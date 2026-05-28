@@ -1418,6 +1418,23 @@ html.motion-ready [data-reveal].is-visible {
     padding-right: 18px;
   }
 
+  .content-proof {
+    gap: 24px;
+    align-items: start;
+    padding-top: 44px;
+    padding-bottom: 50px;
+  }
+
+  .content-proof-copy {
+    max-width: 100%;
+  }
+
+  .content-proof h2 {
+    max-width: 350px;
+    font-size: clamp(2.7rem, 11.8vw, 3.45rem);
+    line-height: 0.92;
+  }
+
   .loop {
     gap: 24px;
     padding-top: 54px;
@@ -1519,14 +1536,42 @@ html.motion-ready [data-reveal].is-visible {
   }
 
   .content-card {
-    flex: 0 0 min(76vw, 280px);
+    flex: 0 0 min(66vw, 242px);
     min-height: 0;
+    gap: 8px;
+    padding: 8px;
     scroll-snap-align: start;
   }
 
   .content-card.is-reel strong,
   .content-card strong {
-    font-size: clamp(1.08rem, 5vw, 1.34rem);
+    font-size: clamp(1rem, 4.6vw, 1.22rem);
+  }
+
+  .content-card > span:not(.reel-media),
+  .content-card strong,
+  .content-card small {
+    margin-right: 6px;
+    margin-left: 6px;
+  }
+
+  .content-card small {
+    margin-bottom: 6px;
+  }
+
+  .content-card.is-reel::after {
+    top: 18px;
+    right: 18px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .content-card.is-reel::before {
+    top: 29px;
+    right: 31px;
+    border-top-width: 7px;
+    border-bottom-width: 7px;
+    border-left-width: 10px;
   }
 
   .service-grid {
@@ -1556,24 +1601,74 @@ html.motion-ready [data-reveal].is-visible {
   }
 
   .client-links {
-    margin-right: -18px;
-    padding-right: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    overflow: visible;
+    margin-right: 0;
+    padding-right: 0;
     border: 0;
     background: transparent;
+    scroll-snap-type: none;
   }
 
   .client-link,
   .client-link.is-featured {
-    flex: 0 0 min(84vw, 340px);
+    flex: initial;
     grid-column: auto;
-    min-height: 230px;
+    min-height: 164px;
+    gap: 18px;
+    padding: 16px;
     border: 1px solid rgba(255, 255, 255, 0.18);
-    scroll-snap-align: start;
+    scroll-snap-align: none;
+  }
+
+  .client-link.is-featured {
+    grid-column: 1 / -1;
+    min-height: 190px;
+    padding: 18px;
+  }
+
+  .client-top {
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+  }
+
+  .client-link.is-featured .client-top {
+    display: flex;
+    align-items: center;
+  }
+
+  .client-logo {
+    width: 68px;
+    height: 44px;
+    padding: 7px;
+  }
+
+  .client-link.is-featured .client-logo {
+    width: 78px;
+    height: 48px;
+  }
+
+  .client-category {
+    max-width: 100%;
+    text-align: left;
   }
 
   .client-link strong,
   .client-link:not(.is-featured) strong {
-    font-size: clamp(1.9rem, 10vw, 3.1rem);
+    max-width: 100%;
+    font-size: clamp(1.24rem, 5.7vw, 1.55rem);
+    line-height: 0.96;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .client-link.is-featured strong {
+    max-width: 92%;
+    font-size: clamp(2.15rem, 10vw, 3rem);
+    line-height: 0.92;
   }
 
 }
