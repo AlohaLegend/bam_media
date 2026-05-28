@@ -102,7 +102,8 @@ let headerIsScrolled = null;
 let headerFrame = 0;
 
 const syncHeader = () => {
-  const shouldBeScrolled = window.scrollY > 12;
+  const scrollThreshold = mobileHeroQuery.matches ? Math.min(360, window.innerHeight * 0.42) : 12;
+  const shouldBeScrolled = window.scrollY > scrollThreshold;
 
   if (shouldBeScrolled === headerIsScrolled) {
     return;
@@ -196,6 +197,17 @@ anchorLinks.forEach((link) => {
 
 syncHeader();
 window.addEventListener("scroll", scheduleHeaderSync, { passive: true });
+
+const handleHeaderViewportChange = () => {
+  headerIsScrolled = null;
+  syncHeader();
+};
+
+if (typeof mobileHeroQuery.addEventListener === "function") {
+  mobileHeroQuery.addEventListener("change", handleHeaderViewportChange);
+} else {
+  mobileHeroQuery.addListener(handleHeaderViewportChange);
+}
 
 if (window.location.hash) {
   window.addEventListener(

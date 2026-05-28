@@ -1352,12 +1352,17 @@ html.motion-ready [data-reveal].is-visible {
 @media (max-width: 620px) {
   .site-header {
     padding: 14px 16px;
-    transition-duration: 120ms;
+    color: var(--white);
+    transition: color 140ms ease;
+    will-change: auto;
   }
 
   .site-header::before {
+    opacity: 0;
+    background: rgba(246, 241, 232, 0.96);
     backdrop-filter: none;
-    transition-duration: 120ms;
+    transition: opacity 140ms ease;
+    will-change: auto;
   }
 
   .hero {
