@@ -146,10 +146,10 @@ const getScrollTarget = (hash) => {
     return null;
   }
 
-  return section.querySelector(".section-kicker, .eyebrow, h1, h2") || section;
+  return section;
 };
 
-const scrollToHash = (hash, updateHash = true) => {
+const scrollToHash = (hash, updateHash = true, instant = false) => {
   const target = getScrollTarget(hash);
 
   if (!target) {
@@ -158,14 +158,11 @@ const scrollToHash = (hash, updateHash = true) => {
 
   const isTop = hash === "#top";
   const headerOffset = header.getBoundingClientRect().height;
-  const breathingRoom = window.matchMedia("(min-width: 901px)").matches ? 56 : 40;
-  const top = isTop
-    ? 0
-    : window.scrollY + target.getBoundingClientRect().top - headerOffset - breathingRoom;
+  const top = isTop ? 0 : window.scrollY + target.getBoundingClientRect().top - headerOffset;
 
   window.scrollTo({
     top: Math.max(0, top),
-    behavior: prefersReducedMotion ? "auto" : "smooth",
+    behavior: instant || prefersReducedMotion ? "auto" : "smooth",
   });
 
   if (updateHash && window.location.hash !== hash) {
@@ -187,8 +184,11 @@ anchorLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
     const hash = link.getAttribute("href");
 
-    if (hash && scrollToHash(hash)) {
+    if (hash && getScrollTarget(hash)) {
       event.preventDefault();
+      closeNav();
+      window.setTimeout(() => scrollToHash(hash), 0);
+      return;
     }
 
     closeNav();
@@ -210,10 +210,17 @@ if (typeof mobileHeroQuery.addEventListener === "function") {
 }
 
 if (window.location.hash) {
+  const syncInitialHash = () => scrollToHash(window.location.hash, false, true);
+
+  requestAnimationFrame(syncInitialHash);
+  window.setTimeout(syncInitialHash, 160);
+  window.setTimeout(syncInitialHash, 720);
+
   window.addEventListener(
     "load",
     () => {
-      requestAnimationFrame(() => scrollToHash(window.location.hash, false));
+      requestAnimationFrame(syncInitialHash);
+      window.setTimeout(syncInitialHash, 160);
     },
     { once: true }
   );
