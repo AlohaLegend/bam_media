@@ -183,6 +183,7 @@ img {
 }
 
 .hero-media,
+.hero-motion,
 .hero-media img,
 .hero-media video {
   position: absolute;
@@ -198,6 +199,11 @@ img {
   background: url("assets/bam-hero-poster.jpg?v=fast") center / cover;
 }
 
+.hero-motion {
+  display: block;
+  overflow: hidden;
+}
+
 .hero-media img,
 .hero-media video {
   object-fit: cover;
@@ -207,11 +213,17 @@ img {
 
 .hero-media video {
   opacity: 0;
-  transition: opacity 220ms ease, transform 220ms ease-out;
+  transition: opacity 420ms ease, transform 220ms ease-out;
 }
 
 .hero-media video.is-ready {
   opacity: 1;
+}
+
+@media (min-width: 621px) {
+  .hero-motion {
+    display: none;
+  }
 }
 
 .hero-content {
