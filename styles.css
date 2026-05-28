@@ -5,8 +5,8 @@
   --paper-2: #fffaf0;
   --muted: #6f6860;
   --line: rgba(12, 12, 11, 0.15);
-  --red: #ef3324;
-  --red-dark: #b91612;
+  --red: #f35a3d;
+  --red-dark: #9f3328;
   --mint: #85dfb8;
   --yellow: #f5c747;
   --steel: #d8ded8;
@@ -315,7 +315,7 @@ img {
 
 .button.primary {
   color: var(--white);
-  background: var(--red);
+  background: linear-gradient(135deg, var(--red), #f2744f);
 }
 
 .button.ghost {
@@ -516,7 +516,7 @@ html.motion-ready [data-reveal].is-visible {
 
 .mini-metrics span:hover {
   color: var(--white);
-  background: var(--red);
+  background: rgba(243, 90, 61, 0.72);
   transform: translateY(-4px);
 }
 
@@ -997,7 +997,9 @@ html.motion-ready [data-reveal].is-visible {
 
 .proof {
   padding: clamp(62px, 9vw, 110px) clamp(18px, 5vw, 70px);
-  background: var(--red);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(243, 90, 61, 0.32), rgba(243, 90, 61, 0) 34%),
+    linear-gradient(135deg, #24130f 0%, var(--ink) 68%);
 }
 
 .proof-inner {
@@ -1015,23 +1017,29 @@ html.motion-ready [data-reveal].is-visible {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   margin-top: 38px;
-  background: rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .metrics article {
   display: grid;
   gap: 14px;
   padding: 26px;
-  background: var(--red);
+  background: rgba(255, 255, 255, 0.055);
   transition: background 180ms ease, transform 180ms ease;
 }
 
+.metrics article:nth-child(2) {
+  background: rgba(243, 90, 61, 0.12);
+}
+
 .metrics article:hover {
-  background: var(--red-dark);
+  background: rgba(243, 90, 61, 0.24);
   transform: translateY(-6px);
 }
 
 .metrics strong {
+  color: #ff8765;
   font-family: "Archivo", sans-serif;
   font-size: clamp(3.5rem, 8vw, 7rem);
   line-height: 0.86;
@@ -1106,7 +1114,10 @@ html.motion-ready [data-reveal].is-visible {
 
 .client-link.is-featured {
   grid-column: span 2;
-  background: var(--red);
+  background:
+    linear-gradient(135deg, rgba(243, 90, 61, 0.34), rgba(12, 12, 11, 0) 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0)),
+    var(--ink);
 }
 
 .client-link::after {
