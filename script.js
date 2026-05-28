@@ -102,7 +102,7 @@ let headerIsScrolled = null;
 let headerFrame = 0;
 
 const syncHeader = () => {
-  const scrollThreshold = mobileHeroQuery.matches ? Math.min(360, window.innerHeight * 0.42) : 12;
+  const scrollThreshold = mobileHeroQuery.matches ? 0 : 12;
   const shouldBeScrolled = window.scrollY > scrollThreshold;
 
   if (shouldBeScrolled === headerIsScrolled) {
@@ -564,15 +564,119 @@ loopSteps.forEach((step) => stepObserver.observe(step));
 
 const scrollRails = document.querySelectorAll(".content-rail, .loop-steps, .service-grid, .metrics, .client-links");
 
+const ensureRailProgress = (rail) => {
+  const next = rail.nextElementSibling;
+
+  if (next?.classList.contains("rail-progress")) {
+    return next;
+  }
+
+  const progress = document.createElement("div");
+  const bar = document.createElement("span");
+
+  progress.className = "rail-progress";
+  progress.setAttribute("aria-hidden", "true");
+  progress.hidden = true;
+  progress.append(bar);
+  rail.insertAdjacentElement("afterend", progress);
+
+  return progress;
+};
+
+const syncRailState = (rail) => {
+  const maxScroll = Math.max(0, rail.scrollWidth - rail.clientWidth);
+  const isScrollable = maxScroll > 4;
+  const progress = ensureRailProgress(rail);
+
+  rail.classList.toggle("is-scrollable", isScrollable);
+  rail.classList.toggle("has-scroll-prev", isScrollable && rail.scrollLeft > 6);
+  rail.classList.toggle("has-scroll-next", isScrollable && rail.scrollLeft < maxScroll - 6);
+
+  progress.hidden = !isScrollable;
+
+  if (!isScrollable) {
+    return;
+  }
+
+  const trackWidth = progress.clientWidth || 140;
+  const progressWidth = Math.max(28, (trackWidth * rail.clientWidth) / rail.scrollWidth);
+  const progressLeft = ((trackWidth - progressWidth) * rail.scrollLeft) / maxScroll;
+
+  progress.style.setProperty("--rail-progress-width", `${progressWidth}px`);
+  progress.style.setProperty("--rail-progress-left", `${progressLeft}px`);
+};
+
 const syncScrollableRails = () => {
-  scrollRails.forEach((rail) => {
-    rail.classList.toggle("is-scrollable", rail.scrollWidth > rail.clientWidth + 4);
+  scrollRails.forEach(syncRailState);
+};
+
+const scheduleRailSync = (rail) => {
+  if (rail.dataset.railSyncing === "true") {
+    return;
+  }
+
+  rail.dataset.railSyncing = "true";
+
+  requestAnimationFrame(() => {
+    rail.dataset.railSyncing = "false";
+    syncRailState(rail);
   });
+};
+
+const visibleRails = new Set();
+let visibleRailTimer = 0;
+
+const stopVisibleRailSync = () => {
+  if (visibleRailTimer) {
+    window.clearInterval(visibleRailTimer);
+    visibleRailTimer = 0;
+  }
+};
+
+const startVisibleRailSync = () => {
+  if (visibleRailTimer) {
+    return;
+  }
+
+  visibleRailTimer = window.setInterval(() => {
+    if (!visibleRails.size) {
+      stopVisibleRailSync();
+      return;
+    }
+
+    visibleRails.forEach(syncRailState);
+  }, 120);
 };
 
 syncScrollableRails();
 window.addEventListener("resize", syncScrollableRails, { passive: true });
 window.addEventListener("load", syncScrollableRails, { once: true });
+
+scrollRails.forEach((rail) => {
+  rail.addEventListener("scroll", () => scheduleRailSync(rail), { passive: true });
+});
+
+const railObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        visibleRails.add(entry.target);
+        syncRailState(entry.target);
+      } else {
+        visibleRails.delete(entry.target);
+      }
+    });
+
+    if (visibleRails.size) {
+      startVisibleRailSync();
+    } else {
+      stopVisibleRailSync();
+    }
+  },
+  { threshold: 0.08 }
+);
+
+scrollRails.forEach((rail) => railObserver.observe(rail));
 
 if (window.matchMedia("(pointer: fine)").matches) {
   scrollRails.forEach((rail) => {
