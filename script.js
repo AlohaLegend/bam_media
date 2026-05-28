@@ -234,6 +234,204 @@ if (!prefersReducedMotion) {
   revealTargets.forEach((target) => target.classList.add("is-visible"));
 }
 
+const reelCards = Array.from(document.querySelectorAll(".content-card.is-reel"));
+const reelVisibility = new Map();
+let activeReelCard = null;
+let priorityReelCard = null;
+let reelFrame = 0;
+
+const loadReelPreview = (video) => {
+  if (!video || video.dataset.loaded === "true") {
+    return Boolean(video);
+  }
+
+  const src = video.dataset.src;
+
+  if (!src) {
+    return false;
+  }
+
+  video.src = src;
+  video.dataset.loaded = "true";
+  video.load();
+  return true;
+};
+
+const pauseReelPreview = (card) => {
+  const video = card?.querySelector(".reel-preview");
+
+  if (!video) {
+    return;
+  }
+
+  video.pause();
+
+  if (video.readyState > 0) {
+    try {
+      video.currentTime = 0;
+    } catch (error) {
+      // Some mobile browsers briefly block seeking while media is settling.
+    }
+  }
+
+  card.classList.remove("is-previewing");
+};
+
+const playReelPreview = (card) => {
+  const video = card?.querySelector(".reel-preview");
+
+  if (!video || prefersReducedMotion || !loadReelPreview(video)) {
+    return;
+  }
+
+  video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
+  video.setAttribute("muted", "");
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  card.classList.add("is-previewing");
+
+  const playAttempt = video.play();
+
+  if (playAttempt && typeof playAttempt.catch === "function") {
+    playAttempt.catch(() => {
+      if (activeReelCard === card) {
+        activeReelCard = null;
+        card.classList.remove("is-previewing");
+      }
+    });
+  }
+};
+
+const isCardOnScreen = (card) => {
+  if (!card) {
+    return false;
+  }
+
+  const rect = card.getBoundingClientRect();
+
+  return rect.bottom > 0 && rect.top < window.innerHeight && rect.right > 0 && rect.left < window.innerWidth;
+};
+
+const getBestVisibleReel = () => {
+  let bestCard = null;
+  let bestScore = 0;
+  const viewportCenter = window.innerWidth / 2;
+
+  reelVisibility.forEach((ratio, card) => {
+    if (ratio < 0.42 || !isCardOnScreen(card)) {
+      return;
+    }
+
+    const rect = card.getBoundingClientRect();
+    const centerDistance = Math.abs(rect.left + rect.width / 2 - viewportCenter) / Math.max(window.innerWidth, 1);
+    const score = ratio - centerDistance * 0.2;
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestCard = card;
+    }
+  });
+
+  return bestCard;
+};
+
+const setActiveReel = (nextCard) => {
+  if (nextCard === activeReelCard) {
+    return;
+  }
+
+  if (activeReelCard) {
+    pauseReelPreview(activeReelCard);
+  }
+
+  activeReelCard = nextCard;
+
+  if (activeReelCard) {
+    playReelPreview(activeReelCard);
+  }
+};
+
+const syncActiveReel = () => {
+  reelFrame = 0;
+
+  if (document.hidden) {
+    setActiveReel(null);
+    return;
+  }
+
+  const priorityCandidate = isCardOnScreen(priorityReelCard) ? priorityReelCard : null;
+  setActiveReel(priorityCandidate || getBestVisibleReel());
+};
+
+const scheduleReelSync = () => {
+  if (reelFrame) {
+    return;
+  }
+
+  reelFrame = requestAnimationFrame(syncActiveReel);
+};
+
+if (reelCards.length && !prefersReducedMotion && "IntersectionObserver" in window) {
+  const reelObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target.querySelector(".reel-preview");
+
+        if (entry.intersectionRatio > 0.08) {
+          loadReelPreview(video);
+        }
+
+        if (entry.isIntersecting) {
+          reelVisibility.set(entry.target, entry.intersectionRatio);
+        } else {
+          reelVisibility.delete(entry.target);
+        }
+      });
+
+      scheduleReelSync();
+    },
+    { rootMargin: "12% 0px -8% 0px", threshold: [0, 0.08, 0.25, 0.42, 0.6, 0.78] }
+  );
+
+  reelCards.forEach((card) => {
+    reelObserver.observe(card);
+
+    card.addEventListener("mouseenter", () => {
+      priorityReelCard = card;
+      scheduleReelSync();
+    });
+
+    card.addEventListener("mouseleave", () => {
+      if (priorityReelCard === card) {
+        priorityReelCard = null;
+      }
+
+      scheduleReelSync();
+    });
+
+    card.addEventListener("focusin", () => {
+      priorityReelCard = card;
+      scheduleReelSync();
+    });
+
+    card.addEventListener("focusout", () => {
+      if (priorityReelCard === card) {
+        priorityReelCard = null;
+      }
+
+      scheduleReelSync();
+    });
+  });
+
+  document.addEventListener("visibilitychange", scheduleReelSync);
+  window.addEventListener("resize", scheduleReelSync, { passive: true });
+  document.querySelectorAll(".content-rail").forEach((rail) => {
+    rail.addEventListener("scroll", scheduleReelSync, { passive: true });
+  });
+}
+
 const countElements = document.querySelectorAll("[data-count]");
 
 const easeOut = (value) => 1 - Math.pow(1 - value, 3);
