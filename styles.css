@@ -20,6 +20,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 82px;
 }
 
 section[id] {
@@ -804,10 +805,10 @@ html.motion-ready [data-reveal].is-visible {
 
 .client-link {
   position: relative;
-  min-height: 190px;
+  min-height: 204px;
   display: grid;
   align-content: space-between;
-  gap: 28px;
+  gap: 26px;
   overflow: hidden;
   padding: clamp(18px, 3vw, 26px);
   background: var(--ink);
@@ -834,7 +835,36 @@ html.motion-ready [data-reveal].is-visible {
   transition: opacity 180ms ease, transform 180ms ease;
 }
 
-.client-link span,
+.client-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.client-logo {
+  width: clamp(74px, 12vw, 112px);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(12, 12, 11, 0.12);
+  border-radius: 8px;
+  padding: 8px;
+  background: var(--white);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.client-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.client-category,
 .client-link small {
   position: relative;
   z-index: 1;
@@ -844,8 +874,9 @@ html.motion-ready [data-reveal].is-visible {
   text-transform: uppercase;
 }
 
-.client-link span {
+.client-category {
   color: var(--mint);
+  text-align: right;
 }
 
 .client-link strong {
@@ -881,9 +912,15 @@ html.motion-ready [data-reveal].is-visible {
   transform: translate(5px, -5px) rotate(45deg);
 }
 
-.client-link:hover span,
-.client-link:focus-visible span {
+.client-link:hover .client-category,
+.client-link:focus-visible .client-category {
   color: var(--red-dark);
+}
+
+.client-link:hover .client-logo,
+.client-link:focus-visible .client-logo {
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
 }
 
 .client-link:hover small,
@@ -1089,6 +1126,10 @@ html.motion-ready [data-reveal].is-visible {
     text-align: center;
   }
 
+  .ticker span[aria-hidden="true"] {
+    display: none;
+  }
+
   .section {
     padding-left: 18px;
     padding-right: 18px;
@@ -1165,7 +1206,7 @@ html.motion-ready [data-reveal].is-visible {
   .client-link,
   .client-link.is-featured {
     grid-column: auto;
-    min-height: 148px;
+    min-height: 174px;
   }
 
   .client-link strong,
