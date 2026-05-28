@@ -32,9 +32,7 @@ body {
   margin: 0;
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
-  background:
-    linear-gradient(180deg, rgba(12, 12, 11, 0.08), rgba(12, 12, 11, 0) 170px),
-    var(--paper);
+  background: var(--paper);
 }
 
 body.nav-open {
@@ -505,13 +503,13 @@ html.motion-ready [data-reveal].is-visible {
 
 .thesis::before {
   background:
-    linear-gradient(180deg, rgba(255, 250, 240, 0.98) 0%, rgba(246, 241, 232, 0.98) 42%, rgba(239, 232, 218, 0.98) 100%);
+    linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 54%, #efe5d3 100%);
   border-bottom: 1px solid rgba(12, 12, 11, 0.12);
 }
 
 .services::before {
   background:
-    linear-gradient(180deg, rgba(255, 250, 240, 0.98) 0%, rgba(246, 241, 232, 0.98) 58%, rgba(236, 229, 214, 0.98) 100%);
+    linear-gradient(180deg, #fff8ea 0%, var(--paper) 56%, #eadfc9 100%);
   border-top: 1px solid rgba(12, 12, 11, 0.1);
   border-bottom: 1px solid rgba(12, 12, 11, 0.1);
 }
@@ -597,9 +595,8 @@ html.motion-ready [data-reveal].is-visible {
   padding: clamp(62px, 9vw, 110px) clamp(18px, 5vw, 70px);
   color: var(--white);
   background:
-    linear-gradient(180deg, rgba(246, 241, 232, 0.11), rgba(246, 241, 232, 0) 18%),
-    linear-gradient(135deg, rgba(223, 112, 73, 0.15), rgba(12, 12, 11, 0) 38%),
-    var(--ink);
+    linear-gradient(180deg, rgba(246, 241, 232, 0.11), rgba(246, 241, 232, 0) 16%),
+    linear-gradient(180deg, #26160f 0%, #14120f 44%, #0b0c0a 100%);
 }
 
 .loop::before {
@@ -609,8 +606,8 @@ html.motion-ready [data-reveal].is-visible {
   inset: 0;
   pointer-events: none;
   background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 138px),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.026) 0 1px, transparent 1px 138px);
+    linear-gradient(90deg, rgba(242, 197, 83, 0.08), rgba(242, 197, 83, 0) 34%),
+    linear-gradient(270deg, rgba(133, 223, 184, 0.055), rgba(133, 223, 184, 0) 42%);
 }
 
 .loop > * {
@@ -805,9 +802,8 @@ html.motion-ready [data-reveal].is-visible {
   padding: clamp(58px, 8vw, 96px) clamp(18px, 5vw, 70px);
   color: var(--ink);
   background:
-    linear-gradient(180deg, rgba(12, 12, 11, 0.12), rgba(12, 12, 11, 0) 20%),
-    linear-gradient(96deg, rgba(133, 223, 184, 0.22), rgba(242, 197, 83, 0.12) 44%, rgba(255, 250, 240, 0) 72%),
-    var(--paper-2);
+    linear-gradient(180deg, rgba(12, 12, 11, 0.08), rgba(12, 12, 11, 0) 18%),
+    linear-gradient(180deg, var(--paper-2) 0%, #f5ecd8 100%);
   border-bottom: 1px solid var(--line);
 }
 
@@ -1053,7 +1049,7 @@ html.motion-ready [data-reveal].is-visible {
   right: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--mint), var(--amber));
+  background: var(--amber);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 200ms ease;
@@ -1079,8 +1075,8 @@ html.motion-ready [data-reveal].is-visible {
   color: var(--white);
   border-color: rgba(12, 12, 11, 0.36);
   background:
-    linear-gradient(135deg, rgba(133, 223, 184, 0.12), rgba(223, 112, 73, 0.12)),
-    var(--ink);
+    linear-gradient(180deg, rgba(246, 241, 232, 0.05), rgba(246, 241, 232, 0)),
+    #15120f;
   transform: translateY(-7px);
 }
 
@@ -1114,8 +1110,7 @@ html.motion-ready [data-reveal].is-visible {
   padding: clamp(62px, 9vw, 110px) clamp(18px, 5vw, 70px);
   background:
     linear-gradient(180deg, rgba(246, 241, 232, 0.1), rgba(246, 241, 232, 0) 18%),
-    linear-gradient(140deg, rgba(223, 112, 73, 0.24) 0%, rgba(223, 112, 73, 0) 44%),
-    linear-gradient(180deg, #211510 0%, var(--ink) 100%);
+    linear-gradient(180deg, #2a1810 0%, #15100d 54%, #090908 100%);
 }
 
 .proof::before {
@@ -1125,8 +1120,8 @@ html.motion-ready [data-reveal].is-visible {
   inset: 0;
   pointer-events: none;
   background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 150px),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.024) 0 1px, transparent 1px 150px);
+    linear-gradient(90deg, rgba(223, 112, 73, 0.13), rgba(223, 112, 73, 0) 36%),
+    linear-gradient(180deg, rgba(242, 197, 83, 0.08), rgba(242, 197, 83, 0) 32%);
 }
 
 .proof-inner {
@@ -1189,8 +1184,7 @@ html.motion-ready [data-reveal].is-visible {
   padding: clamp(62px, 9vw, 112px) clamp(18px, 5vw, 70px);
   color: var(--white);
   background:
-    linear-gradient(135deg, rgba(133, 223, 184, 0.12), rgba(12, 12, 11, 0) 34%),
-    linear-gradient(180deg, var(--ink) 0%, #111612 100%);
+    linear-gradient(180deg, #0c0c0b 0%, #0e130f 52%, #090b09 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -1240,7 +1234,7 @@ html.motion-ready [data-reveal].is-visible {
   gap: 26px;
   overflow: hidden;
   padding: clamp(18px, 3vw, 26px);
-  background: linear-gradient(180deg, #121210 0%, var(--ink) 100%);
+  background: #0f100e;
   outline-offset: -5px;
   transition: background 200ms ease, color 200ms ease, transform 200ms ease;
 }
@@ -1248,9 +1242,8 @@ html.motion-ready [data-reveal].is-visible {
 .client-link.is-featured {
   grid-column: span 2;
   background:
-    linear-gradient(135deg, rgba(133, 223, 184, 0.16), rgba(223, 112, 73, 0.18) 42%, rgba(12, 12, 11, 0) 66%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0)),
-    var(--ink);
+    linear-gradient(180deg, rgba(223, 112, 73, 0.15), rgba(223, 112, 73, 0.04) 52%, rgba(255, 255, 255, 0.03)),
+    #11100e;
 }
 
 .client-link::after {
@@ -1370,7 +1363,7 @@ html.motion-ready [data-reveal].is-visible {
   padding: clamp(62px, 9vw, 110px) clamp(18px, 5vw, 70px);
   color: var(--white);
   background:
-    linear-gradient(180deg, #111612 0%, var(--ink) 54%, #070706 100%);
+    linear-gradient(180deg, #0e130f 0%, #0b0c0a 56%, #070706 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
