@@ -732,18 +732,59 @@ html.motion-ready [data-reveal].is-visible {
   transition: transform 200ms ease, background 200ms ease, border-color 200ms ease;
 }
 
-.content-card img {
+.content-card > img,
+.reel-media {
   width: 100%;
   aspect-ratio: 9 / 16;
   height: auto;
-  object-fit: cover;
   border-radius: 6px;
   background: var(--paper);
 }
 
-.content-card:not(.is-reel) img {
+.content-card > img {
+  object-fit: cover;
+}
+
+.content-card:not(.is-reel) > img {
   object-fit: contain;
   padding: 8px;
+}
+
+.reel-media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  min-width: 0;
+  margin: 0;
+}
+
+.reel-media img,
+.reel-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 220ms ease, transform 420ms ease;
+}
+
+.reel-media video {
+  opacity: 0;
+  background: var(--ink);
+}
+
+.content-card.is-previewing .reel-preview {
+  opacity: 1;
+}
+
+.content-card.is-previewing .reel-poster {
+  opacity: 0;
+}
+
+.content-card.is-previewing .reel-preview,
+.content-card:hover .reel-poster,
+.content-card:focus-visible .reel-poster {
+  transform: scale(1.02);
 }
 
 .content-card.is-reel::after {
@@ -756,6 +797,7 @@ html.motion-ready [data-reveal].is-visible {
   border-radius: 999px;
   background: rgba(12, 12, 11, 0.72);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  transition: background 200ms ease, transform 200ms ease;
 }
 
 .content-card.is-reel::before {
@@ -767,9 +809,20 @@ html.motion-ready [data-reveal].is-visible {
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
   border-left: 12px solid var(--white);
+  transition: opacity 200ms ease, transform 200ms ease;
 }
 
-.content-card span,
+.content-card.is-previewing::after {
+  background: rgba(12, 12, 11, 0.54);
+  transform: scale(0.92);
+}
+
+.content-card.is-previewing::before {
+  opacity: 0.9;
+  transform: scale(0.92);
+}
+
+.content-card > span:not(.reel-media),
 .content-card strong,
 .content-card small {
   min-width: 0;
@@ -777,7 +830,7 @@ html.motion-ready [data-reveal].is-visible {
   margin-left: 8px;
 }
 
-.content-card span,
+.content-card > span:not(.reel-media),
 .content-card small {
   font-size: 0.72rem;
   font-weight: 900;
@@ -785,7 +838,7 @@ html.motion-ready [data-reveal].is-visible {
   text-transform: uppercase;
 }
 
-.content-card span {
+.content-card > span:not(.reel-media) {
   color: var(--mint);
 }
 
@@ -813,8 +866,8 @@ html.motion-ready [data-reveal].is-visible {
   transform: translateY(-6px);
 }
 
-.content-card:hover span,
-.content-card:focus-visible span {
+.content-card:hover > span:not(.reel-media),
+.content-card:focus-visible > span:not(.reel-media) {
   color: var(--red-dark);
 }
 
