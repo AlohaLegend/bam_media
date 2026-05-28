@@ -1,6 +1,6 @@
 const header = document.querySelector("[data-header]");
 const toggle = document.querySelector(".nav-toggle");
-const navLinks = document.querySelectorAll(".site-nav a");
+const anchorLinks = document.querySelectorAll('a[href^="#"]');
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const heroVideo = document.querySelector(".hero-video");
 
@@ -52,6 +52,57 @@ const syncHeader = () => {
   header.classList.toggle("is-scrolled", window.scrollY > 12);
 };
 
+const closeNav = () => {
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-label", "Open menu");
+  document.body.classList.remove("nav-open");
+  header.classList.remove("is-open");
+};
+
+const getScrollTarget = (hash) => {
+  if (!hash || hash === "#") {
+    return null;
+  }
+
+  if (hash === "#top") {
+    return document.getElementById("top");
+  }
+
+  const section = document.getElementById(hash.slice(1));
+
+  if (!section) {
+    return null;
+  }
+
+  return section.querySelector(".section-kicker, .eyebrow, h1, h2") || section;
+};
+
+const scrollToHash = (hash, updateHash = true) => {
+  const target = getScrollTarget(hash);
+
+  if (!target) {
+    return false;
+  }
+
+  const isTop = hash === "#top";
+  const headerOffset = header.getBoundingClientRect().height;
+  const breathingRoom = window.matchMedia("(min-width: 901px)").matches ? 56 : 40;
+  const top = isTop
+    ? 0
+    : window.scrollY + target.getBoundingClientRect().top - headerOffset - breathingRoom;
+
+  window.scrollTo({
+    top: Math.max(0, top),
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+  });
+
+  if (updateHash && window.location.hash !== hash) {
+    window.history.pushState(null, "", hash);
+  }
+
+  return true;
+};
+
 toggle.addEventListener("click", () => {
   const isOpen = toggle.getAttribute("aria-expanded") === "true";
   toggle.setAttribute("aria-expanded", String(!isOpen));
@@ -60,17 +111,30 @@ toggle.addEventListener("click", () => {
   header.classList.toggle("is-open", !isOpen);
 });
 
-navLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-label", "Open menu");
-    document.body.classList.remove("nav-open");
-    header.classList.remove("is-open");
+anchorLinks.forEach((link) => {
+  link.addEventListener("click", (event) => {
+    const hash = link.getAttribute("href");
+
+    if (hash && scrollToHash(hash)) {
+      event.preventDefault();
+    }
+
+    closeNav();
   });
 });
 
 syncHeader();
 window.addEventListener("scroll", syncHeader, { passive: true });
+
+if (window.location.hash) {
+  window.addEventListener(
+    "load",
+    () => {
+      requestAnimationFrame(() => scrollToHash(window.location.hash, false));
+    },
+    { once: true }
+  );
+}
 
 document.body.classList.add("is-loaded");
 

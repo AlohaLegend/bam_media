@@ -20,11 +20,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 82px;
-}
-
-section[id] {
-  scroll-margin-top: 82px;
+  scroll-padding-top: 96px;
 }
 
 body {
@@ -929,13 +925,21 @@ html.motion-ready [data-reveal].is-visible {
 }
 
 .contact {
+  min-height: calc(100svh + 120px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
+  align-content: start;
   align-items: end;
   padding: clamp(62px, 9vw, 110px) clamp(18px, 5vw, 70px);
   color: var(--white);
   background: var(--ink);
+}
+
+@supports (min-height: 100dvh) {
+  .contact {
+    min-height: calc(100dvh + 120px);
+  }
 }
 
 .contact h2 {
