@@ -48,7 +48,8 @@ const revealTargets = document.querySelectorAll(
     ".proof .section-kicker",
     ".proof h2",
     ".metrics article",
-    ".market-grid",
+    ".clients-copy",
+    ".client-link",
     ".contact > *",
   ].join(",")
 );
