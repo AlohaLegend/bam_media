@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BAM">
+  <rect width="64" height="64" rx="14" fill="#0c0c0b" />
+  <path d="M0 0h64v20c-9.7 4.9-20.5 7.4-32.4 7.4C19 27.4 8.5 24.9 0 19.9V0Z" fill="#f35a3d" />
+  <path d="M47.8 7.4 56.6 16l-8.8 8.6h-6.3l5.6-5.5H33.6v-6.2h13.5l-5.6-5.5h6.3Z" fill="#85dfb8" opacity=".95" />
+  <text
+    x="32"
+    y="44"
+    fill="#fffaf0"
+    font-family="Arial Black, Archivo, Arial, sans-serif"
+    font-size="20"
+    font-weight="900"
+    letter-spacing="-1"
+    text-anchor="middle"
+  >BAM</text>
+  <text
+    x="32"
+    y="53"
+    fill="#85dfb8"
+    font-family="Arial, sans-serif"
+    font-size="6"
+    font-weight="800"
+    text-anchor="middle"
+  >MEDIA</text>
+</svg>
