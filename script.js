@@ -3,11 +3,45 @@ const toggle = document.querySelector(".nav-toggle");
 const anchorLinks = document.querySelectorAll('a[href^="#"]');
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const heroVideo = document.querySelector(".hero-video");
+const mobileHeroQuery = window.matchMedia("(max-width: 620px)");
+
+const getHeroVideoSource = () => {
+  if (!heroVideo) {
+    return "";
+  }
+
+  return mobileHeroQuery.matches ? heroVideo.dataset.mobileSrc : heroVideo.dataset.desktopSrc;
+};
+
+const syncHeroVideoSource = () => {
+  const nextSource = getHeroVideoSource();
+
+  if (!nextSource) {
+    return;
+  }
+
+  const nextUrl = new URL(nextSource, window.location.href).href;
+  const currentUrl = heroVideo.currentSrc || heroVideo.src;
+
+  if (currentUrl !== nextUrl) {
+    heroVideo.classList.remove("is-ready");
+    heroVideo.src = nextSource;
+    heroVideo.load();
+  }
+};
+
+const markHeroVideoReady = () => {
+  if (heroVideo && heroVideo.currentTime > 0) {
+    heroVideo.classList.add("is-ready");
+  }
+};
 
 const playHeroVideo = () => {
   if (!heroVideo || prefersReducedMotion) {
     return;
   }
+
+  syncHeroVideoSource();
 
   const playAttempt = heroVideo.play();
 
@@ -28,7 +62,11 @@ if (heroVideo) {
     heroVideo.pause();
     heroVideo.removeAttribute("autoplay");
   } else {
+    syncHeroVideoSource();
     heroVideo.setAttribute("autoplay", "");
+    heroVideo.addEventListener("playing", markHeroVideoReady);
+    heroVideo.addEventListener("timeupdate", markHeroVideoReady);
+    heroVideo.addEventListener("canplay", playHeroVideo);
 
     if (heroVideo.readyState >= 2) {
       playHeroVideo();
@@ -45,6 +83,17 @@ if (heroVideo) {
 
     window.addEventListener("touchstart", playHeroVideo, { once: true, passive: true });
     window.addEventListener("pointerdown", playHeroVideo, { once: true, passive: true });
+
+    const handleHeroSourceChange = () => {
+      syncHeroVideoSource();
+      playHeroVideo();
+    };
+
+    if (typeof mobileHeroQuery.addEventListener === "function") {
+      mobileHeroQuery.addEventListener("change", handleHeroSourceChange);
+    } else {
+      mobileHeroQuery.addListener(handleHeroSourceChange);
+    }
   }
 }
 

@@ -191,11 +191,27 @@ img {
   height: 100%;
 }
 
+.hero-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("assets/bam-hero-poster.jpg?v=fast") center / cover;
+}
+
 .hero-media img,
 .hero-media video {
   object-fit: cover;
   transform: scale(1.035) translate3d(calc(var(--hero-x, 0) * 1px), calc(var(--hero-y, 0) * 1px), 0);
   transition: transform 220ms ease-out;
+}
+
+.hero-media video {
+  opacity: 0;
+  transition: opacity 220ms ease, transform 220ms ease-out;
+}
+
+.hero-media video.is-ready {
+  opacity: 1;
 }
 
 .hero-content {
