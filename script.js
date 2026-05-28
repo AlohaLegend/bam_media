@@ -5,6 +5,10 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 const heroVideo = document.querySelector(".hero-video");
 const mobileHeroQuery = window.matchMedia("(max-width: 620px)");
 
+if ("scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
+
 const getHeroVideoSource = () => {
   if (!heroVideo) {
     return "";
@@ -158,12 +162,16 @@ const scrollToHash = (hash, updateHash = true, instant = false) => {
 
   const isTop = hash === "#top";
   const headerOffset = header.getBoundingClientRect().height;
-  const top = isTop ? 0 : window.scrollY + target.getBoundingClientRect().top - headerOffset;
+  const top = Math.max(0, isTop ? 0 : window.scrollY + target.getBoundingClientRect().top - headerOffset);
 
-  window.scrollTo({
-    top: Math.max(0, top),
-    behavior: instant || prefersReducedMotion ? "auto" : "smooth",
-  });
+  if (instant || prefersReducedMotion) {
+    window.scrollTo(0, top);
+  } else {
+    window.scrollTo({
+      top,
+      behavior: "smooth",
+    });
+  }
 
   if (updateHash && window.location.hash !== hash) {
     window.history.pushState(null, "", hash);
@@ -210,13 +218,33 @@ if (typeof mobileHeroQuery.addEventListener === "function") {
 }
 
 if (window.location.hash) {
-  const syncInitialHash = () => scrollToHash(window.location.hash, false, true);
+  const syncInitialHash = () => {
+    let attempts = 0;
+
+    const sync = () => {
+      if (!window.location.hash || !scrollToHash(window.location.hash, false, true)) {
+        return;
+      }
+
+      attempts += 1;
+
+      const target = getScrollTarget(window.location.hash);
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const delta =
+        window.location.hash === "#top"
+          ? window.scrollY
+          : target.getBoundingClientRect().top - header.getBoundingClientRect().height;
+      const canAlignMore = window.scrollY < maxScroll - 2;
+
+      if (attempts < 18 && Math.abs(delta) > 2 && canAlignMore) {
+        window.setTimeout(sync, 220);
+      }
+    };
+
+    sync();
+  };
 
   requestAnimationFrame(syncInitialHash);
-  window.setTimeout(syncInitialHash, 160);
-  window.setTimeout(syncInitialHash, 720);
-  window.setTimeout(syncInitialHash, 1600);
-  window.setTimeout(syncInitialHash, 2600);
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(syncInitialHash);
@@ -232,6 +260,8 @@ if (window.location.hash) {
     { once: true }
   );
 }
+
+window.addEventListener("hashchange", () => scrollToHash(window.location.hash, false));
 
 document.body.classList.add("is-loaded");
 
