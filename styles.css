@@ -182,14 +182,16 @@ img {
 }
 
 .hero-media,
-.hero-media img {
+.hero-media img,
+.hero-media video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
 
-.hero-media img {
+.hero-media img,
+.hero-media video {
   object-fit: cover;
   transform: scale(1.035) translate3d(calc(var(--hero-x, 0) * 1px), calc(var(--hero-y, 0) * 1px), 0);
   transition: transform 220ms ease-out;
@@ -891,7 +893,8 @@ html.motion-ready [data-reveal].is-visible {
       linear-gradient(90deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0) 100%);
   }
 
-  .hero-media img {
+  .hero-media img,
+  .hero-media video {
     object-position: 58% center;
   }
 
@@ -1099,7 +1102,8 @@ html.motion-ready [data-reveal].is-visible {
     transition-duration: 0.001ms !important;
   }
 
-  .hero-media img {
+  .hero-media img,
+  .hero-media video {
     transform: none;
   }
 }

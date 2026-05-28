@@ -2,6 +2,12 @@ const header = document.querySelector("[data-header]");
 const toggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelectorAll(".site-nav a");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const heroVideo = document.querySelector(".hero-video");
+
+if (prefersReducedMotion && heroVideo) {
+  heroVideo.pause();
+  heroVideo.removeAttribute("autoplay");
+}
 
 const syncHeader = () => {
   header.classList.toggle("is-scrolled", window.scrollY > 12);

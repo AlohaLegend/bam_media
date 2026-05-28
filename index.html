@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=544dfd8" />
+    <link rel="stylesheet" href="styles.css?v=hero-video" />
   </head>
   <body>
     <header class="site-header" data-header>
@@ -43,7 +43,17 @@
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-media" aria-hidden="true">
-          <img src="assets/hero-bam-food-social.png" alt="" />
+          <video
+            class="hero-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="assets/bam-hero-poster.jpg"
+          >
+            <source src="assets/bam-hero-reel.mp4" type="video/mp4" />
+          </video>
         </div>
         <div class="hero-content">
           <p class="eyebrow">QSR + food brand growth</p>
@@ -249,6 +259,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=544dfd8"></script>
+    <script src="script.js?v=hero-video"></script>
   </body>
 </html>
