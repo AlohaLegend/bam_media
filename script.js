@@ -215,12 +215,19 @@ if (window.location.hash) {
   requestAnimationFrame(syncInitialHash);
   window.setTimeout(syncInitialHash, 160);
   window.setTimeout(syncInitialHash, 720);
+  window.setTimeout(syncInitialHash, 1600);
+  window.setTimeout(syncInitialHash, 2600);
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(syncInitialHash);
+  }
 
   window.addEventListener(
     "load",
     () => {
       requestAnimationFrame(syncInitialHash);
       window.setTimeout(syncInitialHash, 160);
+      window.setTimeout(syncInitialHash, 900);
     },
     { once: true }
   );
