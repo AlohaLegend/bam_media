@@ -98,8 +98,29 @@ if (heroVideo) {
   }
 }
 
+let headerIsScrolled = null;
+let headerFrame = 0;
+
 const syncHeader = () => {
-  header.classList.toggle("is-scrolled", window.scrollY > 12);
+  const shouldBeScrolled = window.scrollY > 12;
+
+  if (shouldBeScrolled === headerIsScrolled) {
+    return;
+  }
+
+  headerIsScrolled = shouldBeScrolled;
+  header.classList.toggle("is-scrolled", shouldBeScrolled);
+};
+
+const scheduleHeaderSync = () => {
+  if (headerFrame) {
+    return;
+  }
+
+  headerFrame = requestAnimationFrame(() => {
+    headerFrame = 0;
+    syncHeader();
+  });
 };
 
 const closeNav = () => {
@@ -174,7 +195,7 @@ anchorLinks.forEach((link) => {
 });
 
 syncHeader();
-window.addEventListener("scroll", syncHeader, { passive: true });
+window.addEventListener("scroll", scheduleHeaderSync, { passive: true });
 
 if (window.location.hash) {
   window.addEventListener(

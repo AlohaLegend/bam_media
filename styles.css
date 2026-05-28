@@ -70,6 +70,7 @@ img {
 
 .site-header {
   position: fixed;
+  isolation: isolate;
   z-index: 30;
   top: 0;
   left: 0;
@@ -79,15 +80,33 @@ img {
   justify-content: space-between;
   padding: 18px clamp(18px, 4vw, 44px);
   color: var(--white);
-  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+  transform: translateZ(0);
+  transition: color 160ms ease;
+  will-change: color;
+}
+
+.site-header::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  background: rgba(246, 241, 232, 0.94);
+  backdrop-filter: blur(18px);
+  transform: translateZ(0);
+  transition: opacity 160ms ease;
+  will-change: opacity;
 }
 
 .site-header.is-scrolled,
 .site-header.is-open {
   color: var(--ink);
-  background: rgba(246, 241, 232, 0.94);
-  border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(18px);
+}
+
+.site-header.is-scrolled::before,
+.site-header.is-open::before {
+  opacity: 1;
 }
 
 .brand {
@@ -1293,6 +1312,12 @@ html.motion-ready [data-reveal].is-visible {
 @media (max-width: 620px) {
   .site-header {
     padding: 14px 16px;
+    transition-duration: 120ms;
+  }
+
+  .site-header::before {
+    backdrop-filter: none;
+    transition-duration: 120ms;
   }
 
   .hero {
