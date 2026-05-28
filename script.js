@@ -196,6 +196,8 @@ const revealTargets = document.querySelectorAll(
     ".loop-copy",
     ".phone-wall",
     ".loop-steps article",
+    ".content-proof-copy",
+    ".content-card",
     ".section-head",
     ".service-grid article",
     ".proof .section-kicker",
