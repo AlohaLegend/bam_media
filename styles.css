@@ -469,6 +469,10 @@ html.motion-ready [data-reveal].is-visible {
   font-size: clamp(3rem, 7vw, 6.6rem);
 }
 
+.thesis h2 {
+  line-height: 1.08;
+}
+
 .thesis-copy p {
   margin: 0;
   color: rgba(255, 255, 255, 0.82);
@@ -1477,6 +1481,11 @@ html.motion-ready [data-reveal].is-visible {
   .clients h2,
   .contact h2 {
     font-size: clamp(2.9rem, 14vw, 4.8rem);
+  }
+
+  .thesis h2 {
+    font-size: 3.05rem;
+    line-height: 1.06;
   }
 
   .loop,
