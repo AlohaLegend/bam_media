@@ -455,9 +455,9 @@ html.motion-ready [data-reveal].is-visible {
 
 .thesis-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.82fr);
-  gap: clamp(30px, 8vw, 92px);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.74fr);
+  gap: clamp(28px, 6vw, 74px);
+  align-items: stretch;
 }
 
 .thesis h2,
@@ -471,30 +471,45 @@ html.motion-ready [data-reveal].is-visible {
 
 .thesis-copy p {
   margin: 0;
-  color: #38332e;
+  color: rgba(255, 255, 255, 0.82);
   font-size: clamp(1.05rem, 2vw, 1.42rem);
   line-height: 1.52;
 }
 
+.thesis-copy {
+  min-height: clamp(300px, 27vw, 390px);
+  display: grid;
+  align-content: space-between;
+  gap: 30px;
+  border: 1px solid rgba(12, 12, 11, 0.18);
+  border-radius: 8px;
+  padding: clamp(22px, 3vw, 32px);
+  background:
+    linear-gradient(135deg, rgba(133, 223, 184, 0.14), rgba(12, 12, 11, 0) 48%),
+    var(--ink);
+}
+
 .mini-metrics {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
-  margin-top: 26px;
+  margin-top: 0;
 }
 
 .mini-metrics span {
-  flex: 1 1 120px;
-  min-height: 64px;
+  min-height: 96px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--red-dark);
-  background: var(--paper-2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 7px;
+  padding: 12px;
+  color: var(--mint);
+  background: rgba(255, 255, 255, 0.06);
   font-family: "Archivo", sans-serif;
-  font-size: 1.1rem;
+  font-size: clamp(0.92rem, 1.25vw, 1.08rem);
   font-weight: 900;
+  line-height: 0.95;
+  text-align: center;
   text-transform: uppercase;
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
 }
@@ -532,7 +547,7 @@ html.motion-ready [data-reveal].is-visible {
 .phone-wall {
   position: relative;
   min-height: 470px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .phone-card,
@@ -549,9 +564,13 @@ html.motion-ready [data-reveal].is-visible {
   width: 190px;
   min-height: 330px;
   padding: 16px;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.78)),
-    url("assets/hero-bam-food-social.png") center / cover;
+  background-color: var(--ink);
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.8)),
+    var(--loop-image);
+  background-position: center, var(--loop-position, center);
+  background-repeat: no-repeat;
+  background-size: cover, cover;
 }
 
 .phone-card::after {
@@ -603,6 +622,8 @@ html.motion-ready [data-reveal].is-visible {
 }
 
 .card-one {
+  --loop-image: url("assets/loop-launch-clip.webp");
+  --loop-position: 50% 42%;
   top: 0;
   left: 0;
   transform: translate3d(var(--card-one-x, 0), var(--card-one-y, 0), 0) rotate(-5deg);
@@ -610,6 +631,8 @@ html.motion-ready [data-reveal].is-visible {
 }
 
 .card-two {
+  --loop-image: url("assets/loop-creator-ad.webp");
+  --loop-position: 48% 42%;
   right: 10px;
   bottom: 42px;
   transform: translate3d(var(--card-two-x, 0), var(--card-two-y, 0), 0) rotate(5deg);
@@ -711,7 +734,12 @@ html.motion-ready [data-reveal].is-visible {
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  margin-top: -6px;
+  padding-top: 6px;
+  padding-bottom: 8px;
   scroll-padding-left: 1px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -1189,11 +1217,11 @@ html.motion-ready [data-reveal].is-visible {
 }
 
 .contact {
-  min-height: calc(100svh + 120px);
+  min-height: clamp(420px, 62svh, 620px);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
-  align-content: start;
+  align-content: center;
   align-items: end;
   padding: clamp(62px, 9vw, 110px) clamp(18px, 5vw, 70px);
   color: var(--white);
@@ -1202,7 +1230,7 @@ html.motion-ready [data-reveal].is-visible {
 
 @supports (min-height: 100dvh) {
   .contact {
-    min-height: calc(100dvh + 120px);
+    min-height: clamp(420px, 62dvh, 620px);
   }
 }
 
@@ -1219,6 +1247,7 @@ html.motion-ready [data-reveal].is-visible {
     order: 3;
     grid-column: 1 / -1;
     min-height: 360px;
+    overflow: visible;
   }
 
   .card-two {
@@ -1472,7 +1501,7 @@ html.motion-ready [data-reveal].is-visible {
 
   .phone-wall {
     min-height: 390px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .phone-card {
@@ -1694,6 +1723,41 @@ html.motion-ready [data-reveal].is-visible {
     max-width: 92%;
     font-size: clamp(2.15rem, 10vw, 3rem);
     line-height: 0.92;
+  }
+
+  .clients {
+    padding-bottom: 42px;
+  }
+
+  .thesis-copy {
+    min-height: auto;
+    gap: 22px;
+    padding: 20px;
+  }
+
+  .mini-metrics span {
+    min-height: 76px;
+    font-size: 0.86rem;
+  }
+
+  .mini-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mini-metrics span:last-child {
+    grid-column: 1 / -1;
+    min-height: 58px;
+  }
+
+  .contact {
+    min-height: auto;
+    align-items: start;
+    padding-top: 36px;
+    padding-bottom: max(48px, calc(env(safe-area-inset-bottom) + 42px));
+  }
+
+  .contact h2 {
+    font-size: clamp(2.55rem, 11.2vw, 3.7rem);
   }
 
 }
