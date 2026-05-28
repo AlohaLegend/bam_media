@@ -1046,7 +1046,13 @@ html.motion-ready [data-reveal].is-visible {
   }
 
   .hero {
-    min-height: auto;
+    min-height: 100svh;
+  }
+
+  @supports (min-height: 100dvh) {
+    .hero {
+      min-height: 100dvh;
+    }
   }
 
   .hero::after {
@@ -1061,17 +1067,22 @@ html.motion-ready [data-reveal].is-visible {
   }
 
   .hero-content {
-    padding: 96px 18px 24px;
+    padding: max(84px, calc(env(safe-area-inset-top) + 76px)) 18px 18px;
   }
 
   .hero h1 {
     max-width: 360px;
-    font-size: clamp(3.25rem, 15.8vw, 4.55rem);
+    font-size: clamp(3rem, 14.4vw, 4.2rem);
   }
 
   .hero-copy {
     max-width: 350px;
+    margin-top: 16px;
     font-size: 1rem;
+  }
+
+  .hero-actions {
+    margin-top: 20px;
   }
 
   .hero-actions,
@@ -1079,9 +1090,13 @@ html.motion-ready [data-reveal].is-visible {
     width: 100%;
   }
 
+  .button {
+    min-height: 46px;
+  }
+
   .signal-panel {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin: 0 18px 20px;
+    margin: 0 18px max(14px, env(safe-area-inset-bottom));
   }
 
   .signal-panel > p {
@@ -1096,7 +1111,7 @@ html.motion-ready [data-reveal].is-visible {
   }
 
   .signal-panel strong {
-    font-size: 1.72rem;
+    font-size: 1.58rem;
   }
 
   .signal-panel span {

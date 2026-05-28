@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=visual-pass" />
+    <link rel="stylesheet" href="styles.css?v=mobile-video" />
   </head>
   <body>
     <header class="site-header" data-header>
@@ -49,10 +49,16 @@
             muted
             loop
             playsinline
-            preload="metadata"
-            poster="assets/bam-hero-poster.jpg?v=crisp"
+            webkit-playsinline
+            preload="auto"
+            poster="assets/bam-hero-poster.jpg?v=mobile"
           >
-            <source src="assets/bam-hero-reel.mp4?v=crisp" type="video/mp4" />
+            <source
+              src="assets/bam-hero-reel-mobile.mp4?v=mobile"
+              type="video/mp4"
+              media="(max-width: 620px)"
+            />
+            <source src="assets/bam-hero-reel.mp4?v=mobile" type="video/mp4" />
           </video>
         </div>
         <div class="hero-content">
@@ -354,6 +360,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=visual-pass"></script>
+    <script src="script.js?v=mobile-video"></script>
   </body>
 </html>
