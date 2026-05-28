@@ -67,6 +67,7 @@ if (heroVideo) {
     heroVideo.addEventListener("playing", markHeroVideoReady);
     heroVideo.addEventListener("timeupdate", markHeroVideoReady);
     heroVideo.addEventListener("canplay", playHeroVideo);
+    markHeroVideoReady();
 
     if (heroVideo.readyState >= 2) {
       playHeroVideo();

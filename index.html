@@ -21,7 +21,13 @@
       type="video/mp4"
       media="(max-width: 620px)"
     />
-    <link rel="stylesheet" href="styles.css?v=hero-fast" />
+    <link
+      rel="preload"
+      as="image"
+      href="assets/bam-hero-mobile-motion.webp?v=motion"
+      media="(max-width: 620px)"
+    />
+    <link rel="stylesheet" href="styles.css?v=hero-motion" />
   </head>
   <body>
     <header class="site-header" data-header>
@@ -50,6 +56,14 @@
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-media" aria-hidden="true">
+          <picture class="hero-motion">
+            <source
+              srcset="assets/bam-hero-mobile-motion.webp?v=motion"
+              type="image/webp"
+              media="(max-width: 620px)"
+            />
+            <img src="assets/bam-hero-poster.jpg?v=fast" alt="" fetchpriority="high" />
+          </picture>
           <video
             class="hero-video"
             autoplay
@@ -57,6 +71,8 @@
             loop
             playsinline
             webkit-playsinline
+            disablepictureinpicture
+            controlslist="nodownload noplaybackrate noremoteplayback"
             preload="auto"
             poster="assets/bam-hero-poster.jpg?v=fast"
             src="assets/bam-hero-reel-mobile-lite.mp4?v=fast"
@@ -64,6 +80,28 @@
             data-desktop-src="assets/bam-hero-reel.mp4?v=fast"
           >
           </video>
+          <script>
+            (() => {
+              const video = document.currentScript.previousElementSibling;
+
+              if (!video || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                return;
+              }
+
+              video.muted = true;
+              video.defaultMuted = true;
+              video.playsInline = true;
+              video.setAttribute("muted", "");
+              video.setAttribute("playsinline", "");
+              video.setAttribute("webkit-playsinline", "");
+
+              const playAttempt = video.play();
+
+              if (playAttempt && typeof playAttempt.catch === "function") {
+                playAttempt.catch(() => {});
+              }
+            })();
+          </script>
         </div>
         <div class="hero-content">
           <p class="eyebrow">QSR + food brand growth</p>
@@ -364,6 +402,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=hero-fast"></script>
+    <script src="script.js?v=hero-motion"></script>
   </body>
 </html>
