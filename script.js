@@ -317,6 +317,90 @@ const stepObserver = new IntersectionObserver(
 
 loopSteps.forEach((step) => stepObserver.observe(step));
 
+const scrollRails = document.querySelectorAll(".content-rail, .loop-steps, .service-grid, .metrics, .client-links");
+
+const syncScrollableRails = () => {
+  scrollRails.forEach((rail) => {
+    rail.classList.toggle("is-scrollable", rail.scrollWidth > rail.clientWidth + 4);
+  });
+};
+
+syncScrollableRails();
+window.addEventListener("resize", syncScrollableRails, { passive: true });
+window.addEventListener("load", syncScrollableRails, { once: true });
+
+if (window.matchMedia("(pointer: fine)").matches) {
+  scrollRails.forEach((rail) => {
+    let isDown = false;
+    let didDrag = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    rail.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || !rail.classList.contains("is-scrollable")) {
+        return;
+      }
+
+      isDown = true;
+      didDrag = false;
+      startX = event.clientX;
+      startScrollLeft = rail.scrollLeft;
+      rail.classList.add("is-dragging");
+      if (typeof rail.setPointerCapture === "function") {
+        rail.setPointerCapture(event.pointerId);
+      }
+    });
+
+    rail.addEventListener("pointermove", (event) => {
+      if (!isDown) {
+        return;
+      }
+
+      const deltaX = event.clientX - startX;
+
+      if (Math.abs(deltaX) > 4) {
+        didDrag = true;
+        rail.scrollLeft = startScrollLeft - deltaX;
+        event.preventDefault();
+      }
+    });
+
+    const endDrag = (event) => {
+      if (!isDown) {
+        return;
+      }
+
+      isDown = false;
+      rail.classList.remove("is-dragging");
+
+      if (typeof rail.hasPointerCapture === "function" && rail.hasPointerCapture(event.pointerId)) {
+        rail.releasePointerCapture(event.pointerId);
+      }
+    };
+
+    rail.addEventListener("pointerup", endDrag);
+    rail.addEventListener("pointercancel", endDrag);
+    rail.addEventListener("lostpointercapture", () => {
+      isDown = false;
+      rail.classList.remove("is-dragging");
+    });
+
+    rail.addEventListener(
+      "click",
+      (event) => {
+        if (!didDrag) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        didDrag = false;
+      },
+      true
+    );
+  });
+}
+
 const hero = document.querySelector(".hero");
 
 if (hero && !prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {

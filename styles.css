@@ -58,6 +58,11 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 4px;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -696,6 +701,17 @@ html.motion-ready [data-reveal].is-visible {
 
 .content-rail::-webkit-scrollbar {
   display: none;
+}
+
+@media (pointer: fine) {
+  .is-scrollable {
+    cursor: grab;
+  }
+
+  .is-scrollable.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
 }
 
 .content-card {
@@ -1450,14 +1466,14 @@ html.motion-ready [data-reveal].is-visible {
   }
 
   .content-card {
-    flex: 0 0 min(68vw, 260px);
+    flex: 0 0 min(76vw, 280px);
     min-height: 0;
     scroll-snap-align: start;
   }
 
   .content-card.is-reel strong,
   .content-card strong {
-    font-size: clamp(1.2rem, 6vw, 1.6rem);
+    font-size: clamp(1.08rem, 5vw, 1.34rem);
   }
 
   .service-grid {
