@@ -91,11 +91,10 @@ img {
 }
 
 .nav-toggle {
+  position: relative;
   display: none;
   width: 42px;
   height: 42px;
-  place-items: center;
-  gap: 5px;
   border: 1px solid currentColor;
   border-radius: 999px;
   color: inherit;
@@ -103,10 +102,21 @@ img {
 }
 
 .nav-toggle span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 17px;
   height: 2px;
   background: currentColor;
   transition: transform 180ms ease;
+}
+
+.nav-toggle span:first-child {
+  transform: translate(-50%, -50%) translateY(-4px);
+}
+
+.nav-toggle span:last-child {
+  transform: translate(-50%, -50%) translateY(4px);
 }
 
 .hero {
@@ -271,7 +281,7 @@ img {
   position: sticky;
   top: 110px;
   max-width: 560px;
-  font-size: clamp(3.2rem, 8vw, 7.5rem);
+  font-size: clamp(3rem, 6vw, 6.4rem);
 }
 
 .feature-list {
@@ -299,6 +309,11 @@ img {
   font-family: "Archivo", sans-serif;
   font-size: clamp(1.25rem, 2.7vw, 2.05rem);
   line-height: 1;
+}
+
+.feature-list h3,
+.feature-list p {
+  grid-column: 2;
 }
 
 .feature-list p,
@@ -447,11 +462,11 @@ img {
   }
 
   .site-header.is-open .nav-toggle span:first-child {
-    transform: translateY(3.5px) rotate(45deg);
+    transform: translate(-50%, -50%) rotate(45deg);
   }
 
   .site-header.is-open .nav-toggle span:last-child {
-    transform: translateY(-3.5px) rotate(-45deg);
+    transform: translate(-50%, -50%) rotate(-45deg);
   }
 
   .intro-grid,
@@ -502,12 +517,13 @@ img {
   }
 
   .ticker {
-    overflow-x: auto;
-    scrollbar-width: none;
+    flex-wrap: wrap;
+    overflow: visible;
   }
 
-  .ticker::-webkit-scrollbar {
-    display: none;
+  .ticker span {
+    flex: 1 1 auto;
+    text-align: center;
   }
 
   .section {
@@ -534,13 +550,19 @@ img {
     gap: 10px;
   }
 
+  .feature-list h3,
+  .feature-list p {
+    grid-column: 1;
+  }
+
   .service-grid,
   .metrics {
     grid-template-columns: 1fr;
   }
 
   .service-grid article {
-    min-height: 210px;
+    min-height: 0;
+    gap: 34px;
   }
 
   .metrics div {
