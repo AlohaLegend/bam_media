@@ -1433,29 +1433,8 @@ html.motion-ready [data-reveal].is-visible {
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
-.contact-button::before {
-  content: "";
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(12, 12, 11, 0.36);
-  border-radius: 999px;
-}
-
-.contact-button::after {
-  content: "->";
-  position: absolute;
-  top: 28px;
-  right: 31px;
-  font-weight: 900;
-  line-height: 1;
-  transition: transform 180ms ease;
-}
-
 .contact-button small {
-  max-width: calc(100% - 54px);
+  max-width: 100%;
   color: rgba(12, 12, 11, 0.72);
   font-size: 0.82rem;
   font-weight: 900;
@@ -1477,11 +1456,6 @@ html.motion-ready [data-reveal].is-visible {
   filter: saturate(1.05);
   box-shadow: 0 26px 60px rgba(223, 112, 73, 0.42);
   transform: translateY(-5px);
-}
-
-.contact-button:hover::after,
-.contact-button:focus-visible::after {
-  transform: translate(3px, -3px);
 }
 
 @media (max-width: 1120px) {
