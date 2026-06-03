@@ -29,16 +29,16 @@
     "title": "Attention only matters when it moves the line.",
     "metrics": [
       {
-        "value": "Niche",
-        "label": "food communities and creator networks built around real attention"
-      },
-      {
-        "value": "UGC",
-        "label": "short-form content and paid tests shaped for conversion"
-      },
-      {
         "value": "10%",
-        "label": "overall sales lift from campaign work"
+        "label": "overall sales lift"
+      },
+      {
+        "value": "287%",
+        "label": "engagement lift"
+      },
+      {
+        "value": "5B+",
+        "label": "food community views"
       }
     ]
   },

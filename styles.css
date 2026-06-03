@@ -1285,14 +1285,6 @@ html.motion-ready [data-reveal].is-visible {
   object-fit: contain;
 }
 
-.client-logo.is-text {
-  color: var(--ink);
-  font-family: "Archivo", sans-serif;
-  font-size: 1.05rem;
-  font-weight: 900;
-  letter-spacing: 0;
-}
-
 .client-category,
 .client-link small {
   position: relative;
@@ -1301,6 +1293,11 @@ html.motion-ready [data-reveal].is-visible {
   font-weight: 900;
   line-height: 1.15;
   text-transform: uppercase;
+}
+
+.client-link .client-handle {
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .client-category {
@@ -2097,6 +2094,11 @@ html.motion-ready [data-reveal].is-visible {
     padding: 18px;
   }
 
+  .client-link.is-wide-mobile {
+    grid-column: 1 / -1;
+    min-height: 190px;
+  }
+
   .client-top {
     display: grid;
     justify-items: start;
@@ -2131,6 +2133,22 @@ html.motion-ready [data-reveal].is-visible {
     line-height: 0.96;
     overflow-wrap: normal;
     word-break: normal;
+  }
+
+  .client-link.is-wide-mobile strong {
+    max-width: calc(100% - 34px);
+    font-size: clamp(1.9rem, 8.4vw, 2.55rem);
+  }
+
+  .client-link small {
+    display: block;
+    width: auto;
+    max-width: calc(100% - 20px);
+  }
+
+  .client-link .client-handle {
+    font-size: 0.64rem;
+    line-height: 1.2;
   }
 
   .client-link.is-featured strong {
