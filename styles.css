@@ -2161,8 +2161,8 @@ html.motion-ready [data-reveal].is-visible {
 
   .client-links {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 8px;
     overflow: visible;
     margin-right: 0;
     padding-right: 0;
@@ -2174,81 +2174,97 @@ html.motion-ready [data-reveal].is-visible {
   .client-link,
   .client-link.is-featured {
     flex: initial;
-    grid-column: auto;
-    min-height: 164px;
-    gap: 18px;
+    grid-column: 1;
+    grid-template-columns: 82px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    align-items: center;
+    min-height: 116px;
+    gap: 8px 16px;
     padding: 16px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     scroll-snap-align: none;
   }
 
   .client-link.is-featured {
-    grid-column: 1 / -1;
-    min-height: 190px;
-    padding: 18px;
+    min-height: 124px;
   }
 
   .client-link.is-wide-mobile {
-    grid-column: 1 / -1;
-    min-height: 190px;
+    min-height: 116px;
+  }
+
+  .client-link::after {
+    right: 16px;
+    bottom: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translateY(50%) rotate(45deg);
   }
 
   .client-top {
     display: grid;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-content: center;
     justify-items: start;
-    gap: 10px;
+    gap: 8px;
   }
 
   .client-link.is-featured .client-top {
-    display: flex;
-    align-items: center;
+    display: grid;
   }
 
   .client-logo {
-    width: 68px;
-    height: 44px;
+    width: 72px;
+    height: 46px;
     padding: 7px;
   }
 
   .client-link.is-featured .client-logo {
-    width: 78px;
-    height: 48px;
+    width: 72px;
+    height: 46px;
   }
 
   .client-category {
     max-width: 100%;
+    font-size: 0.6rem;
     text-align: left;
   }
 
   .client-link strong,
   .client-link:not(.is-featured) strong {
-    max-width: 100%;
-    font-size: clamp(1.24rem, 5.7vw, 1.55rem);
-    line-height: 0.96;
+    grid-column: 2;
+    align-self: end;
+    max-width: calc(100% - 24px);
+    font-size: clamp(1.34rem, 6.25vw, 1.78rem);
+    line-height: 0.94;
     overflow-wrap: normal;
     word-break: normal;
   }
 
   .client-link.is-wide-mobile strong {
-    max-width: calc(100% - 34px);
-    font-size: clamp(1.9rem, 8.4vw, 2.55rem);
+    max-width: calc(100% - 24px);
+    font-size: clamp(1.34rem, 6.25vw, 1.78rem);
   }
 
   .client-link small {
+    grid-column: 2;
+    align-self: start;
     display: block;
     width: auto;
-    max-width: calc(100% - 20px);
+    max-width: calc(100% - 24px);
   }
 
   .client-link .client-handle {
-    font-size: 0.58rem;
+    font-size: 0.68rem;
     line-height: 1.2;
   }
 
   .client-link.is-featured strong {
-    max-width: 92%;
-    font-size: clamp(2.15rem, 10vw, 3rem);
-    line-height: 0.92;
+    max-width: calc(100% - 24px);
+    font-size: clamp(1.44rem, 6.7vw, 1.95rem);
+    line-height: 0.94;
   }
 
   .clients {
