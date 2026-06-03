@@ -401,7 +401,7 @@ img {
 .signal-panel strong {
   font-family: "Archivo", sans-serif;
   font-size: clamp(2rem, 3.5vw, 3.4rem);
-  line-height: 0.86;
+  line-height: 0.98;
 }
 
 .signal-panel span {
