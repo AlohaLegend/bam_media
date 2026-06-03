@@ -118,11 +118,11 @@ html.entrance-active.entrance-complete .site-entrance {
 }
 
 .site-entrance::before {
-  top: calc(50% - 86px);
+  top: calc(50% - clamp(86px, 14vw, 178px));
 }
 
 .site-entrance::after {
-  top: calc(50% + 88px);
+  top: calc(50% + clamp(88px, 14vw, 180px));
   animation-delay: 360ms;
 }
 
