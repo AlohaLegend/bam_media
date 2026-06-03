@@ -30,7 +30,7 @@
       href="assets/bam-hero-mobile-motion.webp?v=motion"
       media="(max-width: 620px)"
     />
-    <link rel="stylesheet" href="styles.css?v=static-focus-strip-1" />
+    <link rel="stylesheet" href="styles.css?v=production-sweep-1" />
   </head>
   <body>
     <header class="site-header" data-header>
@@ -108,30 +108,30 @@
           </script>
         </div>
         <div class="hero-content">
-          <p class="eyebrow">QSR + food brand growth</p>
-          <h1 id="hero-title">Make food famous. Move orders.</h1>
-          <p class="hero-copy">
+          <p class="eyebrow" data-content="hero.eyebrow">QSR + food brand growth</p>
+          <h1 id="hero-title" data-content="hero.title">Make food famous. Move orders.</h1>
+          <p class="hero-copy" data-content="hero.copy">
             BAM turns social attention into store visits, catering demand, and repeatable local momentum.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#contact">Start a conversation</a>
-            <a class="button ghost" href="#work">See the system</a>
+            <a class="button primary" href="#contact" data-content="hero.primaryCta">Start a conversation</a>
+            <a class="button ghost" href="#work" data-content="hero.secondaryCta">See the system</a>
           </div>
         </div>
 
         <aside class="signal-panel" aria-label="BAM campaign signals">
           <p>Demand board</p>
           <div>
-            <strong data-count="143" data-suffix="%">143%</strong>
-            <span>sales lift</span>
+            <strong data-content="signals.0.value">QSR</strong>
+            <span data-content="signals.0.label">food + beverage focus</span>
           </div>
           <div>
-            <strong data-count="287" data-suffix="%">287%</strong>
-            <span>engagement lift</span>
+            <strong data-content="signals.1.value">UGC</strong>
+            <span data-content="signals.1.label">creator-led content</span>
           </div>
           <div>
-            <strong data-count="5" data-suffix="B+">5B+</strong>
-            <span>food community views</span>
+            <strong data-content="signals.2.value">Local</strong>
+            <span data-content="signals.2.label">sales-minded demand</span>
           </div>
         </aside>
       </section>
@@ -408,20 +408,20 @@
 
       <section id="proof" class="proof">
         <div class="proof-inner">
-          <p class="section-kicker">Receipts</p>
-          <h2>Attention only matters when it moves the line.</h2>
+          <p class="section-kicker" data-content="proof.kicker">Receipts</p>
+          <h2 data-content="proof.title">Attention only matters when it moves the line.</h2>
           <div class="metrics">
             <article>
-              <strong data-count="5" data-suffix="B+">5B+</strong>
-              <span>views generated across niche food communities</span>
+              <strong data-content="proof.metrics.0.value">Niche</strong>
+              <span data-content="proof.metrics.0.label">food communities and creator networks built around real attention</span>
             </article>
             <article>
-              <strong data-count="143" data-suffix="%">143%</strong>
-              <span>reported sales lift from campaign work</span>
+              <strong data-content="proof.metrics.1.value">UGC</strong>
+              <span data-content="proof.metrics.1.label">short-form content and paid tests shaped for conversion</span>
             </article>
             <article>
-              <strong data-count="287" data-suffix="%">287%</strong>
-              <span>reported engagement lift for managed social</span>
+              <strong data-content="proof.metrics.2.value">Local</strong>
+              <span data-content="proof.metrics.2.label">campaigns pointed at store visits, catering leads, and repeat buyers</span>
             </article>
           </div>
         </div>
@@ -539,19 +539,78 @@
 
       <section id="contact" class="contact">
         <div class="contact-copy">
-          <p class="eyebrow">Ready when the food is</p>
-          <h2>Give the next launch, opening, or growth push a system behind it.</h2>
+          <p class="eyebrow" data-content="contact.eyebrow">Ready when the food is</p>
+          <h2 data-content="contact.title">Give the next launch, opening, or growth push a system behind it.</h2>
         </div>
         <div class="contact-panel">
           <span>Direct line</span>
-          <a class="contact-button" href="mailto:hello@bammediagroup.us">
-            <strong>Start a conversation</strong>
-            <small>hello@bammediagroup.us</small>
+          <a class="contact-button" href="mailto:hello@bammediagroup.us" data-contact-email>
+            <strong data-content="contact.cta">Start a conversation</strong>
+            <small data-contact-email-label>hello@bammediagroup.us</small>
           </a>
+          <div class="social-links contact-social" aria-label="BAM social profiles">
+            <a
+              href="https://www.instagram.com/bam.social/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="BAM on Instagram"
+              data-social="instagram"
+            >
+              <span>IG</span>
+              <strong>Instagram</strong>
+            </a>
+            <a
+              href="https://www.linkedin.com/company/bam-media-group/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="BAM Media Group on LinkedIn"
+              data-social="linkedin"
+            >
+              <span>in</span>
+              <strong>LinkedIn</strong>
+            </a>
+          </div>
         </div>
       </section>
     </main>
 
-    <script src="script.js?v=static-focus-strip-1"></script>
+    <footer class="site-footer" aria-label="Site footer">
+      <a class="brand footer-brand" href="#top" aria-label="BAM Media Group home">
+        <span>BAM</span>
+        <small>Media Group</small>
+      </a>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#work">System</a>
+        <a href="#reels">Reels</a>
+        <a href="#services">Services</a>
+        <a href="#clients">Clients</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="social-links footer-social" aria-label="BAM social profiles">
+        <a
+          href="https://www.instagram.com/bam.social/"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="BAM on Instagram"
+          data-social="instagram"
+        >
+          <span>IG</span>
+          <strong>Instagram</strong>
+        </a>
+        <a
+          href="https://www.linkedin.com/company/bam-media-group/"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="BAM Media Group on LinkedIn"
+          data-social="linkedin"
+        >
+          <span>in</span>
+          <strong>LinkedIn</strong>
+        </a>
+      </div>
+      <p>Copyright 2018-2026 BAM Media Group Inc. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js?v=production-sweep-1"></script>
   </body>
 </html>

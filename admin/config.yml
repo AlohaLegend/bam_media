@@ -1,0 +1,73 @@
+backend:
+  name: github
+  repo: AlohaLegend/bam_media
+  branch: main
+
+site_url: https://bammedia.us
+display_url: https://bammedia.us
+logo_url: /assets/favicon.svg
+media_folder: assets/uploads
+public_folder: /assets/uploads
+
+collections:
+  - name: site
+    label: Website Content
+    files:
+      - name: homepage
+        label: Homepage Settings
+        file: content/site.json
+        format: json
+        fields:
+          - label: SEO
+            name: seo
+            widget: object
+            fields:
+              - { label: Browser Title, name: title, widget: string }
+              - { label: Search Description, name: description, widget: text }
+          - label: Hero
+            name: hero
+            widget: object
+            fields:
+              - { label: Eyebrow, name: eyebrow, widget: string }
+              - { label: Headline, name: title, widget: string }
+              - { label: Intro Copy, name: copy, widget: text }
+              - { label: Primary Button, name: primaryCta, widget: string }
+              - { label: Secondary Button, name: secondaryCta, widget: string }
+          - label: Demand Board
+            name: signals
+            widget: list
+            summary: "{{fields.value}} - {{fields.label}}"
+            min: 3
+            max: 3
+            fields:
+              - { label: Value, name: value, widget: string }
+              - { label: Label, name: label, widget: string }
+          - label: Proof Section
+            name: proof
+            widget: object
+            fields:
+              - { label: Kicker, name: kicker, widget: string }
+              - { label: Headline, name: title, widget: string }
+              - label: Proof Cards
+                name: metrics
+                widget: list
+                summary: "{{fields.value}} - {{fields.label}}"
+                min: 3
+                max: 3
+                fields:
+                  - { label: Value, name: value, widget: string }
+                  - { label: Label, name: label, widget: text }
+          - label: Contact
+            name: contact
+            widget: object
+            fields:
+              - { label: Eyebrow, name: eyebrow, widget: string }
+              - { label: Headline, name: title, widget: text }
+              - { label: Button Text, name: cta, widget: string }
+              - { label: Email, name: email, widget: string }
+          - label: Social Links
+            name: social
+            widget: object
+            fields:
+              - { label: Instagram URL, name: instagram, widget: string }
+              - { label: LinkedIn URL, name: linkedin, widget: string }
