@@ -7,7 +7,7 @@
     "eyebrow": "QSR + food brand growth",
     "title": "Make food famous. Move orders.",
     "copy": "BAM turns social attention into store visits, catering demand, and repeatable local momentum.",
-    "primaryCta": "Start a conversation",
+    "primaryCta": "Email BAM",
     "secondaryCta": "See the system"
   },
   "signals": [
@@ -20,8 +20,8 @@
       "label": "creator-led content"
     },
     {
-      "value": "Local",
-      "label": "sales-minded demand"
+      "value": "10%",
+      "label": "overall sales lift"
     }
   ],
   "proof": {
@@ -37,15 +37,15 @@
         "label": "short-form content and paid tests shaped for conversion"
       },
       {
-        "value": "Local",
-        "label": "campaigns pointed at store visits, catering leads, and repeat buyers"
+        "value": "10%",
+        "label": "overall sales lift from campaign work"
       }
     ]
   },
   "contact": {
     "eyebrow": "Ready when the food is",
     "title": "Give the next launch, opening, or growth push a system behind it.",
-    "cta": "Start a conversation",
+    "cta": "Email BAM",
     "email": "hello@bammediagroup.us"
   },
   "social": {
