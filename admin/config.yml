@@ -2,6 +2,7 @@ backend:
   name: github
   repo: AlohaLegend/bam_media
   branch: main
+  auth_methods: [token]
 
 site_url: https://bammedia.us
 display_url: https://bammedia.us
