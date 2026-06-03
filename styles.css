@@ -1285,6 +1285,14 @@ html.motion-ready [data-reveal].is-visible {
   object-fit: contain;
 }
 
+.client-logo.is-text {
+  color: var(--ink);
+  font-family: "Archivo", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
 .client-category,
 .client-link small {
   position: relative;
@@ -1306,7 +1314,7 @@ html.motion-ready [data-reveal].is-visible {
   max-width: 92%;
   font-family: "Archivo", sans-serif;
   font-size: clamp(2rem, 4vw, 4.7rem);
-  line-height: 0.88;
+  line-height: 1.05;
   overflow-wrap: break-word;
 }
 
@@ -1318,6 +1326,7 @@ html.motion-ready [data-reveal].is-visible {
   width: max-content;
   max-width: calc(100% - 34px);
   color: rgba(255, 255, 255, 0.66);
+  overflow-wrap: anywhere;
 }
 
 .client-link:hover,
