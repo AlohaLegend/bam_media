@@ -4,9 +4,250 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>BAM Website Admin</title>
+    <title>BAM Admin | Edit the Website</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0c0c0b;
+        --paper: #f6f1e8;
+        --paper-2: #fffaf0;
+        --mint: #85dfb8;
+        --amber: #f3a85e;
+        --muted: #6f6860;
+        --line: rgba(12, 12, 11, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .admin-guide {
+        padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 56px) 28px;
+        background:
+          linear-gradient(135deg, rgba(133, 223, 184, 0.16), transparent 38%),
+          linear-gradient(180deg, var(--paper-2), var(--paper));
+        border-bottom: 1px solid var(--line);
+      }
+
+      .admin-guide-inner {
+        width: min(100%, 1120px);
+        display: grid;
+        gap: 24px;
+        margin: 0 auto;
+      }
+
+      .admin-kicker,
+      .cms-kicker {
+        margin: 0;
+        color: #1b8f66;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .admin-guide h1 {
+        max-width: 860px;
+        margin: 0;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: clamp(2.8rem, 9vw, 7rem);
+        line-height: 0.88;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .admin-intro {
+        max-width: 720px;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.22rem);
+        font-weight: 700;
+        line-height: 1.5;
+      }
+
+      .admin-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .admin-actions a {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.42);
+        font-size: 0.78rem;
+        font-weight: 900;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .admin-actions a:first-child {
+        border-color: transparent;
+        background: var(--amber);
+      }
+
+      .admin-cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .admin-card {
+        min-height: 160px;
+        display: grid;
+        align-content: space-between;
+        gap: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 18px;
+        background: rgba(255, 250, 240, 0.72);
+      }
+
+      .admin-card strong {
+        font-family: Archivo, Impact, sans-serif;
+        font-size: 1.05rem;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .admin-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        font-weight: 700;
+        line-height: 1.42;
+      }
+
+      .admin-card.is-liam {
+        color: #06130d;
+        background:
+          linear-gradient(180deg, rgba(133, 223, 184, 0.62), rgba(133, 223, 184, 0.36)),
+          var(--mint);
+      }
+
+      .admin-card.is-liam p {
+        color: rgba(6, 19, 13, 0.72);
+      }
+
+      .cms-shell {
+        width: min(100%, 1120px);
+        margin: 0 auto;
+        padding: 28px clamp(18px, 5vw, 56px) 64px;
+      }
+
+      .cms-heading {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .cms-heading h2 {
+        margin: 0;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        line-height: 0.95;
+        text-transform: uppercase;
+      }
+
+      .cms-heading p {
+        max-width: 680px;
+        margin: 0;
+        color: var(--muted);
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      #nc-root {
+        min-height: 720px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #ffffff;
+      }
+
+      @media (max-width: 900px) {
+        .admin-cards {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        .admin-cards {
+          grid-template-columns: 1fr;
+        }
+
+        .admin-card {
+          min-height: 130px;
+        }
+      }
+    </style>
   </head>
   <body>
+    <main class="admin-guide" aria-labelledby="admin-title">
+      <div class="admin-guide-inner">
+        <p class="admin-kicker">BAM backend</p>
+        <h1 id="admin-title">Make the easy edits here.</h1>
+        <p class="admin-intro">
+          This page edits the safe homepage fields: hero copy, stats, receipts, email, and social links.
+          Publish saves a commit to GitHub, then GitHub Pages pushes the live site.
+        </p>
+        <div class="admin-actions" aria-label="Admin shortcuts">
+          <a href="/" target="_blank" rel="noreferrer">View live site</a>
+          <a href="#cms-title">Jump to editor</a>
+          <a href="https://github.com/AlohaLegend/bam_media" target="_blank" rel="noreferrer">Open GitHub</a>
+        </div>
+        <section class="admin-cards" aria-label="Editing tips">
+          <article class="admin-card">
+            <strong>Hero copy</strong>
+            <p>Keep it short. If it looks like a paragraph on mobile, it is probably two sentences too long.</p>
+          </article>
+          <article class="admin-card">
+            <strong>Stats</strong>
+            <p>Use the Demand Board and Receipts together so the numbers tell one clean story.</p>
+          </article>
+          <article class="admin-card">
+            <strong>Publish flow</strong>
+            <p>Save, publish, then give GitHub Pages a minute. Refresh the live site after the cache catches up.</p>
+          </article>
+          <article class="admin-card is-liam">
+            <strong>Liam-proof note</strong>
+            <p>Built by Liam, tuned for Jake. If copy starts sounding too fancy, cut it in half and blame the builder.</p>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <section class="cms-shell" aria-labelledby="cms-title">
+      <div class="cms-heading">
+        <p class="cms-kicker">Editor</p>
+        <h2 id="cms-title">Homepage controls</h2>
+        <p>
+          Sign in with GitHub below. The editor is intentionally narrow so normal updates stay hard to break.
+          Deeper layout changes still belong in the code.
+        </p>
+      </div>
+      <div id="nc-root"></div>
+    </section>
+
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
 </html>
