@@ -2,10 +2,14 @@
 
 The admin panel lives at `/admin/` and edits `content/site.json`.
 
-This repository is a static GitHub Pages site, so Decap CMS still needs GitHub authentication before Jake can save changes from the browser. After GitHub auth is configured, edits made in the admin panel will commit back to the `main` branch and publish through GitHub Pages.
+Jake's normal workflow:
 
-Recommended setup:
+1. Open `https://bammedia.us/admin/`.
+2. Sign in with GitHub.
+3. Open `BAM Website` then `Homepage Quick Edits`.
+4. Edit copy, stats, contact email, or social links.
+5. Publish. GitHub Pages usually updates the live site within a minute or two.
 
-1. Give Jake write access to `AlohaLegend/bam_media`.
-2. Configure a Decap CMS GitHub auth provider for `https://bammedia.us/admin/`.
-3. Open `https://bammedia.us/admin/`, sign in with GitHub, edit the homepage fields, and publish.
+The admin is intentionally narrow. It is for safe copy and stat changes, not layout surgery. Bigger visual changes still belong in the code.
+
+Liam-proofing rule: if the copy starts sounding like it wore a blazer to lunch, shorten it.
