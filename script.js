@@ -6,10 +6,54 @@ const heroVideo = document.querySelector(".hero-video");
 const mobileHeroQuery = window.matchMedia("(max-width: 620px)");
 const entrance = document.querySelector("[data-entrance]");
 const entranceActive = document.documentElement.classList.contains("entrance-active");
+const canWarmScrollAssets = "requestIdleCallback" in window;
+
+const runWhenIdle = (callback, timeout = 1200) => {
+  if (canWarmScrollAssets) {
+    window.requestIdleCallback(callback, { timeout });
+    return;
+  }
+
+  window.setTimeout(callback, 160);
+};
+
+const warmImage = (src) => {
+  if (!src) {
+    return;
+  }
+
+  const image = new Image();
+  image.decoding = "async";
+  image.loading = "eager";
+  image.src = src;
+
+  if (typeof image.decode === "function") {
+    image.decode().catch(() => {});
+  }
+};
+
+let scrollAssetsWarmed = false;
+
+const warmScrollAssets = () => {
+  if (scrollAssetsWarmed) {
+    return;
+  }
+
+  scrollAssetsWarmed = true;
+
+  const imageSources = Array.from(document.querySelectorAll(".reel-poster, .client-logo img"))
+    .map((image) => image.currentSrc || image.src)
+    .filter(Boolean);
+
+  Array.from(new Set(imageSources)).forEach((src, index) => {
+    window.setTimeout(() => warmImage(src), index * 45);
+  });
+};
 
 const finishEntrance = () => {
   document.documentElement.classList.add("entrance-complete");
   document.body.classList.add("is-loaded");
+  runWhenIdle(warmScrollAssets, 900);
 
   if (entrance) {
     window.setTimeout(() => {
@@ -24,6 +68,7 @@ const runEntrance = () => {
     return;
   }
 
+  runWhenIdle(warmScrollAssets, 700);
   window.setTimeout(finishEntrance, 1900);
 };
 
@@ -358,7 +403,7 @@ window.addEventListener("hashchange", () => scrollToHash(window.location.hash, f
 
 runEntrance();
 
-const revealTargets = document.querySelectorAll(
+const revealTargets = Array.from(document.querySelectorAll(
   [
     ".thesis .section-kicker",
     ".thesis h2",
@@ -377,14 +422,34 @@ const revealTargets = document.querySelectorAll(
     ".client-link",
     ".contact > *",
   ].join(",")
-);
+));
+const isMobileViewport = mobileHeroQuery.matches;
+const mobileRevealSelectors = [
+  ".thesis .section-kicker",
+  ".thesis h2",
+  ".loop-copy",
+  ".content-proof-copy",
+  ".section-head",
+  ".proof .section-kicker",
+  ".proof h2",
+  ".clients-copy",
+  ".contact > *",
+].join(",");
+const animatedRevealTargets = isMobileViewport
+  ? revealTargets.filter((target) => target.matches(mobileRevealSelectors))
+  : revealTargets;
+const immediateRevealTargets = isMobileViewport
+  ? revealTargets.filter((target) => !target.matches(mobileRevealSelectors))
+  : [];
 
 if (!prefersReducedMotion) {
   document.documentElement.classList.add("motion-ready");
 
-  revealTargets.forEach((target, index) => {
+  immediateRevealTargets.forEach((target) => target.classList.add("is-visible"));
+
+  animatedRevealTargets.forEach((target, index) => {
     target.dataset.reveal = "";
-    target.style.setProperty("--reveal-delay", `${(index % 5) * 55}ms`);
+    target.style.setProperty("--reveal-delay", isMobileViewport ? "0ms" : `${(index % 5) * 55}ms`);
   });
 
   const revealObserver = new IntersectionObserver(
@@ -399,7 +464,7 @@ if (!prefersReducedMotion) {
     { rootMargin: "0px 0px -12% 0px", threshold: 0.12 }
   );
 
-  revealTargets.forEach((target) => revealObserver.observe(target));
+  animatedRevealTargets.forEach((target) => revealObserver.observe(target));
 } else {
   revealTargets.forEach((target) => target.classList.add("is-visible"));
 }
