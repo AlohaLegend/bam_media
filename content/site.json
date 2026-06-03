@@ -1,0 +1,55 @@
+{
+  "seo": {
+    "title": "BAM Media Group | Food Social That Moves",
+    "description": "BAM Media Group builds social growth systems for quick-service restaurants and food brands that need attention to become orders."
+  },
+  "hero": {
+    "eyebrow": "QSR + food brand growth",
+    "title": "Make food famous. Move orders.",
+    "copy": "BAM turns social attention into store visits, catering demand, and repeatable local momentum.",
+    "primaryCta": "Start a conversation",
+    "secondaryCta": "See the system"
+  },
+  "signals": [
+    {
+      "value": "QSR",
+      "label": "food + beverage focus"
+    },
+    {
+      "value": "UGC",
+      "label": "creator-led content"
+    },
+    {
+      "value": "Local",
+      "label": "sales-minded demand"
+    }
+  ],
+  "proof": {
+    "kicker": "Receipts",
+    "title": "Attention only matters when it moves the line.",
+    "metrics": [
+      {
+        "value": "Niche",
+        "label": "food communities and creator networks built around real attention"
+      },
+      {
+        "value": "UGC",
+        "label": "short-form content and paid tests shaped for conversion"
+      },
+      {
+        "value": "Local",
+        "label": "campaigns pointed at store visits, catering leads, and repeat buyers"
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Ready when the food is",
+    "title": "Give the next launch, opening, or growth push a system behind it.",
+    "cta": "Start a conversation",
+    "email": "hello@bammediagroup.us"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/bam.social/",
+    "linkedin": "https://www.linkedin.com/company/bam-media-group/"
+  }
+}

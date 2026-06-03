@@ -9,6 +9,77 @@ if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
 }
 
+const getEditableValue = (source, path) =>
+  path.split(".").reduce((value, key) => {
+    if (value == null) {
+      return undefined;
+    }
+
+    return Array.isArray(value) ? value[Number(key)] : value[key];
+  }, source);
+
+const applyEditableContent = (content) => {
+  if (!content || typeof content !== "object") {
+    return;
+  }
+
+  if (content.seo?.title) {
+    document.title = content.seo.title;
+  }
+
+  const description = document.querySelector('meta[name="description"]');
+
+  if (description && content.seo?.description) {
+    description.setAttribute("content", content.seo.description);
+  }
+
+  document.querySelectorAll("[data-content]").forEach((element) => {
+    const value = getEditableValue(content, element.dataset.content);
+
+    if (typeof value === "string" && value.trim()) {
+      element.textContent = value;
+    }
+  });
+
+  if (content.contact?.email) {
+    const email = content.contact.email.trim();
+
+    document.querySelectorAll("[data-contact-email]").forEach((element) => {
+      element.href = `mailto:${email}`;
+    });
+
+    document.querySelectorAll("[data-contact-email-label]").forEach((element) => {
+      element.textContent = email;
+    });
+  }
+
+  Object.entries(content.social || {}).forEach(([network, url]) => {
+    if (typeof url !== "string" || !url.trim()) {
+      return;
+    }
+
+    document.querySelectorAll(`[data-social="${network}"]`).forEach((element) => {
+      element.href = url;
+    });
+  });
+};
+
+const loadEditableContent = async () => {
+  try {
+    const response = await fetch("content/site.json", { cache: "no-store" });
+
+    if (!response.ok) {
+      return;
+    }
+
+    applyEditableContent(await response.json());
+  } catch {
+    applyEditableContent(null);
+  }
+};
+
+loadEditableContent();
+
 const getHeroVideoSource = () => {
   if (!heroVideo) {
     return "";
@@ -509,58 +580,6 @@ if (reelCards.length && !prefersReducedMotion && "IntersectionObserver" in windo
   });
 }
 
-const countElements = document.querySelectorAll("[data-count]");
-
-const easeOut = (value) => 1 - Math.pow(1 - value, 3);
-
-const formatCount = (value, suffix) => {
-  const rounded = suffix === "B+" ? Math.round(value) : Math.round(value);
-  return `${rounded}${suffix}`;
-};
-
-const animateCount = (element) => {
-  if (element.dataset.counted === "true") {
-    return;
-  }
-
-  element.dataset.counted = "true";
-
-  if (prefersReducedMotion) {
-    return;
-  }
-
-  const target = Number(element.dataset.count);
-  const suffix = element.dataset.suffix || "";
-  const duration = 1100;
-  const start = performance.now();
-
-  const tick = (now) => {
-    const progress = Math.min((now - start) / duration, 1);
-    element.textContent = formatCount(target * easeOut(progress), suffix);
-
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    }
-  };
-
-  element.textContent = formatCount(0, suffix);
-  requestAnimationFrame(tick);
-};
-
-const countObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animateCount(entry.target);
-        countObserver.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.45 }
-);
-
-countElements.forEach((element) => countObserver.observe(element));
-
 const serviceCards = document.querySelectorAll(".service-grid article");
 
 const activateService = (activeCard) => {
@@ -592,7 +611,7 @@ const stepObserver = new IntersectionObserver(
 
 loopSteps.forEach((step) => stepObserver.observe(step));
 
-const scrollRails = document.querySelectorAll(".content-rail, .loop-steps, .service-grid, .metrics, .client-links");
+const scrollRails = document.querySelectorAll(".content-rail, .loop-steps, .service-grid, .metrics");
 
 const ensureRailProgress = (rail) => {
   const next = rail.nextElementSibling;
@@ -653,31 +672,6 @@ const scheduleRailSync = (rail) => {
   });
 };
 
-const visibleRails = new Set();
-let visibleRailTimer = 0;
-
-const stopVisibleRailSync = () => {
-  if (visibleRailTimer) {
-    window.clearInterval(visibleRailTimer);
-    visibleRailTimer = 0;
-  }
-};
-
-const startVisibleRailSync = () => {
-  if (visibleRailTimer) {
-    return;
-  }
-
-  visibleRailTimer = window.setInterval(() => {
-    if (!visibleRails.size) {
-      stopVisibleRailSync();
-      return;
-    }
-
-    visibleRails.forEach(syncRailState);
-  }, 120);
-};
-
 syncScrollableRails();
 window.addEventListener("resize", syncScrollableRails, { passive: true });
 window.addEventListener("load", syncScrollableRails, { once: true });
@@ -690,23 +684,22 @@ const railObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        visibleRails.add(entry.target);
-        syncRailState(entry.target);
-      } else {
-        visibleRails.delete(entry.target);
+        scheduleRailSync(entry.target);
       }
     });
-
-    if (visibleRails.size) {
-      startVisibleRailSync();
-    } else {
-      stopVisibleRailSync();
-    }
   },
   { threshold: 0.08 }
 );
 
 scrollRails.forEach((rail) => railObserver.observe(rail));
+
+if ("ResizeObserver" in window) {
+  const railResizeObserver = new ResizeObserver((entries) => {
+    entries.forEach((entry) => scheduleRailSync(entry.target));
+  });
+
+  scrollRails.forEach((rail) => railResizeObserver.observe(rail));
+}
 
 if (window.matchMedia("(pointer: fine)").matches) {
   scrollRails.forEach((rail) => {
