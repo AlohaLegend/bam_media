@@ -709,8 +709,7 @@ html.motion-ready [data-reveal].is-visible {
   overflow: visible;
 }
 
-.phone-card,
-.order-ticket {
+.phone-card {
   position: absolute;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -759,8 +758,7 @@ html.motion-ready [data-reveal].is-visible {
   display: block;
 }
 
-.phone-card span,
-.order-ticket small {
+.phone-card span {
   color: var(--mint);
   font-size: 0.74rem;
   font-weight: 900;
@@ -775,8 +773,7 @@ html.motion-ready [data-reveal].is-visible {
   overflow-wrap: anywhere;
 }
 
-.phone-card small,
-.order-ticket span {
+.phone-card small {
   margin-top: 8px;
   color: rgba(255, 255, 255, 0.76);
   font-weight: 700;
@@ -798,29 +795,6 @@ html.motion-ready [data-reveal].is-visible {
   bottom: 42px;
   transform: translate3d(var(--card-two-x, 0), var(--card-two-y, 0), 0) rotate(5deg);
   animation: float-two 5.4s ease-in-out infinite;
-}
-
-.order-ticket {
-  right: 0;
-  top: 90px;
-  width: 214px;
-  padding: 18px;
-  color: var(--ink);
-  background: var(--yellow);
-  transform: translate3d(var(--ticket-x, 0), var(--ticket-y, 0), 0);
-  animation: ticket-pulse 4.9s ease-in-out infinite;
-}
-
-.order-ticket strong {
-  display: block;
-  margin-top: 8px;
-  font-family: "Archivo", sans-serif;
-  font-size: 2rem;
-  line-height: 0.9;
-}
-
-.order-ticket span {
-  color: rgba(12, 12, 11, 0.72);
 }
 
 .loop-steps {
@@ -1680,9 +1654,6 @@ html.motion-ready [data-reveal].is-visible {
     right: 22%;
   }
 
-  .order-ticket {
-    right: 14%;
-  }
 }
 
 @media (max-width: 900px) {
@@ -1972,12 +1943,6 @@ html.motion-ready [data-reveal].is-visible {
   .card-two {
     right: 2px;
     bottom: 24px;
-  }
-
-  .order-ticket {
-    right: 32px;
-    top: 72px;
-    width: 188px;
   }
 
   .loop-steps,
@@ -2377,16 +2342,6 @@ html.motion-ready [data-reveal].is-visible {
   }
   50% {
     translate: 0 12px;
-  }
-}
-
-@keyframes ticket-pulse {
-  0%,
-  100% {
-    scale: 1;
-  }
-  50% {
-    scale: 1.025;
   }
 }
 
