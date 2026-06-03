@@ -4,6 +4,28 @@ const anchorLinks = document.querySelectorAll('a[href^="#"]');
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const heroVideo = document.querySelector(".hero-video");
 const mobileHeroQuery = window.matchMedia("(max-width: 620px)");
+const entrance = document.querySelector("[data-entrance]");
+const entranceActive = document.documentElement.classList.contains("entrance-active");
+
+const finishEntrance = () => {
+  document.documentElement.classList.add("entrance-complete");
+  document.body.classList.add("is-loaded");
+
+  if (entrance) {
+    window.setTimeout(() => {
+      entrance.hidden = true;
+    }, prefersReducedMotion ? 0 : 560);
+  }
+};
+
+const runEntrance = () => {
+  if (!entrance || !entranceActive || prefersReducedMotion) {
+    finishEntrance();
+    return;
+  }
+
+  window.setTimeout(finishEntrance, 1900);
+};
 
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
@@ -334,7 +356,7 @@ if (window.location.hash) {
 
 window.addEventListener("hashchange", () => scrollToHash(window.location.hash, false));
 
-document.body.classList.add("is-loaded");
+runEntrance();
 
 const revealTargets = document.querySelectorAll(
   [
