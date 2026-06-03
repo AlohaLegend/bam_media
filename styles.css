@@ -541,6 +541,16 @@ html.motion-ready [data-reveal].is-visible {
   transform: translateY(0);
 }
 
+@media (max-width: 620px) {
+  [data-reveal] {
+    transition-duration: 360ms;
+  }
+
+  html.motion-ready [data-reveal] {
+    transform: translateY(14px);
+  }
+}
+
 .section {
   width: min(100%, var(--max));
   margin: 0 auto;
