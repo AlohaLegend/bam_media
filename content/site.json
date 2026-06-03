@@ -12,16 +12,16 @@
   },
   "signals": [
     {
-      "value": "QSR",
-      "label": "food + beverage focus"
-    },
-    {
-      "value": "UGC",
-      "label": "creator-led content"
-    },
-    {
       "value": "10%",
       "label": "overall sales lift"
+    },
+    {
+      "value": "287%",
+      "label": "engagement lift"
+    },
+    {
+      "value": "5B+",
+      "label": "food community views"
     }
   ],
   "proof": {
