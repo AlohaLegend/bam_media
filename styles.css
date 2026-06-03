@@ -39,6 +39,16 @@ body.nav-open {
   overflow: hidden;
 }
 
+html.entrance-active:not(.entrance-complete) body {
+  overflow: hidden;
+}
+
+html.entrance-active:not(.entrance-complete) .site-header,
+html.entrance-active:not(.entrance-complete) main,
+html.entrance-active:not(.entrance-complete) .site-footer {
+  visibility: hidden;
+}
+
 body.is-loaded .hero h1,
 body.is-loaded .hero-copy,
 body.is-loaded .hero-actions,
@@ -71,6 +81,75 @@ a {
 img {
   display: block;
   max-width: 100%;
+}
+
+.site-entrance {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: none;
+  place-items: center;
+  overflow: hidden;
+  color: var(--white);
+  background:
+    radial-gradient(circle at 50% 48%, rgba(133, 223, 184, 0.13), transparent 24%),
+    linear-gradient(180deg, #0e130f 0%, #080908 62%, #050505 100%);
+  pointer-events: none;
+}
+
+html.entrance-active .site-entrance {
+  display: grid;
+}
+
+html.entrance-active.entrance-complete .site-entrance {
+  animation: entrance-out 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.site-entrance::before,
+.site-entrance::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: min(620px, 86vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(133, 223, 184, 0.62), transparent);
+  transform: translateX(-50%) scaleX(0);
+  animation: entrance-line 1500ms cubic-bezier(0.16, 1, 0.3, 1) 240ms both;
+}
+
+.site-entrance::before {
+  top: calc(50% - 86px);
+}
+
+.site-entrance::after {
+  top: calc(50% + 88px);
+  animation-delay: 360ms;
+}
+
+.entrance-mark {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  font-family: "Archivo", sans-serif;
+  line-height: 0.86;
+  text-align: center;
+  text-transform: uppercase;
+  animation: entrance-mark 1900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.entrance-mark span {
+  font-size: clamp(5.8rem, 19vw, 14rem);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.entrance-mark small {
+  color: var(--mint);
+  font-size: clamp(0.95rem, 2.2vw, 1.45rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
 }
 
 .site-header {
@@ -2282,6 +2361,41 @@ html.motion-ready [data-reveal].is-visible {
   }
   50% {
     scale: 1.025;
+  }
+}
+
+@keyframes entrance-mark {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  22%,
+  78% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.02);
+  }
+}
+
+@keyframes entrance-line {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0);
+  }
+  40%,
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
+@keyframes entrance-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
   }
 }
 

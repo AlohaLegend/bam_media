@@ -30,9 +30,31 @@
       href="assets/bam-hero-mobile-motion.webp?v=motion"
       media="(max-width: 620px)"
     />
-    <link rel="stylesheet" href="styles.css?v=footer-icons-1" />
+    <script>
+      (() => {
+        const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+        if (!reduceMotion) {
+          document.documentElement.classList.add("entrance-active");
+          window.setTimeout(() => {
+            document.documentElement.classList.add("entrance-complete");
+            document.body?.classList.add("is-loaded");
+          }, 3600);
+        } else {
+          document.documentElement.classList.add("entrance-complete");
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="styles.css?v=entrance-1" />
   </head>
   <body>
+    <div class="site-entrance" data-entrance aria-hidden="true">
+      <div class="entrance-mark">
+        <span>BAM</span>
+        <small>Media Group</small>
+      </div>
+    </div>
+
     <header class="site-header" data-header>
       <a class="brand" href="#top" aria-label="BAM Media Group home">
         <span>BAM</span>
@@ -633,6 +655,6 @@
       <p>Copyright 2018-2026 BAM Media Group Inc. All Rights Reserved.</p>
     </footer>
 
-    <script src="script.js?v=production-sweep-1"></script>
+    <script src="script.js?v=entrance-1"></script>
   </body>
 </html>
