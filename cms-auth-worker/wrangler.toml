@@ -1,0 +1,7 @@
+name = "bam-cms-auth"
+main = "src/index.js"
+compatibility_date = "2026-06-03"
+
+[vars]
+ALLOWED_DOMAINS = "bammedia.us,www.bammedia.us"
+GITHUB_SCOPE = "public_repo"

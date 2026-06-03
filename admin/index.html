@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
+    <meta name="cms-auth-mode" content="token" />
     <title>BAM Admin | Edit the Website</title>
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -101,7 +102,7 @@
         text-transform: uppercase;
       }
 
-      .admin-actions a:first-child {
+      .admin-actions a.is-primary {
         border-color: transparent;
         background: var(--amber);
       }
@@ -109,6 +110,12 @@
       .admin-actions a.is-key {
         border-color: transparent;
         background: var(--mint);
+      }
+
+      .admin-actions a.is-oauth {
+        border-color: transparent;
+        background: var(--blue);
+        color: #ffffff;
       }
 
       .admin-cards {
@@ -240,6 +247,11 @@
         color: #ffffff;
       }
 
+      html[data-cms-auth-mode="token"] .oauth-mode,
+      html[data-cms-auth-mode="oauth"] .token-mode {
+        display: none !important;
+      }
+
       #nc-root {
         min-height: 720px;
         overflow: hidden;
@@ -284,13 +296,14 @@
         </p>
         <div class="admin-actions" aria-label="Admin shortcuts">
           <a
-            class="is-key"
+            class="is-key token-mode"
             href="https://github.com/settings/tokens/new?description=BAM%20Website%20Admin&scopes=public_repo"
             target="_blank"
             rel="noreferrer"
           >Create admin key</a>
-          <a href="#cms-title">Paste key below</a>
-          <a href="/" target="_blank" rel="noreferrer">View live site</a>
+          <a class="token-mode" href="#cms-title">Paste key below</a>
+          <a class="is-oauth oauth-mode" href="#nc-root">Sign in with GitHub</a>
+          <a class="is-primary" href="/" target="_blank" rel="noreferrer">View live site</a>
         </div>
         <section class="admin-cards" aria-label="Editing tips">
           <article class="admin-card">
@@ -317,12 +330,15 @@
       <div class="cms-heading">
         <p class="cms-kicker">Editor</p>
         <h2 id="cms-title">Homepage controls</h2>
-        <p>
+        <p class="token-mode">
           First login only: create the admin key, copy it, click Paste Admin Key, and paste it. After that,
           this browser remembers Jake's login.
         </p>
+        <p class="oauth-mode">
+          Click Sign in with GitHub below. If Jake has repo access, the editor opens without copy-pasting keys.
+        </p>
       </div>
-      <aside class="login-setup" aria-label="First login setup">
+      <aside class="login-setup token-mode" aria-label="First login setup">
         <div>
           <strong>First login, no scavenger hunt.</strong>
           <p>
@@ -339,11 +355,32 @@
           <a href="#nc-root">Paste key</a>
         </div>
       </aside>
+      <aside class="login-setup oauth-mode" aria-label="GitHub sign in setup">
+        <div>
+          <strong>One-click sign in.</strong>
+          <p>
+            The Cloudflare OAuth bridge keeps the GitHub secret off the website. Jake just approves GitHub access,
+            then edits the safe homepage fields.
+          </p>
+        </div>
+        <div class="setup-actions">
+          <a href="#nc-root">Sign in below</a>
+          <a
+            href="https://github.com/AlohaLegend/bam_media/tree/main/cms-auth-worker"
+            target="_blank"
+            rel="noreferrer"
+          >Setup notes</a>
+        </div>
+      </aside>
       <div id="nc-root"></div>
     </section>
 
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
     <script>
+      const cmsAuthMode = document.querySelector('meta[name="cms-auth-mode"]')?.content || "token";
+
+      document.documentElement.dataset.cmsAuthMode = cmsAuthMode;
+
       const withCmsRoots = (callback) => {
         const roots = [document];
 
@@ -364,15 +401,22 @@
           root.querySelectorAll("button").forEach((button) => {
             const label = (button.textContent || "").trim().toLowerCase();
 
-            if (
-              label.includes("work with local repository") ||
-              (label.includes("sign in with") && label.includes("github"))
-            ) {
+            if (label.includes("work with local repository")) {
               button.hidden = true;
               button.setAttribute("aria-hidden", "true");
             }
 
-            if (label.includes("sign in using access token")) {
+            if (cmsAuthMode === "token" && label.includes("sign in with") && label.includes("github")) {
+              button.hidden = true;
+              button.setAttribute("aria-hidden", "true");
+            }
+
+            if (cmsAuthMode === "oauth" && label.includes("access token")) {
+              button.hidden = true;
+              button.setAttribute("aria-hidden", "true");
+            }
+
+            if (cmsAuthMode === "token" && label.includes("sign in using access token")) {
               button.textContent = "Paste Admin Key";
             }
           });
