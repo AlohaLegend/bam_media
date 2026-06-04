@@ -32,6 +32,7 @@ It exists because `bammedia.us` is a static GitHub Pages site. GitHub Pages cann
    - `GITHUB_CLIENT_SECRET`: the OAuth app client secret, encrypted/secret
    - `ALLOWED_DOMAINS`: `bammedia.us,www.bammedia.us`
    - `GITHUB_SCOPE`: `public_repo`
+   - `CMS_REDIRECT_URL`: `https://bammedia.us/admin/`
 
 6. Run the helper from the repo root:
 
@@ -42,6 +43,9 @@ It exists because `bammedia.us` is a static GitHub Pages site. GitHub Pages cann
 7. Commit and push the config change.
 
 After GitHub Pages updates, Jake can open `https://bammedia.us/admin/` and click `Sign in with GitHub`.
+
+If GitHub opens in the same browser tab instead of a popup, the callback redirects back to
+`/admin/#/signin/...` so Sveltia can finish login instead of leaving a blank callback page.
 
 ## Rollback
 
