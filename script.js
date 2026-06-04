@@ -559,8 +559,50 @@ let activeReelCard = null;
 let priorityReelCard = null;
 let reelFrame = 0;
 
+const configureReelVideo = (video) => {
+  if (!video) {
+    return false;
+  }
+
+  video.muted = true;
+  video.defaultMuted = true;
+  video.loop = true;
+  video.autoplay = true;
+  video.playsInline = true;
+  video.setAttribute("muted", "");
+  video.setAttribute("loop", "");
+  video.setAttribute("autoplay", "");
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+
+  if (video.dataset.reelConfigured !== "true") {
+    const card = video.closest(".content-card.is-reel");
+    const syncPlayingState = () => {
+      if (!prefersReducedMotion && card === activeReelCard && !video.paused && isCardOnScreen(card)) {
+        card.classList.add("is-previewing");
+      }
+    };
+
+    video.addEventListener("play", syncPlayingState);
+    video.addEventListener("playing", syncPlayingState);
+    video.addEventListener("timeupdate", syncPlayingState);
+    video.addEventListener("pause", () => {
+      if (card !== activeReelCard) {
+        card?.classList.remove("is-previewing");
+      }
+    });
+    video.dataset.reelConfigured = "true";
+  }
+
+  return true;
+};
+
 const loadReelPreview = (video) => {
-  if (!video || video.dataset.loaded === "true") {
+  if (!configureReelVideo(video)) {
+    return false;
+  }
+
+  if (video.dataset.loaded === "true") {
     return Boolean(video);
   }
 
@@ -596,6 +638,56 @@ const pauseReelPreview = (card) => {
   card.classList.remove("is-previewing");
 };
 
+const pauseInactiveReels = () => {
+  reelCards.forEach((card) => {
+    if (card !== activeReelCard) {
+      pauseReelPreview(card);
+    }
+  });
+};
+
+const retryReelPlayback = (card, attempt = 0) => {
+  if (card !== activeReelCard || !isCardOnScreen(card) || document.hidden) {
+    return;
+  }
+
+  const video = card?.querySelector(".reel-preview");
+
+  if (!video || prefersReducedMotion || !loadReelPreview(video)) {
+    return;
+  }
+
+  const markPlaying = () => {
+    if (card === activeReelCard && !video.paused) {
+      card.classList.add("is-previewing");
+    }
+  };
+
+  video.addEventListener("playing", markPlaying, { once: true });
+
+  const playAttempt = video.play();
+
+  if (!playAttempt || typeof playAttempt.catch !== "function") {
+    card.classList.add("is-previewing");
+    return;
+  }
+
+  playAttempt.then(markPlaying).catch(() => {
+    video.removeEventListener("playing", markPlaying);
+
+    if (card !== activeReelCard) {
+      return;
+    }
+
+    if (attempt < 4) {
+      window.setTimeout(() => retryReelPlayback(card, attempt + 1), 180 + attempt * 180);
+      return;
+    }
+
+    card.classList.remove("is-previewing");
+  });
+};
+
 const playReelPreview = (card) => {
   const video = card?.querySelector(".reel-preview");
 
@@ -603,24 +695,14 @@ const playReelPreview = (card) => {
     return;
   }
 
-  video.muted = true;
-  video.defaultMuted = true;
-  video.playsInline = true;
-  video.setAttribute("muted", "");
-  video.setAttribute("playsinline", "");
-  video.setAttribute("webkit-playsinline", "");
-  card.classList.add("is-previewing");
-
-  const playAttempt = video.play();
-
-  if (playAttempt && typeof playAttempt.catch === "function") {
-    playAttempt.catch(() => {
-      if (activeReelCard === card) {
-        activeReelCard = null;
-        card.classList.remove("is-previewing");
-      }
-    });
+  if (video.readyState >= 2) {
+    retryReelPlayback(card);
+    return;
   }
+
+  video.addEventListener("loadeddata", () => retryReelPlayback(card), { once: true });
+  video.addEventListener("canplay", () => retryReelPlayback(card), { once: true });
+  retryReelPlayback(card);
 };
 
 const isCardOnScreen = (card) => {
@@ -658,6 +740,10 @@ const getBestVisibleReel = () => {
 
 const setActiveReel = (nextCard) => {
   if (nextCard === activeReelCard) {
+    if (activeReelCard && !activeReelCard.classList.contains("is-previewing")) {
+      retryReelPlayback(activeReelCard);
+    }
+
     return;
   }
 
@@ -666,6 +752,7 @@ const setActiveReel = (nextCard) => {
   }
 
   activeReelCard = nextCard;
+  pauseInactiveReels();
 
   if (activeReelCard) {
     playReelPreview(activeReelCard);
@@ -692,6 +779,15 @@ const scheduleReelSync = () => {
   reelFrame = requestAnimationFrame(syncActiveReel);
 };
 
+const resumeActiveReel = () => {
+  if (activeReelCard) {
+    retryReelPlayback(activeReelCard);
+    return;
+  }
+
+  scheduleReelSync();
+};
+
 if (reelCards.length && !prefersReducedMotion && "IntersectionObserver" in window) {
   const reelObserver = new IntersectionObserver(
     (entries) => {
@@ -715,6 +811,7 @@ if (reelCards.length && !prefersReducedMotion && "IntersectionObserver" in windo
   );
 
   reelCards.forEach((card) => {
+    configureReelVideo(card.querySelector(".reel-preview"));
     reelObserver.observe(card);
 
     card.addEventListener("mouseenter", () => {
@@ -745,6 +842,10 @@ if (reelCards.length && !prefersReducedMotion && "IntersectionObserver" in windo
   });
 
   document.addEventListener("visibilitychange", scheduleReelSync);
+  window.addEventListener("pageshow", resumeActiveReel);
+  window.addEventListener("scroll", scheduleReelSync, { passive: true });
+  window.addEventListener("touchstart", resumeActiveReel, { passive: true });
+  window.addEventListener("pointerdown", resumeActiveReel, { passive: true });
   window.addEventListener("resize", scheduleReelSync, { passive: true });
   document.querySelectorAll(".content-rail").forEach((rail) => {
     rail.addEventListener("scroll", scheduleReelSync, { passive: true });
