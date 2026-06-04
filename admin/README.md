@@ -12,7 +12,11 @@ Jake's normal workflow:
 
 The admin is intentionally focused. It controls homepage copy, hero stats, ticker labels, the BAM loop, reels, services, public client work, receipts, contact text, email, social links, SEO text, footer copy, and the image/video/logo paths used by those sections.
 
-Layout changes, the hero video, brand-new sections, uploaded asset processing, and design edits still belong in code.
+Asset fields include upload, open, and download controls. Uploading a file stages the new Cloudflare asset URL in that field; Jake still needs to click `Save live content` to publish it.
+
+Changing a reel's Instagram link only changes where the reel card opens. The poster image and preview video are separate fields because Instagram does not reliably hand this static site a clean public asset to embed.
+
+Layout changes, the hero video, brand-new sections, and design edits still belong in code.
 
 The password is checked by the Cloudflare Worker in `cms-auth-worker/`. The static website does not contain the password.
 
