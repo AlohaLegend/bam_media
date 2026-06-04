@@ -89,6 +89,14 @@ const getEditableValue = (source, path) =>
     return Array.isArray(value) ? value[Number(key)] : value[key];
   }, source);
 
+const getEditableString = (content, path) => {
+  const value = getEditableValue(content, path);
+
+  return typeof value === "string" && value.trim() ? value.trim() : "";
+};
+
+const cssUrl = (value) => `url("${value.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}")`;
+
 const applyEditableContent = (content) => {
   if (!content || typeof content !== "object") {
     return;
@@ -109,6 +117,75 @@ const applyEditableContent = (content) => {
 
     if (typeof value === "string" && value.trim()) {
       element.textContent = value;
+    }
+  });
+
+  document.querySelectorAll("[data-href]").forEach((element) => {
+    const value = getEditableString(content, element.dataset.href);
+
+    if (value) {
+      element.href = value;
+    }
+  });
+
+  document.querySelectorAll("[data-aria-label]").forEach((element) => {
+    const value = getEditableString(content, element.dataset.ariaLabel);
+
+    if (value) {
+      element.setAttribute("aria-label", value);
+    }
+  });
+
+  document.querySelectorAll("[data-src]").forEach((element) => {
+    const value = getEditableString(content, element.dataset.src);
+
+    if (!value || element.dataset.videoSrc) {
+      return;
+    }
+
+    if (element.getAttribute("src") !== value) {
+      element.setAttribute("src", value);
+    }
+  });
+
+  document.querySelectorAll("[data-poster]").forEach((element) => {
+    const value = getEditableString(content, element.dataset.poster);
+
+    if (value) {
+      element.setAttribute("poster", value);
+    }
+  });
+
+  document.querySelectorAll("[data-video-src]").forEach((element) => {
+    const value = getEditableString(content, element.dataset.videoSrc);
+
+    if (!value || element.dataset.src === value) {
+      return;
+    }
+
+    element.dataset.src = value;
+
+    if (element.dataset.loaded === "true") {
+      element.pause();
+      element.removeAttribute("src");
+      element.dataset.loaded = "false";
+      element.load();
+    }
+  });
+
+  document.querySelectorAll("[data-bg-image]").forEach((element) => {
+    const value = getEditableString(content, element.dataset.bgImage);
+
+    if (value) {
+      element.style.setProperty("--loop-image", cssUrl(value));
+    }
+  });
+
+  document.querySelectorAll("[data-bg-position]").forEach((element) => {
+    const value = getEditableString(content, element.dataset.bgPosition);
+
+    if (value) {
+      element.style.setProperty("--loop-position", value);
     }
   });
 

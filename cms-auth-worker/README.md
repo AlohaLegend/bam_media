@@ -6,7 +6,7 @@ This Cloudflare Worker powers the custom password-protected editor at:
 https://bammedia.us/admin/
 ```
 
-It stores editable homepage content in Cloudflare KV and serves it to the public site from:
+It stores the editable homepage schema in Cloudflare KV, including copy, stats, reels, services, client cards, links, and asset paths. The public site reads that content from:
 
 ```text
 https://bam-cms-auth.bammediaauth.workers.dev/content/site.json

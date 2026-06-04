@@ -25,6 +25,212 @@ const fallbackContent = {
     { value: "287%+", label: "average engagement lift" },
     { value: "5B+", label: "food community views" },
   ],
+  ticker: ["QSR", "F&B", "Creator campaigns", "Paid social", "Partnerships", "Bulk-order leads", "Local communities"],
+  thesis: {
+    kicker: "From scroll to sale",
+    title: "A growth engine for brands people can taste.",
+    copy:
+      "Restaurants do not need more disconnected content. They need a system that spots culture, creates craving, backs winners with media, and converts demand while the food is still hot.",
+    focus: ["Creative", "Community", "Conversion"],
+  },
+  loop: {
+    eyebrow: "The BAM loop",
+    title: "Every post has a job.",
+    copy:
+      "Social should create a real-world action: a saved order, a lunch run, a catering inquiry, a launch line, or a creator clip that keeps working after it posts.",
+    cards: [
+      {
+        tag: "Launch clip",
+        value: "4,500 videos produced",
+        label: "Content engine",
+        image: "assets/loop-launch-clip.webp",
+        position: "50% 42%",
+      },
+      {
+        tag: "Creator ad",
+        value: "-78% lower CPA",
+        label: "Paid efficiency",
+        image: "assets/loop-creator-ad.webp",
+        position: "48% 42%",
+      },
+    ],
+    steps: [
+      {
+        number: "01",
+        title: "Read the room",
+        copy: "Track the food moments, creator angles, and community signals worth acting on.",
+      },
+      {
+        number: "02",
+        title: "Create the craving",
+        copy: "Build short-form content, UGC, and campaign ideas that make the offer feel immediate.",
+      },
+      {
+        number: "03",
+        title: "Back the winners",
+        copy: "Use paid social and partnerships to turn the best creative into repeatable demand.",
+      },
+      {
+        number: "04",
+        title: "Convert the demand",
+        copy: "Push attention toward store visits, catering leads, launch traffic, and loyal fans.",
+      },
+    ],
+  },
+  reelsSection: {
+    kicker: "Instagram content",
+    title: "Real reels. Real brands.",
+  },
+  reels: [
+    {
+      brand: "German Doner Kebab",
+      handle: "@jessknowsthedeal",
+      cta: "Watch reel",
+      url: "https://www.instagram.com/reel/DTtHCLHkRdr/",
+      poster: "assets/reel-gdk.jpg",
+      preview: "assets/reel-gdk-preview.mp4",
+      ariaLabel: "Watch German Doner Kebab reel on Instagram",
+    },
+    {
+      brand: "University of Beer",
+      handle: "@theb0badiaries",
+      cta: "Watch reel",
+      url: "https://www.instagram.com/reel/DXsXbDuD3TR/",
+      poster: "assets/reel-uob.jpg",
+      preview: "assets/reel-uob-preview.mp4",
+      ariaLabel: "Watch University of Beer reel on Instagram",
+    },
+    {
+      brand: "Northern Cafe",
+      handle: "@angela.danii",
+      cta: "Watch reel",
+      url: "https://www.instagram.com/reel/DWprKbLjasu/",
+      poster: "assets/reel-northern-cafe.jpg",
+      preview: "assets/reel-northern-cafe-preview.mp4",
+      ariaLabel: "Watch Northern Cafe reel on Instagram",
+    },
+    {
+      brand: "Sharky's",
+      handle: "@sharkyssocial",
+      cta: "Watch reel",
+      url: "https://www.instagram.com/reel/DQH57oHElJ5/",
+      poster: "assets/reel-sharkys.jpg",
+      preview: "assets/reel-sharkys-preview.mp4",
+      ariaLabel: "Watch Sharky's reel on Instagram",
+    },
+    {
+      brand: "Dumpling Wei",
+      handle: "@comfywithkerry",
+      cta: "Watch reel",
+      url: "https://www.instagram.com/reel/DWAiKnfROqJ/",
+      poster: "assets/reel-dumpling-wei.jpg",
+      preview: "assets/reel-dumpling-wei-preview.mp4",
+      ariaLabel: "Watch Dumpling Wei reel on Instagram",
+    },
+  ],
+  servicesSection: {
+    kicker: "What BAM runs",
+    title: "One stack. Built for food.",
+  },
+  services: [
+    { number: "01", title: "Social management", copy: "Strategy, calendars, posting, engagement, and reporting." },
+    {
+      number: "02",
+      title: "Content production",
+      copy: "Short-form concepts, shoots, edits, and repeatable food formats.",
+    },
+    {
+      number: "03",
+      title: "Paid + UGC",
+      copy: "Creator-style ads, testing cycles, and spend behind the clips that move.",
+    },
+    {
+      number: "04",
+      title: "Partnerships",
+      copy: "Local activations, influencer relationships, and brand collaborations.",
+    },
+    {
+      number: "05",
+      title: "Niche communities",
+      copy: "Food pages and audience clusters that keep brands close to culture.",
+    },
+    {
+      number: "06",
+      title: "Bulk-order leads",
+      copy: "Demand generation for catering, office orders, and recurring buyers.",
+    },
+  ],
+  clientsSection: {
+    kicker: "Selected client work",
+    title: "Brands people recognize.",
+    note: "Publicly listed work",
+  },
+  clients: [
+    {
+      name: "German Doner Kebab",
+      handle: "@germandonerkebabusa",
+      category: "Fast casual",
+      url: "https://www.gdk.com/us",
+      logo: "assets/client-gdk.png",
+      ariaLabel: "Visit German Doner Kebab website",
+    },
+    {
+      name: "Sharky's",
+      handle: "@sharkyssocial",
+      category: "Restaurant group",
+      url: "https://www.sharkys.com/",
+      logo: "assets/client-sharkys.png",
+      ariaLabel: "Visit Sharky's website",
+    },
+    {
+      name: "University of Beer",
+      handle: "@UniversityofBeerInsta",
+      category: "Restaurant + bar",
+      url: "https://www.theuob.com/",
+      logo: "assets/client-uob.png",
+      ariaLabel: "Visit University of Beer website",
+    },
+    {
+      name: "Northern Cafe",
+      handle: "@northerncafe.official",
+      category: "Restaurant",
+      url: "https://www.northerncafeus.com/",
+      logo: "assets/client-northern-cafe.png",
+      ariaLabel: "Visit Northern Cafe website",
+    },
+    {
+      name: "Dumpling Wei",
+      handle: "@dumpling.wei",
+      category: "Restaurant",
+      url: "https://www.instagram.com/dumpling.wei/",
+      logo: "assets/client-dumpling-wei.jpg",
+      ariaLabel: "Visit Dumpling Wei Instagram",
+    },
+    {
+      name: "Shipwrecked Paradise Island",
+      handle: "@shipwrecked_paradise_island",
+      category: "Hospitality",
+      url: "https://www.shipwreckedparadiseisland.com/",
+      logo: "assets/client-shipwrecked-paradise-island.jpg",
+      ariaLabel: "Visit Shipwrecked Paradise Island website",
+    },
+    {
+      name: "SpudBros Express",
+      handle: "@spudbrosexpress",
+      category: "Fast casual",
+      url: "https://www.spudbrosexpress.com/",
+      logo: "assets/client-spudbros-express.jpg",
+      ariaLabel: "Visit SpudBros Express website",
+    },
+    {
+      name: "Sharky's Fit",
+      handle: "@sharkyssocial",
+      category: "Food + fitness",
+      url: "https://sharkysfit.com/",
+      logo: "assets/client-sharkys-fit.png",
+      ariaLabel: "Visit Sharky's Fit website",
+    },
+  ],
   proof: {
     kicker: "Receipts",
     title: "Attention only matters when it moves the line.",
@@ -37,12 +243,16 @@ const fallbackContent = {
   contact: {
     eyebrow: "Ready when the food is",
     title: "Give the next launch, opening, or growth push a system behind it.",
+    panelLabel: "Direct line",
     cta: "Email BAM",
     email: "hello@bammediagroup.us",
   },
   social: {
     instagram: "https://www.instagram.com/bam.social/",
     linkedin: "https://www.linkedin.com/company/bam-media-group/",
+  },
+  footer: {
+    copyright: "Copyright 2018-2026 BAM Media Group Inc. All Rights Reserved.",
   },
 };
 
@@ -204,6 +414,20 @@ const cleanUrl = (value, fallback = "") => {
   }
 };
 
+const cleanAsset = (value, fallback = "") => {
+  const cleaned = cleanString(value, fallback, 220);
+
+  if (/^https:\/\//i.test(cleaned)) {
+    return cleanUrl(cleaned, fallback);
+  }
+
+  if (/^\/?assets\/[a-z0-9._/-]+\.(?:jpg|jpeg|png|webp|svg|mp4)$/i.test(cleaned)) {
+    return cleaned.replace(/^\/+/, "");
+  }
+
+  return fallback;
+};
+
 const cleanEmail = (value, fallback = "") => {
   const cleaned = cleanString(value, fallback, 120);
 
@@ -213,6 +437,42 @@ const cleanEmail = (value, fallback = "") => {
 const cleanMetric = (metric = {}, fallback = {}) => ({
   value: cleanString(metric.value, fallback.value, 20),
   label: cleanString(metric.label, fallback.label, 60),
+});
+
+const cleanTicker = (items, fallbackItems) =>
+  fallbackItems.map((fallback, index) => cleanString(items?.[index], fallback, 32));
+
+const cleanLoopCard = (card = {}, fallback = {}) => ({
+  tag: cleanString(card.tag, fallback.tag, 32),
+  value: cleanString(card.value, fallback.value, 48),
+  label: cleanString(card.label, fallback.label, 48),
+  image: cleanAsset(card.image, fallback.image),
+  position: cleanString(card.position, fallback.position, 24),
+});
+
+const cleanCopyCard = (card = {}, fallback = {}) => ({
+  number: cleanString(card.number, fallback.number, 8),
+  title: cleanString(card.title, fallback.title, 54),
+  copy: cleanString(card.copy, fallback.copy, 150),
+});
+
+const cleanReel = (reel = {}, fallback = {}) => ({
+  brand: cleanString(reel.brand, fallback.brand, 54),
+  handle: cleanString(reel.handle, fallback.handle, 54),
+  cta: cleanString(reel.cta, fallback.cta, 32),
+  url: cleanUrl(reel.url, fallback.url),
+  poster: cleanAsset(reel.poster, fallback.poster),
+  preview: cleanAsset(reel.preview, fallback.preview),
+  ariaLabel: cleanString(reel.ariaLabel, fallback.ariaLabel, 110),
+});
+
+const cleanClient = (client = {}, fallback = {}) => ({
+  name: cleanString(client.name, fallback.name, 72),
+  handle: cleanString(client.handle, fallback.handle, 72),
+  category: cleanString(client.category, fallback.category, 42),
+  url: cleanUrl(client.url, fallback.url),
+  logo: cleanAsset(client.logo, fallback.logo),
+  ariaLabel: cleanString(client.ariaLabel, fallback.ariaLabel, 120),
 });
 
 const normalizeContent = (content = {}) => ({
@@ -228,6 +488,36 @@ const normalizeContent = (content = {}) => ({
     secondaryCta: cleanString(content.hero?.secondaryCta, fallbackContent.hero.secondaryCta, 40),
   },
   signals: [0, 1, 2].map((index) => cleanMetric(content.signals?.[index], fallbackContent.signals[index])),
+  ticker: cleanTicker(content.ticker, fallbackContent.ticker),
+  thesis: {
+    kicker: cleanString(content.thesis?.kicker, fallbackContent.thesis.kicker, 42),
+    title: cleanString(content.thesis?.title, fallbackContent.thesis.title, 94),
+    copy: cleanString(content.thesis?.copy, fallbackContent.thesis.copy, 240),
+    focus: cleanTicker(content.thesis?.focus, fallbackContent.thesis.focus),
+  },
+  loop: {
+    eyebrow: cleanString(content.loop?.eyebrow, fallbackContent.loop.eyebrow, 42),
+    title: cleanString(content.loop?.title, fallbackContent.loop.title, 80),
+    copy: cleanString(content.loop?.copy, fallbackContent.loop.copy, 220),
+    cards: [0, 1].map((index) => cleanLoopCard(content.loop?.cards?.[index], fallbackContent.loop.cards[index])),
+    steps: [0, 1, 2, 3].map((index) => cleanCopyCard(content.loop?.steps?.[index], fallbackContent.loop.steps[index])),
+  },
+  reelsSection: {
+    kicker: cleanString(content.reelsSection?.kicker, fallbackContent.reelsSection.kicker, 42),
+    title: cleanString(content.reelsSection?.title, fallbackContent.reelsSection.title, 80),
+  },
+  reels: fallbackContent.reels.map((fallback, index) => cleanReel(content.reels?.[index], fallback)),
+  servicesSection: {
+    kicker: cleanString(content.servicesSection?.kicker, fallbackContent.servicesSection.kicker, 42),
+    title: cleanString(content.servicesSection?.title, fallbackContent.servicesSection.title, 80),
+  },
+  services: fallbackContent.services.map((fallback, index) => cleanCopyCard(content.services?.[index], fallback)),
+  clientsSection: {
+    kicker: cleanString(content.clientsSection?.kicker, fallbackContent.clientsSection.kicker, 42),
+    title: cleanString(content.clientsSection?.title, fallbackContent.clientsSection.title, 90),
+    note: cleanString(content.clientsSection?.note, fallbackContent.clientsSection.note, 54),
+  },
+  clients: fallbackContent.clients.map((fallback, index) => cleanClient(content.clients?.[index], fallback)),
   proof: {
     kicker: cleanString(content.proof?.kicker, fallbackContent.proof.kicker, 40),
     title: cleanString(content.proof?.title, fallbackContent.proof.title, 110),
@@ -236,12 +526,16 @@ const normalizeContent = (content = {}) => ({
   contact: {
     eyebrow: cleanString(content.contact?.eyebrow, fallbackContent.contact.eyebrow, 48),
     title: cleanString(content.contact?.title, fallbackContent.contact.title, 130),
+    panelLabel: cleanString(content.contact?.panelLabel, fallbackContent.contact.panelLabel, 36),
     cta: cleanString(content.contact?.cta, fallbackContent.contact.cta, 40),
     email: cleanEmail(content.contact?.email, fallbackContent.contact.email),
   },
   social: {
     instagram: cleanUrl(content.social?.instagram, fallbackContent.social.instagram),
     linkedin: cleanUrl(content.social?.linkedin, fallbackContent.social.linkedin),
+  },
+  footer: {
+    copyright: cleanString(content.footer?.copyright, fallbackContent.footer.copyright, 100),
   },
 });
 

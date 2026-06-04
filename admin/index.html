@@ -346,6 +346,56 @@
         gap: 6px;
       }
 
+      .dynamic-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .dynamic-grid.is-small {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .control-card {
+        display: grid;
+        gap: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        background: rgba(255, 250, 240, 0.78);
+      }
+
+      .control-card header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 10px;
+      }
+
+      .control-card header strong {
+        font-family: Archivo, Impact, sans-serif;
+        font-size: 1.05rem;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .control-card header span {
+        color: var(--muted);
+        font-size: 0.74rem;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .group-label {
+        margin-top: 2px;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: 1rem;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
       .savebar {
         position: sticky;
         bottom: 12px;
@@ -396,7 +446,9 @@
         }
 
         .field-grid,
-        .metric-grid {
+        .metric-grid,
+        .dynamic-grid,
+        .dynamic-grid.is-small {
           grid-template-columns: 1fr;
         }
 
@@ -454,7 +506,7 @@
           <div class="hero-copy">
             <p class="kicker">Live homepage editor</p>
             <h1>Make the easy edits obvious.</h1>
-            <p>These are the fields the website actually uses. If a change needs layout, video, reels, or new sections, that still belongs in the code.</p>
+            <p>Text, stats, reels, services, client work, links, and image paths live here. New layouts still go through Liam, who has bravely labeled the light switches.</p>
           </div>
           <aside class="preview" aria-label="Homepage preview">
             <div>
@@ -558,6 +610,148 @@
           <section class="edit-section">
             <div class="section-title">
               <div>
+                <p class="kicker">Yellow signal bar</p>
+                <h2>Focus labels</h2>
+              </div>
+              <p>These short labels sit directly under the hero on mobile and desktop.</p>
+            </div>
+            <div class="dynamic-grid is-small" data-repeat-group="ticker"></div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Core pitch</p>
+                <h2>From scroll to sale</h2>
+              </div>
+              <p>This is the first big explanation section after the hero.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Kicker</strong>
+                <input data-field="thesis.kicker" maxlength="48" />
+              </label>
+              <label class="field is-wide">
+                <strong>Headline</strong>
+                <textarea data-field="thesis.title" maxlength="96"></textarea>
+              </label>
+              <label class="field is-wide">
+                <strong>Pitch copy</strong>
+                <textarea data-field="thesis.copy" maxlength="260"></textarea>
+              </label>
+              <label class="field">
+                <strong>Focus 1</strong>
+                <input data-field="thesis.focus.0" maxlength="28" />
+              </label>
+              <label class="field">
+                <strong>Focus 2</strong>
+                <input data-field="thesis.focus.1" maxlength="28" />
+              </label>
+              <label class="field">
+                <strong>Focus 3</strong>
+                <input data-field="thesis.focus.2" maxlength="28" />
+              </label>
+            </div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">System section</p>
+                <h2>The BAM loop</h2>
+              </div>
+              <p>The phone cards use image paths from the assets folder or a hosted URL.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Eyebrow</strong>
+                <input data-field="loop.eyebrow" maxlength="48" />
+              </label>
+              <label class="field is-wide">
+                <strong>Headline</strong>
+                <textarea data-field="loop.title" maxlength="96"></textarea>
+              </label>
+              <label class="field is-wide">
+                <strong>Intro copy</strong>
+                <textarea data-field="loop.copy" maxlength="260"></textarea>
+              </label>
+            </div>
+            <h3 class="group-label">Phone cards</h3>
+            <div class="dynamic-grid" data-repeat-group="loopCards"></div>
+            <h3 class="group-label">Process steps</h3>
+            <div class="dynamic-grid" data-repeat-group="loopSteps"></div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Video proof</p>
+                <h2>Instagram reels</h2>
+              </div>
+              <p>Swap a reel, poster, or preview clip without touching the page layout.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Kicker</strong>
+                <input data-field="reelsSection.kicker" maxlength="48" />
+              </label>
+              <label class="field is-wide">
+                <strong>Headline</strong>
+                <textarea data-field="reelsSection.title" maxlength="96"></textarea>
+              </label>
+            </div>
+            <div class="dynamic-grid" data-repeat-group="reels"></div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Offer stack</p>
+                <h2>Services</h2>
+              </div>
+              <p>These cards should stay concrete and easy to scan.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Kicker</strong>
+                <input data-field="servicesSection.kicker" maxlength="48" />
+              </label>
+              <label class="field is-wide">
+                <strong>Headline</strong>
+                <textarea data-field="servicesSection.title" maxlength="96"></textarea>
+              </label>
+            </div>
+            <div class="dynamic-grid" data-repeat-group="services"></div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Public proof</p>
+                <h2>Client work</h2>
+              </div>
+              <p>These links should go to the brand site when possible, Instagram when that is the public source.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Kicker</strong>
+                <input data-field="clientsSection.kicker" maxlength="48" />
+              </label>
+              <label class="field">
+                <strong>Small note</strong>
+                <input data-field="clientsSection.note" maxlength="48" />
+              </label>
+              <label class="field is-wide">
+                <strong>Headline</strong>
+                <textarea data-field="clientsSection.title" maxlength="96"></textarea>
+              </label>
+            </div>
+            <div class="dynamic-grid" data-repeat-group="clients"></div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
                 <p class="kicker">Proof section</p>
                 <h2>Receipts</h2>
               </div>
@@ -624,6 +818,10 @@
                 <strong>Button text</strong>
                 <input data-field="contact.cta" maxlength="40" />
               </label>
+              <label class="field">
+                <strong>Contact card label</strong>
+                <input data-field="contact.panelLabel" maxlength="36" />
+              </label>
               <label class="field is-wide">
                 <strong>Contact headline</strong>
                 <textarea data-field="contact.title" maxlength="130"></textarea>
@@ -660,6 +858,10 @@
                 <strong>Search description</strong>
                 <textarea data-field="seo.description" maxlength="180"></textarea>
               </label>
+              <label class="field is-wide">
+                <strong>Footer copyright</strong>
+                <input data-field="footer.copyright" maxlength="100" />
+              </label>
             </div>
           </section>
         </form>
@@ -685,12 +887,15 @@
       const saveButton = document.querySelector('[data-action="save"]');
       const reloadButton = document.querySelector('[data-action="reload"]');
       const syncReceiptsButton = document.querySelector('[data-action="sync-receipts"]');
-      const fields = Array.from(document.querySelectorAll("[data-field]"));
-      const previews = Array.from(document.querySelectorAll("[data-preview]"));
+      const contentForm = document.querySelector("[data-content-form]");
+      const repeatContainers = Array.from(document.querySelectorAll("[data-repeat-group]"));
       const sessionKey = "bamAdminSession";
 
       let content = null;
       let dirty = false;
+
+      const getFields = () => Array.from(document.querySelectorAll("[data-field]"));
+      const getPreviews = () => Array.from(document.querySelectorAll("[data-preview]"));
 
       const getValue = (source, path) =>
         path.split(".").reduce((value, key) => {
@@ -720,6 +925,183 @@
           }
 
           cursor = cursor[key];
+        });
+      };
+
+      const repeatGroups = {
+        ticker: {
+          count: 7,
+          title: (index) => `Label ${index + 1}`,
+          badge: "Hero bar",
+          fields: [{ label: "Text", path: (index) => `ticker.${index}`, maxlength: 36 }],
+        },
+        loopCards: {
+          count: 2,
+          title: (index) => `Phone card ${index + 1}`,
+          badge: "BAM loop",
+          fields: [
+            { label: "Tag", path: (index) => `loop.cards.${index}.tag`, maxlength: 34 },
+            { label: "Big stat", path: (index) => `loop.cards.${index}.value`, maxlength: 40 },
+            { label: "Small label", path: (index) => `loop.cards.${index}.label`, maxlength: 46 },
+            {
+              label: "Image path",
+              path: (index) => `loop.cards.${index}.image`,
+              maxlength: 180,
+              hint: "Example: assets/loop-launch-clip.webp",
+            },
+            {
+              label: "Image position",
+              path: (index) => `loop.cards.${index}.position`,
+              maxlength: 24,
+              hint: "Example: 50% 42%",
+            },
+          ],
+        },
+        loopSteps: {
+          count: 4,
+          title: (index) => `Step ${index + 1}`,
+          badge: "Process",
+          fields: [
+            { label: "Number", path: (index) => `loop.steps.${index}.number`, maxlength: 8 },
+            { label: "Title", path: (index) => `loop.steps.${index}.title`, maxlength: 48 },
+            {
+              label: "Copy",
+              path: (index) => `loop.steps.${index}.copy`,
+              control: "textarea",
+              maxlength: 160,
+              wide: true,
+            },
+          ],
+        },
+        reels: {
+          count: 5,
+          title: (index) => `Reel ${index + 1}`,
+          badge: "Instagram",
+          fields: [
+            { label: "Brand", path: (index) => `reels.${index}.brand`, maxlength: 54 },
+            { label: "Handle", path: (index) => `reels.${index}.handle`, maxlength: 54 },
+            { label: "Button text", path: (index) => `reels.${index}.cta`, maxlength: 28 },
+            { label: "Instagram link", path: (index) => `reels.${index}.url`, type: "url", maxlength: 220 },
+            {
+              label: "Poster image",
+              path: (index) => `reels.${index}.poster`,
+              maxlength: 180,
+              hint: "Example: assets/reel-gdk.jpg",
+            },
+            {
+              label: "Preview video",
+              path: (index) => `reels.${index}.preview`,
+              maxlength: 180,
+              hint: "Example: assets/reel-gdk-preview.mp4",
+            },
+            {
+              label: "Accessible label",
+              path: (index) => `reels.${index}.ariaLabel`,
+              maxlength: 100,
+              wide: true,
+            },
+          ],
+        },
+        services: {
+          count: 6,
+          title: (index) => `Service ${index + 1}`,
+          badge: "Offer",
+          fields: [
+            { label: "Number", path: (index) => `services.${index}.number`, maxlength: 8 },
+            { label: "Title", path: (index) => `services.${index}.title`, maxlength: 54 },
+            {
+              label: "Copy",
+              path: (index) => `services.${index}.copy`,
+              control: "textarea",
+              maxlength: 150,
+              wide: true,
+            },
+          ],
+        },
+        clients: {
+          count: 8,
+          title: (index) => `Client ${index + 1}`,
+          badge: "Public work",
+          fields: [
+            { label: "Brand name", path: (index) => `clients.${index}.name`, maxlength: 64 },
+            { label: "Displayed @", path: (index) => `clients.${index}.handle`, maxlength: 64 },
+            { label: "Category", path: (index) => `clients.${index}.category`, maxlength: 44 },
+            { label: "Click-through link", path: (index) => `clients.${index}.url`, type: "url", maxlength: 220 },
+            {
+              label: "Logo path",
+              path: (index) => `clients.${index}.logo`,
+              maxlength: 180,
+              hint: "Example: assets/client-gdk.png",
+            },
+            {
+              label: "Accessible label",
+              path: (index) => `clients.${index}.ariaLabel`,
+              maxlength: 100,
+              wide: true,
+            },
+          ],
+        },
+      };
+
+      const createEditorField = (field, index) => {
+        const label = document.createElement("label");
+        label.className = `field${field.wide ? " is-wide" : ""}`;
+
+        const title = document.createElement("strong");
+        title.textContent = field.label;
+        label.append(title);
+
+        const control = document.createElement(field.control === "textarea" ? "textarea" : "input");
+        control.dataset.field = typeof field.path === "function" ? field.path(index) : field.path;
+
+        if (field.type && control.tagName === "INPUT") {
+          control.type = field.type;
+        }
+
+        if (field.maxlength) {
+          control.maxLength = field.maxlength;
+        }
+
+        label.append(control);
+
+        if (field.hint) {
+          const hint = document.createElement("span");
+          hint.textContent = field.hint;
+          label.append(hint);
+        }
+
+        return label;
+      };
+
+      const renderRepeatGroups = () => {
+        repeatContainers.forEach((container) => {
+          const group = repeatGroups[container.dataset.repeatGroup];
+
+          if (!group) {
+            return;
+          }
+
+          container.innerHTML = "";
+
+          Array.from({ length: group.count }).forEach((_, index) => {
+            const card = document.createElement("article");
+            card.className = "control-card";
+
+            const header = document.createElement("header");
+            const title = document.createElement("strong");
+            const badge = document.createElement("span");
+
+            title.textContent = group.title(index);
+            badge.textContent = group.badge;
+            header.append(title, badge);
+            card.append(header);
+
+            group.fields.forEach((field) => {
+              card.append(createEditorField(field, index));
+            });
+
+            container.append(card);
+          });
         });
       };
 
@@ -763,7 +1145,7 @@
       };
 
       const renderPreview = () => {
-        previews.forEach((element) => {
+        getPreviews().forEach((element) => {
           const value = getValue(content, element.dataset.preview);
 
           if (typeof value === "string") {
@@ -773,7 +1155,7 @@
       };
 
       const renderFields = () => {
-        fields.forEach((field) => {
+        getFields().forEach((field) => {
           const value = getValue(content, field.dataset.field);
 
           field.value = typeof value === "string" ? value : "";
@@ -807,17 +1189,21 @@
         }
       };
 
-      fields.forEach((field) => {
-        field.addEventListener("input", () => {
-          if (!content) {
-            return;
-          }
+      contentForm.addEventListener("input", (event) => {
+        const field = event.target.matches?.("[data-field]") ? event.target : null;
 
-          setValue(content, field.dataset.field, field.value);
-          dirty = true;
-          renderPreview();
-          setStatus(saveStatus, "Unsaved edits. Hit save when this is ready.", "");
-        });
+        if (!field || !content) {
+          return;
+        }
+
+        setValue(content, field.dataset.field, field.value);
+        dirty = true;
+        renderPreview();
+        setStatus(saveStatus, "Unsaved edits. Hit save when this is ready.", "");
+      });
+
+      contentForm.addEventListener("submit", (event) => {
+        event.preventDefault();
       });
 
       loginForm.addEventListener("submit", async (event) => {
@@ -900,6 +1286,7 @@
         event.returnValue = "";
       });
 
+      renderRepeatGroups();
       boot();
     </script>
   </body>

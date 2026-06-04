@@ -24,6 +24,226 @@
       "label": "food community views"
     }
   ],
+  "ticker": [
+    "QSR",
+    "F&B",
+    "Creator campaigns",
+    "Paid social",
+    "Partnerships",
+    "Bulk-order leads",
+    "Local communities"
+  ],
+  "thesis": {
+    "kicker": "From scroll to sale",
+    "title": "A growth engine for brands people can taste.",
+    "copy": "Restaurants do not need more disconnected content. They need a system that spots culture, creates craving, backs winners with media, and converts demand while the food is still hot.",
+    "focus": [
+      "Creative",
+      "Community",
+      "Conversion"
+    ]
+  },
+  "loop": {
+    "eyebrow": "The BAM loop",
+    "title": "Every post has a job.",
+    "copy": "Social should create a real-world action: a saved order, a lunch run, a catering inquiry, a launch line, or a creator clip that keeps working after it posts.",
+    "cards": [
+      {
+        "tag": "Launch clip",
+        "value": "4,500 videos produced",
+        "label": "Content engine",
+        "image": "assets/loop-launch-clip.webp",
+        "position": "50% 42%"
+      },
+      {
+        "tag": "Creator ad",
+        "value": "-78% lower CPA",
+        "label": "Paid efficiency",
+        "image": "assets/loop-creator-ad.webp",
+        "position": "48% 42%"
+      }
+    ],
+    "steps": [
+      {
+        "number": "01",
+        "title": "Read the room",
+        "copy": "Track the food moments, creator angles, and community signals worth acting on."
+      },
+      {
+        "number": "02",
+        "title": "Create the craving",
+        "copy": "Build short-form content, UGC, and campaign ideas that make the offer feel immediate."
+      },
+      {
+        "number": "03",
+        "title": "Back the winners",
+        "copy": "Use paid social and partnerships to turn the best creative into repeatable demand."
+      },
+      {
+        "number": "04",
+        "title": "Convert the demand",
+        "copy": "Push attention toward store visits, catering leads, launch traffic, and loyal fans."
+      }
+    ]
+  },
+  "reelsSection": {
+    "kicker": "Instagram content",
+    "title": "Real reels. Real brands."
+  },
+  "reels": [
+    {
+      "brand": "German Doner Kebab",
+      "handle": "@jessknowsthedeal",
+      "cta": "Watch reel",
+      "url": "https://www.instagram.com/reel/DTtHCLHkRdr/",
+      "poster": "assets/reel-gdk.jpg",
+      "preview": "assets/reel-gdk-preview.mp4",
+      "ariaLabel": "Watch German Doner Kebab reel on Instagram"
+    },
+    {
+      "brand": "University of Beer",
+      "handle": "@theb0badiaries",
+      "cta": "Watch reel",
+      "url": "https://www.instagram.com/reel/DXsXbDuD3TR/",
+      "poster": "assets/reel-uob.jpg",
+      "preview": "assets/reel-uob-preview.mp4",
+      "ariaLabel": "Watch University of Beer reel on Instagram"
+    },
+    {
+      "brand": "Northern Cafe",
+      "handle": "@angela.danii",
+      "cta": "Watch reel",
+      "url": "https://www.instagram.com/reel/DWprKbLjasu/",
+      "poster": "assets/reel-northern-cafe.jpg",
+      "preview": "assets/reel-northern-cafe-preview.mp4",
+      "ariaLabel": "Watch Northern Cafe reel on Instagram"
+    },
+    {
+      "brand": "Sharky's",
+      "handle": "@sharkyssocial",
+      "cta": "Watch reel",
+      "url": "https://www.instagram.com/reel/DQH57oHElJ5/",
+      "poster": "assets/reel-sharkys.jpg",
+      "preview": "assets/reel-sharkys-preview.mp4",
+      "ariaLabel": "Watch Sharky's reel on Instagram"
+    },
+    {
+      "brand": "Dumpling Wei",
+      "handle": "@comfywithkerry",
+      "cta": "Watch reel",
+      "url": "https://www.instagram.com/reel/DWAiKnfROqJ/",
+      "poster": "assets/reel-dumpling-wei.jpg",
+      "preview": "assets/reel-dumpling-wei-preview.mp4",
+      "ariaLabel": "Watch Dumpling Wei reel on Instagram"
+    }
+  ],
+  "servicesSection": {
+    "kicker": "What BAM runs",
+    "title": "One stack. Built for food."
+  },
+  "services": [
+    {
+      "number": "01",
+      "title": "Social management",
+      "copy": "Strategy, calendars, posting, engagement, and reporting."
+    },
+    {
+      "number": "02",
+      "title": "Content production",
+      "copy": "Short-form concepts, shoots, edits, and repeatable food formats."
+    },
+    {
+      "number": "03",
+      "title": "Paid + UGC",
+      "copy": "Creator-style ads, testing cycles, and spend behind the clips that move."
+    },
+    {
+      "number": "04",
+      "title": "Partnerships",
+      "copy": "Local activations, influencer relationships, and brand collaborations."
+    },
+    {
+      "number": "05",
+      "title": "Niche communities",
+      "copy": "Food pages and audience clusters that keep brands close to culture."
+    },
+    {
+      "number": "06",
+      "title": "Bulk-order leads",
+      "copy": "Demand generation for catering, office orders, and recurring buyers."
+    }
+  ],
+  "clientsSection": {
+    "kicker": "Selected client work",
+    "title": "Brands people recognize.",
+    "note": "Publicly listed work"
+  },
+  "clients": [
+    {
+      "name": "German Doner Kebab",
+      "handle": "@germandonerkebabusa",
+      "category": "Fast casual",
+      "url": "https://www.gdk.com/us",
+      "logo": "assets/client-gdk.png",
+      "ariaLabel": "Visit German Doner Kebab website"
+    },
+    {
+      "name": "Sharky's",
+      "handle": "@sharkyssocial",
+      "category": "Restaurant group",
+      "url": "https://www.sharkys.com/",
+      "logo": "assets/client-sharkys.png",
+      "ariaLabel": "Visit Sharky's website"
+    },
+    {
+      "name": "University of Beer",
+      "handle": "@UniversityofBeerInsta",
+      "category": "Restaurant + bar",
+      "url": "https://www.theuob.com/",
+      "logo": "assets/client-uob.png",
+      "ariaLabel": "Visit University of Beer website"
+    },
+    {
+      "name": "Northern Cafe",
+      "handle": "@northerncafe.official",
+      "category": "Restaurant",
+      "url": "https://www.northerncafeus.com/",
+      "logo": "assets/client-northern-cafe.png",
+      "ariaLabel": "Visit Northern Cafe website"
+    },
+    {
+      "name": "Dumpling Wei",
+      "handle": "@dumpling.wei",
+      "category": "Restaurant",
+      "url": "https://www.instagram.com/dumpling.wei/",
+      "logo": "assets/client-dumpling-wei.jpg",
+      "ariaLabel": "Visit Dumpling Wei Instagram"
+    },
+    {
+      "name": "Shipwrecked Paradise Island",
+      "handle": "@shipwrecked_paradise_island",
+      "category": "Hospitality",
+      "url": "https://www.shipwreckedparadiseisland.com/",
+      "logo": "assets/client-shipwrecked-paradise-island.jpg",
+      "ariaLabel": "Visit Shipwrecked Paradise Island website"
+    },
+    {
+      "name": "SpudBros Express",
+      "handle": "@spudbrosexpress",
+      "category": "Fast casual",
+      "url": "https://www.spudbrosexpress.com/",
+      "logo": "assets/client-spudbros-express.jpg",
+      "ariaLabel": "Visit SpudBros Express website"
+    },
+    {
+      "name": "Sharky's Fit",
+      "handle": "@sharkyssocial",
+      "category": "Food + fitness",
+      "url": "https://sharkysfit.com/",
+      "logo": "assets/client-sharkys-fit.png",
+      "ariaLabel": "Visit Sharky's Fit website"
+    }
+  ],
   "proof": {
     "kicker": "Receipts",
     "title": "Attention only matters when it moves the line.",
@@ -45,11 +265,15 @@
   "contact": {
     "eyebrow": "Ready when the food is",
     "title": "Give the next launch, opening, or growth push a system behind it.",
+    "panelLabel": "Direct line",
     "cta": "Email BAM",
     "email": "hello@bammediagroup.us"
   },
   "social": {
     "instagram": "https://www.instagram.com/bam.social/",
     "linkedin": "https://www.linkedin.com/company/bam-media-group/"
+  },
+  "footer": {
+    "copyright": "Copyright 2018-2026 BAM Media Group Inc. All Rights Reserved."
   }
 }
