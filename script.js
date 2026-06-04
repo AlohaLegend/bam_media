@@ -143,6 +143,7 @@ const setInstagramEmbedSource = (media, reelUrl) => {
   }
 
   media.dataset.instagramEmbedSrc = embedUrl;
+  delete media.dataset.instagramEmbedFailed;
   card.classList.add("has-instagram-embed");
 
   if (iframe.dataset.loaded === "true" && iframe.src !== embedUrl) {
@@ -641,28 +642,60 @@ const loadInstagramEmbed = (card) => {
   const iframe = media?.querySelector(".reel-embed");
   const src = media?.dataset.instagramEmbedSrc;
 
-  if (!iframe || !src) {
+  if (!iframe || !src || media.dataset.instagramEmbedFailed === "true") {
     return false;
   }
-
-  card.classList.add("has-instagram-embed");
 
   if (iframe.dataset.loaded === "true" && iframe.src === src) {
     return true;
   }
 
-  card.classList.remove("is-instagram-loaded");
-  iframe.addEventListener(
-    "load",
-    () => {
-      card.classList.add("is-instagram-loaded");
-      pauseReelPreview(card);
-    },
-    { once: true }
-  );
+  if (media.dataset.instagramEmbedChecking === "true") {
+    return true;
+  }
 
-  iframe.src = src;
-  iframe.dataset.loaded = "true";
+  const failInstagramEmbed = () => {
+    delete media.dataset.instagramEmbedChecking;
+    media.dataset.instagramEmbedFailed = "true";
+    iframe.dataset.loaded = "false";
+    iframe.removeAttribute("src");
+    card.classList.remove("has-instagram-embed", "is-instagram-loaded");
+    playReelPreview(card);
+  };
+
+  const mountInstagramEmbed = () => {
+    if (media.dataset.instagramEmbedSrc !== src || media.dataset.instagramEmbedFailed === "true") {
+      return;
+    }
+
+    delete media.dataset.instagramEmbedChecking;
+    card.classList.add("has-instagram-embed");
+    card.classList.remove("is-instagram-loaded");
+    iframe.addEventListener(
+      "load",
+      () => {
+        card.classList.add("is-instagram-loaded");
+        pauseReelPreview(card);
+      },
+      { once: true }
+    );
+    iframe.addEventListener("error", failInstagramEmbed, { once: true });
+
+    iframe.src = src;
+    iframe.dataset.loaded = "true";
+  };
+
+  media.dataset.instagramEmbedChecking = "true";
+
+  if (!window.fetch) {
+    mountInstagramEmbed();
+    return true;
+  }
+
+  fetch(src, { cache: "no-store", credentials: "omit", mode: "no-cors" })
+    .then(mountInstagramEmbed)
+    .catch(failInstagramEmbed);
+
   return true;
 };
 
