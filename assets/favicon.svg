@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BAM Media Group">
   <rect width="512" height="512" fill="#ffffff"/>
   <g fill="#0c0c0b" font-family="Archivo, Arial Black, Arial, sans-serif" text-anchor="middle">
-    <text x="256" y="242" font-size="158" font-weight="900">BAM</text>
-    <text x="256" y="308" font-size="66" font-weight="800">MEDIA GROUP</text>
+    <text x="256" y="318" font-size="194" font-weight="900">BAM</text>
   </g>
 </svg>
