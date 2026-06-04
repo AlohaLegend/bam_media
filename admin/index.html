@@ -396,6 +396,47 @@
         text-transform: uppercase;
       }
 
+      .asset-tools {
+        display: grid;
+        gap: 8px;
+        margin-top: 2px;
+      }
+
+      .asset-tools input[type="file"] {
+        min-height: 44px;
+        border-radius: 8px;
+        border: 1px dashed rgba(0, 0, 0, 0.28);
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.56);
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.8rem;
+      }
+
+      .asset-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .asset-actions button,
+      .asset-actions a {
+        min-height: 40px;
+        padding: 10px 12px;
+        font-size: 0.72rem;
+      }
+
+      .asset-actions a[hidden] {
+        display: none;
+      }
+
+      .asset-note {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 800;
+        line-height: 1.35;
+      }
+
       .savebar {
         position: sticky;
         bottom: 12px;
@@ -890,12 +931,16 @@
       const contentForm = document.querySelector("[data-content-form]");
       const repeatContainers = Array.from(document.querySelectorAll("[data-repeat-group]"));
       const sessionKey = "bamAdminSession";
+      const maxUploadBytes = 15 * 1024 * 1024;
 
       let content = null;
       let dirty = false;
 
       const getFields = () => Array.from(document.querySelectorAll("[data-field]"));
       const getPreviews = () => Array.from(document.querySelectorAll("[data-preview]"));
+      const getFieldByPath = (path) => getFields().find((field) => field.dataset.field === path);
+      const getAssetFileInput = (path) =>
+        Array.from(document.querySelectorAll("[data-asset-file]")).find((field) => field.dataset.assetFile === path);
 
       const getValue = (source, path) =>
         path.split(".").reduce((value, key) => {
@@ -947,6 +992,8 @@
               label: "Image path",
               path: (index) => `loop.cards.${index}.image`,
               maxlength: 180,
+              asset: true,
+              accept: "image/jpeg,image/png,image/webp,image/gif",
               hint: "Example: assets/loop-launch-clip.webp",
             },
             {
@@ -981,17 +1028,27 @@
             { label: "Brand", path: (index) => `reels.${index}.brand`, maxlength: 54 },
             { label: "Handle", path: (index) => `reels.${index}.handle`, maxlength: 54 },
             { label: "Button text", path: (index) => `reels.${index}.cta`, maxlength: 28 },
-            { label: "Instagram link", path: (index) => `reels.${index}.url`, type: "url", maxlength: 220 },
+            {
+              label: "Instagram link",
+              path: (index) => `reels.${index}.url`,
+              type: "url",
+              maxlength: 220,
+              hint: "This only changes where the card opens. Upload poster and preview assets separately.",
+            },
             {
               label: "Poster image",
               path: (index) => `reels.${index}.poster`,
               maxlength: 180,
+              asset: true,
+              accept: "image/jpeg,image/png,image/webp,image/gif",
               hint: "Example: assets/reel-gdk.jpg",
             },
             {
               label: "Preview video",
               path: (index) => `reels.${index}.preview`,
               maxlength: 180,
+              asset: true,
+              accept: "video/mp4,video/webm",
               hint: "Example: assets/reel-gdk-preview.mp4",
             },
             {
@@ -1031,6 +1088,8 @@
               label: "Logo path",
               path: (index) => `clients.${index}.logo`,
               maxlength: 180,
+              asset: true,
+              accept: "image/jpeg,image/png,image/webp,image/gif",
               hint: "Example: assets/client-gdk.png",
             },
             {
@@ -1043,6 +1102,100 @@
         },
       };
 
+      const assetHref = (value) => {
+        const cleaned = typeof value === "string" ? value.trim() : "";
+
+        if (!cleaned) {
+          return "";
+        }
+
+        if (/^https:\/\//i.test(cleaned)) {
+          return cleaned;
+        }
+
+        return cleaned.startsWith("/") ? cleaned : `/${cleaned}`;
+      };
+
+      const assetDownloadHref = (value) => {
+        const href = assetHref(value);
+
+        if (!href) {
+          return "";
+        }
+
+        if (href.startsWith(API_BASE)) {
+          return `${href}${href.includes("?") ? "&" : "?"}download=1`;
+        }
+
+        return href;
+      };
+
+      const createAssetTools = (path, field) => {
+        const tools = document.createElement("div");
+        tools.className = "asset-tools";
+        tools.dataset.assetFor = path;
+
+        const file = document.createElement("input");
+        file.type = "file";
+        file.dataset.assetFile = path;
+        file.accept = field.accept || "image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm";
+        tools.append(file);
+
+        const actions = document.createElement("div");
+        actions.className = "asset-actions";
+
+        const upload = document.createElement("button");
+        upload.type = "button";
+        upload.dataset.action = "upload-asset";
+        upload.dataset.assetPath = path;
+        upload.textContent = "Upload + use";
+
+        const open = document.createElement("a");
+        open.className = "button-link";
+        open.dataset.assetOpen = path;
+        open.target = "_blank";
+        open.rel = "noreferrer";
+        open.textContent = "Open current";
+
+        const download = document.createElement("a");
+        download.className = "button-link";
+        download.dataset.assetDownload = path;
+        download.download = "";
+        download.textContent = "Download";
+
+        actions.append(upload, open, download);
+        tools.append(actions);
+
+        const note = document.createElement("span");
+        note.className = "asset-note";
+        note.textContent = "Uploads are stored in Cloudflare. Click Save live content after uploading.";
+        tools.append(note);
+
+        return tools;
+      };
+
+      const updateAssetTools = () => {
+        Array.from(document.querySelectorAll("[data-asset-for]")).forEach((tools) => {
+          const path = tools.dataset.assetFor;
+          const field = getFieldByPath(path);
+          const value = field?.value || "";
+          const openHref = assetHref(value);
+          const downloadHref = assetDownloadHref(value);
+          const open = tools.querySelector("[data-asset-open]");
+          const download = tools.querySelector("[data-asset-download]");
+
+          if (open) {
+            open.href = openHref;
+            open.hidden = !openHref;
+          }
+
+          if (download) {
+            download.href = downloadHref;
+            download.hidden = !downloadHref;
+          }
+        });
+      };
+
       const createEditorField = (field, index) => {
         const label = document.createElement("label");
         label.className = `field${field.wide ? " is-wide" : ""}`;
@@ -1052,7 +1205,8 @@
         label.append(title);
 
         const control = document.createElement(field.control === "textarea" ? "textarea" : "input");
-        control.dataset.field = typeof field.path === "function" ? field.path(index) : field.path;
+        const path = typeof field.path === "function" ? field.path(index) : field.path;
+        control.dataset.field = path;
 
         if (field.type && control.tagName === "INPUT") {
           control.type = field.type;
@@ -1068,6 +1222,10 @@
           const hint = document.createElement("span");
           hint.textContent = field.hint;
           label.append(hint);
+        }
+
+        if (field.asset) {
+          label.append(createAssetTools(path, field));
         }
 
         return label;
@@ -1107,14 +1265,16 @@
 
       const apiFetch = async (path, options = {}) => {
         const session = sessionStorage.getItem(sessionKey);
+        const { headers: optionHeaders = {}, ...fetchOptions } = options;
+        const isFormData = typeof FormData !== "undefined" && fetchOptions.body instanceof FormData;
         const response = await fetch(`${API_BASE}${path}`, {
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
+            ...(isFormData ? {} : { "Content-Type": "application/json" }),
             ...(session ? { Authorization: `Bearer ${session}` } : {}),
-            ...(options.headers || {}),
+            ...optionHeaders,
           },
-          ...options,
+          ...fetchOptions,
         });
 
         const data = await response.json().catch(() => ({}));
@@ -1162,6 +1322,7 @@
         });
 
         renderPreview();
+        updateAssetTools();
       };
 
       const loadContent = async () => {
@@ -1189,6 +1350,59 @@
         }
       };
 
+      const uploadAsset = async (path, button) => {
+        const fileInput = getAssetFileInput(path);
+        const file = fileInput?.files?.[0];
+
+        if (!file) {
+          setStatus(saveStatus, "Choose a file before uploading.", "error");
+          return;
+        }
+
+        if (file.size > maxUploadBytes) {
+          setStatus(saveStatus, "Keep uploads under 15 MB.", "error");
+          return;
+        }
+
+        const field = getFieldByPath(path);
+
+        if (!field || !content) {
+          setStatus(saveStatus, "That asset field is not ready yet. Reload and try again.", "error");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("field", path);
+
+        button.disabled = true;
+        setStatus(saveStatus, `Uploading ${file.name}...`);
+
+        try {
+          const data = await apiFetch("/api/assets", {
+            method: "POST",
+            body: formData,
+          });
+          const url = data.asset?.url;
+
+          if (!url) {
+            throw new Error("The upload worked, but no asset URL came back.");
+          }
+
+          field.value = url;
+          setValue(content, path, url);
+          dirty = true;
+          fileInput.value = "";
+          renderPreview();
+          updateAssetTools();
+          setStatus(saveStatus, "Uploaded and staged. Click Save live content to publish this asset.", "success");
+        } catch (error) {
+          setStatus(saveStatus, error.message, "error");
+        } finally {
+          button.disabled = false;
+        }
+      };
+
       contentForm.addEventListener("input", (event) => {
         const field = event.target.matches?.("[data-field]") ? event.target : null;
 
@@ -1199,7 +1413,18 @@
         setValue(content, field.dataset.field, field.value);
         dirty = true;
         renderPreview();
+        updateAssetTools();
         setStatus(saveStatus, "Unsaved edits. Hit save when this is ready.", "");
+      });
+
+      contentForm.addEventListener("click", (event) => {
+        const uploadButton = event.target.closest?.('[data-action="upload-asset"]');
+
+        if (!uploadButton) {
+          return;
+        }
+
+        uploadAsset(uploadButton.dataset.assetPath, uploadButton);
       });
 
       contentForm.addEventListener("submit", (event) => {
@@ -1238,11 +1463,13 @@
         setStatus(saveStatus, "Saving live content...");
 
         try {
-          await apiFetch("/api/content", {
+          const data = await apiFetch("/api/content", {
             method: "PUT",
             body: JSON.stringify({ content }),
           });
+          content = data.content || content;
           dirty = false;
+          renderFields();
           setStatus(saveStatus, "Saved. The live site will use this content now.", "success");
         } catch (error) {
           setStatus(saveStatus, error.message, "error");

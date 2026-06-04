@@ -12,6 +12,14 @@ It stores the editable homepage schema in Cloudflare KV, including copy, stats, 
 https://bam-cms-auth.bammediaauth.workers.dev/content/site.json
 ```
 
+Uploaded admin assets are also stored in the same KV namespace and served from:
+
+```text
+https://bam-cms-auth.bammediaauth.workers.dev/assets/uploads/<filename>
+```
+
+Uploads require an authenticated admin session, accept JPG, PNG, WEBP, GIF, MP4, and WEBM, and are capped at 15 MB. Public asset responses support byte ranges so preview videos can scrub/load normally.
+
 The checked-in `content/site.json` remains the fallback if Cloudflare is unavailable.
 
 ## Secrets

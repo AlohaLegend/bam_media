@@ -4,6 +4,17 @@ const DEFAULT_CONTENT_URL = "https://bammedia.us/content/site.json";
 const CONTENT_KEY = "site.json";
 const SESSION_COOKIE = "bam_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
+const ASSET_KEY_PREFIX = "asset:";
+const ASSET_ROUTE_PREFIX = "/assets/uploads/";
+const MAX_ASSET_BYTES = 15 * 1024 * 1024;
+const ALLOWED_ASSET_TYPES = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+  "video/mp4": "mp4",
+  "video/webm": "webm",
+};
 
 const textEncoder = new TextEncoder();
 
@@ -310,6 +321,57 @@ const corsHeaders = (request, env = {}) => {
     "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
     Vary: "Origin",
   };
+};
+
+const publicAssetHeaders = (request, metadata = {}, initHeaders = {}) => {
+  const assetMetadata = metadata || {};
+  const filename =
+    typeof assetMetadata.originalName === "string" ? assetMetadata.originalName.replaceAll('"', "") : "bam-asset";
+  const isDownload = new URL(request.url).searchParams.has("download");
+
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": "false",
+    "Accept-Ranges": "bytes",
+    "Cache-Control": "public, max-age=31536000, immutable",
+    "Content-Disposition": `${isDownload ? "attachment" : "inline"}; filename="${filename}"`,
+    "Content-Type": assetMetadata.contentType || "application/octet-stream",
+    ...initHeaders,
+  };
+};
+
+const slugify = (value) => {
+  const slug = value
+    .toLowerCase()
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 54);
+
+  return slug || "bam-asset";
+};
+
+const parseRange = (range, size) => {
+  const match = /^bytes=(\d*)-(\d*)$/.exec(range || "");
+
+  if (!match) {
+    return null;
+  }
+
+  let start = match[1] ? Number(match[1]) : 0;
+  let end = match[2] ? Number(match[2]) : size - 1;
+
+  if (!match[1] && match[2]) {
+    const suffixLength = Number(match[2]);
+    start = Math.max(size - suffixLength, 0);
+    end = size - 1;
+  }
+
+  if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start || start >= size) {
+    return null;
+  }
+
+  return { start, end: Math.min(end, size - 1) };
 };
 
 const readJson = async (request) => {
@@ -640,6 +702,106 @@ const handlePublicContent = async (request, env) =>
     },
   });
 
+const handleAssetUpload = async (request, env) => {
+  const sessionError = await requireSession(request, env);
+
+  if (sessionError) {
+    return sessionError;
+  }
+
+  if (!env.BAM_CMS_CONTENT) {
+    return jsonResponse(request, { error: "Asset storage is not configured." }, { status: 500 });
+  }
+
+  const formData = await request.formData().catch(() => null);
+  const file = formData?.get("file");
+
+  if (!file || typeof file.arrayBuffer !== "function") {
+    return jsonResponse(request, { error: "Choose an image or video file first." }, { status: 400 });
+  }
+
+  const contentType = typeof file.type === "string" ? file.type.toLowerCase() : "";
+  const extension = ALLOWED_ASSET_TYPES[contentType];
+  const size = Number(file.size || 0);
+
+  if (!extension) {
+    return jsonResponse(request, { error: "Use JPG, PNG, WEBP, GIF, MP4, or WEBM files." }, { status: 400 });
+  }
+
+  if (!size || size > MAX_ASSET_BYTES) {
+    return jsonResponse(request, { error: "Keep uploads under 15 MB." }, { status: 400 });
+  }
+
+  const originalName = typeof file.name === "string" && file.name.trim() ? file.name.trim() : `bam-asset.${extension}`;
+  const filename = `${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 8)}-${slugify(originalName)}.${extension}`;
+  const buffer = await file.arrayBuffer();
+
+  await env.BAM_CMS_CONTENT.put(`${ASSET_KEY_PREFIX}${filename}`, buffer, {
+    metadata: {
+      byteLength: buffer.byteLength,
+      contentType,
+      originalName,
+      uploadedAt: new Date().toISOString(),
+    },
+  });
+
+  const origin = new URL(request.url).origin;
+
+  return jsonResponse(request, {
+    asset: {
+      byteLength: buffer.byteLength,
+      contentType,
+      filename,
+      originalName,
+      url: `${origin}${ASSET_ROUTE_PREFIX}${filename}`,
+    },
+  });
+};
+
+const handlePublicAsset = async (request, env, filename) => {
+  if (!env.BAM_CMS_CONTENT) {
+    return new Response("Asset storage is not configured.", { status: 500 });
+  }
+
+  if (!/^[a-z0-9][a-z0-9.-]{1,160}\.(?:jpg|png|webp|gif|mp4|webm)$/i.test(filename)) {
+    return new Response("Not found.", { status: 404 });
+  }
+
+  const { value, metadata } = await env.BAM_CMS_CONTENT.getWithMetadata(`${ASSET_KEY_PREFIX}${filename}`, {
+    type: "arrayBuffer",
+  });
+
+  if (!value) {
+    return new Response("Not found.", { status: 404 });
+  }
+
+  const size = value.byteLength;
+  const range = parseRange(request.headers.get("Range"), size);
+
+  if (request.headers.get("Range") && !range) {
+    return new Response(null, {
+      status: 416,
+      headers: publicAssetHeaders(request, metadata, { "Content-Range": `bytes */${size}` }),
+    });
+  }
+
+  if (range) {
+    const body = value.slice(range.start, range.end + 1);
+
+    return new Response(body, {
+      status: 206,
+      headers: publicAssetHeaders(request, metadata, {
+        "Content-Length": String(body.byteLength),
+        "Content-Range": `bytes ${range.start}-${range.end}/${size}`,
+      }),
+    });
+  }
+
+  return new Response(value, {
+    headers: publicAssetHeaders(request, metadata, { "Content-Length": String(size) }),
+  });
+};
+
 export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
@@ -660,6 +822,10 @@ export default {
       return handlePublicContent(request, env);
     }
 
+    if (request.method === "GET" && pathname.startsWith(ASSET_ROUTE_PREFIX)) {
+      return handlePublicAsset(request, env, pathname.slice(ASSET_ROUTE_PREFIX.length));
+    }
+
     if (request.method === "GET" && pathname === "/api/session") {
       return jsonResponse(request, { authenticated: await verifySession(request, env) });
     }
@@ -678,6 +844,10 @@ export default {
 
     if (request.method === "PUT" && pathname === "/api/content") {
       return handleContentUpdate(request, env);
+    }
+
+    if (request.method === "POST" && pathname === "/api/assets") {
+      return handleAssetUpload(request, env);
     }
 
     return jsonResponse(request, { error: "Not found." }, { status: 404 });
