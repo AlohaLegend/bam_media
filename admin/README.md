@@ -1,45 +1,19 @@
 # BAM Website Admin
 
-The admin panel lives at `/admin/` and edits `content/site.json`.
+The admin panel lives at `/admin/`.
 
 Jake's normal workflow:
 
 1. Open `https://bammedia.us/admin/`.
-2. Click `Sign in with GitHub`.
-3. Approve access if GitHub asks.
-4. Open `BAM Website` then `Homepage Quick Edits`.
-5. Edit copy, stats, contact email, or social links.
-6. Publish. GitHub Pages usually updates the live site within a minute or two.
+2. Enter the BAM admin password.
+3. Edit the safe homepage fields.
+4. Click `Save live content`.
+5. Refresh the live site.
 
-OAuth setup lives in `cms-auth-worker/`. It uses this deployed Worker:
+The admin is intentionally narrow. It controls hero copy, homepage stats, receipts, contact text, email, social links, and SEO text.
 
-```text
-https://bam-cms-auth.bammediaauth.workers.dev
-```
+Layout changes, videos, reels, new client work, and design edits still belong in code.
 
-If the Worker URL ever changes, run:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\enable-cms-oauth.ps1 -WorkerUrl "https://bam-cms-auth.bammediaauth.workers.dev"
-```
-
-Then commit and push.
-
-Fallback token workflow:
-
-1. Open `https://bammedia.us/admin/`.
-2. First time only, click `Create admin key`.
-3. GitHub opens with the `public_repo` permission already selected. Generate the key and copy it.
-4. Back on `/admin/`, click `Paste Admin Key` and paste the key.
-5. Jake's browser should remember the login after that.
-6. Open `BAM Website` then `Homepage Quick Edits`.
-7. Edit copy, stats, contact email, or social links.
-8. Publish. GitHub Pages usually updates the live site within a minute or two.
-
-This uses a classic GitHub token with `public_repo` because the repo is public and Jake is a collaborator. It is fewer clicks than fine-grained tokens and avoids the collaborator-repo limitations.
-
-This is not a website password. Editing is protected by GitHub permissions, and the token can be revoked from GitHub at any time.
-
-The admin is intentionally narrow. It is for safe copy and stat changes, not layout surgery. Bigger visual changes still belong in the code.
+The password is checked by the Cloudflare Worker in `cms-auth-worker/`. The static website does not contain the password.
 
 Liam-proofing rule: if the copy starts sounding like it wore a blazer to lunch, shorten it.
