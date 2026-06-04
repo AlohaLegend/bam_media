@@ -97,75 +97,6 @@ const getEditableString = (content, path) => {
 
 const cssUrl = (value) => `url("${value.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}")`;
 
-const getInstagramEmbedUrl = (value) => {
-  if (typeof value !== "string" || !value.trim()) {
-    return "";
-  }
-
-  try {
-    const url = new URL(value.trim());
-    const hostname = url.hostname.replace(/^www\./, "");
-
-    if (hostname !== "instagram.com") {
-      return "";
-    }
-
-    const parts = url.pathname.split("/").filter(Boolean);
-    const typeIndex = parts.findIndex((part) => ["p", "reel", "tv"].includes(part));
-    const type = parts[typeIndex];
-    const shortcode = parts[typeIndex + 1]?.replace(/[^a-zA-Z0-9_-]/g, "");
-
-    if (!type || !shortcode) {
-      return "";
-    }
-
-    return `https://www.instagram.com/${type}/${shortcode}/embed/`;
-  } catch {
-    return "";
-  }
-};
-
-const setInstagramEmbedSource = (media, reelUrl) => {
-  const iframe = media?.querySelector(".reel-embed");
-  const card = media?.closest(".content-card.is-reel");
-  const embedUrl = getInstagramEmbedUrl(reelUrl);
-
-  if (!iframe || !card) {
-    return false;
-  }
-
-  if (!embedUrl) {
-    delete media.dataset.instagramEmbedSrc;
-    iframe.removeAttribute("src");
-    iframe.dataset.loaded = "false";
-    card.classList.remove("has-instagram-embed", "is-instagram-loaded");
-    return false;
-  }
-
-  media.dataset.instagramEmbedSrc = embedUrl;
-  delete media.dataset.instagramEmbedFailed;
-  card.classList.add("has-instagram-embed");
-
-  if (iframe.dataset.loaded === "true" && iframe.src !== embedUrl) {
-    card.classList.remove("is-instagram-loaded");
-    iframe.dataset.loaded = "false";
-    iframe.removeAttribute("src");
-  }
-
-  return true;
-};
-
-const primeStaticInstagramEmbeds = () => {
-  document.querySelectorAll("[data-instagram-embed]").forEach((media) => {
-    const card = media.closest(".content-card.is-reel");
-    const fallbackUrl = card?.href || card?.getAttribute("href") || "";
-
-    if (fallbackUrl) {
-      setInstagramEmbedSource(media, fallbackUrl);
-    }
-  });
-};
-
 const applyEditableContent = (content) => {
   if (!content || typeof content !== "object") {
     return;
@@ -258,14 +189,6 @@ const applyEditableContent = (content) => {
     }
   });
 
-  document.querySelectorAll("[data-instagram-embed]").forEach((element) => {
-    const value = getEditableString(content, element.dataset.instagramEmbed);
-
-    if (value) {
-      setInstagramEmbedSource(element, value);
-    }
-  });
-
   if (content.contact?.email) {
     const email = content.contact.email.trim();
 
@@ -306,7 +229,6 @@ const loadEditableContent = async () => {
   }
 };
 
-primeStaticInstagramEmbeds();
 loadEditableContent();
 
 const getHeroVideoSource = () => {
@@ -637,68 +559,6 @@ let activeReelCard = null;
 let priorityReelCard = null;
 let reelFrame = 0;
 
-const loadInstagramEmbed = (card) => {
-  const media = card?.querySelector("[data-instagram-embed]");
-  const iframe = media?.querySelector(".reel-embed");
-  const src = media?.dataset.instagramEmbedSrc;
-
-  if (!iframe || !src || media.dataset.instagramEmbedFailed === "true") {
-    return false;
-  }
-
-  if (iframe.dataset.loaded === "true" && iframe.src === src) {
-    return true;
-  }
-
-  if (media.dataset.instagramEmbedChecking === "true") {
-    return true;
-  }
-
-  const failInstagramEmbed = () => {
-    delete media.dataset.instagramEmbedChecking;
-    media.dataset.instagramEmbedFailed = "true";
-    iframe.dataset.loaded = "false";
-    iframe.removeAttribute("src");
-    card.classList.remove("has-instagram-embed", "is-instagram-loaded");
-    playReelPreview(card);
-  };
-
-  const mountInstagramEmbed = () => {
-    if (media.dataset.instagramEmbedSrc !== src || media.dataset.instagramEmbedFailed === "true") {
-      return;
-    }
-
-    delete media.dataset.instagramEmbedChecking;
-    card.classList.add("has-instagram-embed");
-    card.classList.remove("is-instagram-loaded");
-    iframe.addEventListener(
-      "load",
-      () => {
-        card.classList.add("is-instagram-loaded");
-        pauseReelPreview(card);
-      },
-      { once: true }
-    );
-    iframe.addEventListener("error", failInstagramEmbed, { once: true });
-
-    iframe.src = src;
-    iframe.dataset.loaded = "true";
-  };
-
-  media.dataset.instagramEmbedChecking = "true";
-
-  if (!window.fetch) {
-    mountInstagramEmbed();
-    return true;
-  }
-
-  fetch(src, { cache: "no-store", credentials: "omit", mode: "no-cors" })
-    .then(mountInstagramEmbed)
-    .catch(failInstagramEmbed);
-
-  return true;
-};
-
 const loadReelPreview = (video) => {
   if (!video || video.dataset.loaded === "true") {
     return Boolean(video);
@@ -738,10 +598,6 @@ const pauseReelPreview = (card) => {
 
 const playReelPreview = (card) => {
   const video = card?.querySelector(".reel-preview");
-
-  if (loadInstagramEmbed(card)) {
-    return;
-  }
 
   if (!video || prefersReducedMotion || !loadReelPreview(video)) {
     return;
@@ -836,14 +692,13 @@ const scheduleReelSync = () => {
   reelFrame = requestAnimationFrame(syncActiveReel);
 };
 
-if (reelCards.length && "IntersectionObserver" in window) {
+if (reelCards.length && !prefersReducedMotion && "IntersectionObserver" in window) {
   const reelObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const video = entry.target.querySelector(".reel-preview");
-        const hasInstagramEmbed = entry.intersectionRatio > 0.08 && loadInstagramEmbed(entry.target);
 
-        if (entry.intersectionRatio > 0.08 && !hasInstagramEmbed) {
+        if (entry.intersectionRatio > 0.08) {
           loadReelPreview(video);
         }
 
@@ -894,8 +749,6 @@ if (reelCards.length && "IntersectionObserver" in window) {
   document.querySelectorAll(".content-rail").forEach((rail) => {
     rail.addEventListener("scroll", scheduleReelSync, { passive: true });
   });
-} else {
-  reelCards.forEach((card) => loadInstagramEmbed(card));
 }
 
 const serviceCards = document.querySelectorAll(".service-grid article");

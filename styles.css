@@ -961,8 +961,7 @@ html.motion-ready [data-reveal].is-visible {
 }
 
 .reel-media img,
-.reel-media video,
-.reel-media iframe {
+.reel-media video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -971,24 +970,15 @@ html.motion-ready [data-reveal].is-visible {
   transition: opacity 220ms ease, transform 420ms ease;
 }
 
-.reel-media iframe {
-  border: 0;
-  pointer-events: none;
-}
-
-.reel-media video,
-.reel-media iframe {
+.reel-media video {
   opacity: 0;
   background: var(--ink);
 }
 
-.content-card.is-instagram-loaded .reel-embed,
 .content-card.is-previewing .reel-preview {
   opacity: 1;
 }
 
-.content-card.is-instagram-loaded .reel-poster,
-.content-card.is-instagram-loaded .reel-preview,
 .content-card.is-previewing .reel-poster {
   opacity: 0;
 }
@@ -1032,11 +1022,6 @@ html.motion-ready [data-reveal].is-visible {
 .content-card.is-previewing::before {
   opacity: 0.9;
   transform: scale(0.92);
-}
-
-.content-card.is-instagram-loaded::after,
-.content-card.is-instagram-loaded::before {
-  opacity: 0;
 }
 
 .content-card > span:not(.reel-media),
