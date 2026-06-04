@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BAM Media Group">
-  <rect width="64" height="64" rx="14" fill="#0c0c0b"/>
-  <rect x="5" y="5" width="54" height="54" rx="10" fill="#f6f1e8"/>
-  <text x="32" y="35" fill="#0c0c0b" font-family="Arial Black, Archivo, Arial, sans-serif" font-size="25" font-weight="900" letter-spacing="-1.5" text-anchor="middle">BAM</text>
-  <text x="32" y="46" fill="#0c0c0b" font-family="Arial, Inter, sans-serif" font-size="6.2" font-weight="900" letter-spacing=".8" text-anchor="middle">MEDIA GROUP</text>
-  <rect x="17" y="51" width="30" height="3" rx="1.5" fill="#85dfb8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BAM Media Group">
+  <rect width="512" height="512" rx="96" fill="#ffffff"/>
+  <rect x="18" y="18" width="476" height="476" rx="82" fill="none" stroke="#eee9df" stroke-width="10"/>
+  <g fill="#0c0c0b" text-anchor="middle">
+    <text x="256" y="259" font-family="Arial Black, Archivo, Arial, sans-serif" font-size="168" font-weight="900">BAM</text>
+    <text x="256" y="321" font-family="Arial, Inter, sans-serif" font-size="43" font-weight="900">MEDIA GROUP</text>
+  </g>
 </svg>
