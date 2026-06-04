@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <meta name="cms-auth-mode" content="oauth" />
-    <title>BAM Admin | Edit the Website</title>
+    <title>BAM Admin | Website Control Room</title>
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,425 +14,893 @@
     />
     <style>
       :root {
-        --ink: #0c0c0b;
+        --ink: #10100f;
         --paper: #f6f1e8;
-        --paper-2: #fffaf0;
+        --panel: #fffaf0;
+        --line: rgba(16, 16, 15, 0.16);
+        --muted: #746c62;
         --mint: #85dfb8;
-        --amber: #f3a85e;
         --blue: #216fbd;
-        --muted: #6f6860;
-        --line: rgba(12, 12, 11, 0.16);
+        --amber: #f3a85e;
+        --danger: #b53a28;
       }
 
       * {
         box-sizing: border-box;
       }
 
+      [hidden] {
+        display: none !important;
+      }
+
       body {
         margin: 0;
+        background:
+          linear-gradient(180deg, rgba(133, 223, 184, 0.14), transparent 260px),
+          var(--paper);
         color: var(--ink);
-        background: var(--paper);
         font-family:
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
-      a {
-        color: inherit;
+      button,
+      input,
+      textarea {
+        font: inherit;
       }
 
-      .admin-guide {
-        padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 56px) 28px;
-        background:
-          linear-gradient(135deg, rgba(133, 223, 184, 0.16), transparent 38%),
-          linear-gradient(180deg, var(--paper-2), var(--paper));
-        border-bottom: 1px solid var(--line);
-      }
-
-      .admin-guide-inner {
-        width: min(100%, 1120px);
-        display: grid;
-        gap: 24px;
-        margin: 0 auto;
-      }
-
-      .admin-kicker,
-      .cms-kicker {
-        margin: 0;
-        color: #1b8f66;
-        font-size: 0.78rem;
-        font-weight: 900;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .admin-guide h1 {
-        max-width: 860px;
-        margin: 0;
-        font-family: Archivo, Impact, sans-serif;
-        font-size: clamp(2.8rem, 9vw, 7rem);
-        line-height: 0.88;
-        letter-spacing: 0;
-        text-transform: uppercase;
-      }
-
-      .admin-intro {
-        max-width: 720px;
-        margin: 0;
-        color: var(--muted);
-        font-size: clamp(1rem, 2vw, 1.22rem);
-        font-weight: 700;
-        line-height: 1.5;
-      }
-
-      .admin-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .admin-actions a {
+      button,
+      a.button-link {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         border: 1px solid var(--line);
         border-radius: 999px;
-        padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.42);
-        font-size: 0.78rem;
+        padding: 0 16px;
+        background: #ffffff;
+        color: var(--ink);
+        font-size: 0.8rem;
         font-weight: 900;
         text-decoration: none;
         text-transform: uppercase;
+        cursor: pointer;
       }
 
-      .admin-actions a.is-primary {
-        border-color: transparent;
-        background: var(--amber);
-      }
-
-      .admin-actions a.is-key {
-        border-color: transparent;
-        background: var(--mint);
-      }
-
-      .admin-actions a.is-oauth {
+      button.primary {
         border-color: transparent;
         background: var(--blue);
         color: #ffffff;
       }
 
-      .admin-cards {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 10px;
+      button.warm {
+        border-color: transparent;
+        background: var(--amber);
       }
 
-      .admin-card {
-        min-height: 160px;
-        display: grid;
-        align-content: space-between;
-        gap: 18px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 18px;
-        background: rgba(255, 250, 240, 0.72);
+      button.subtle {
+        background: transparent;
       }
 
-      .admin-card strong {
-        font-family: Archivo, Impact, sans-serif;
-        font-size: 1.05rem;
-        line-height: 1;
-        text-transform: uppercase;
+      button:disabled {
+        cursor: wait;
+        opacity: 0.56;
       }
 
-      .admin-card p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.92rem;
-        font-weight: 700;
-        line-height: 1.42;
-      }
-
-      .admin-card.is-liam {
-        color: #06130d;
-        background:
-          linear-gradient(180deg, rgba(133, 223, 184, 0.62), rgba(133, 223, 184, 0.36)),
-          var(--mint);
-      }
-
-      .admin-card.is-liam p {
-        color: rgba(6, 19, 13, 0.72);
-      }
-
-      .cms-shell {
-        width: min(100%, 1120px);
+      .shell {
+        width: min(100% - 32px, 1180px);
         margin: 0 auto;
-        padding: 28px clamp(18px, 5vw, 56px) 64px;
+        padding: 26px 0 52px;
       }
 
-      .cms-heading {
-        display: grid;
-        gap: 8px;
-        margin-bottom: 18px;
-      }
-
-      .cms-heading h2 {
-        margin: 0;
-        font-family: Archivo, Impact, sans-serif;
-        font-size: clamp(1.8rem, 4vw, 3rem);
-        line-height: 0.95;
-        text-transform: uppercase;
-      }
-
-      .cms-heading p {
-        max-width: 680px;
-        margin: 0;
-        color: var(--muted);
-        font-weight: 700;
-        line-height: 1.45;
-      }
-
-      .login-setup {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 18px;
+      .topbar {
+        display: flex;
         align-items: center;
-        margin: 0 0 18px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 18px;
-        background:
-          linear-gradient(135deg, rgba(133, 223, 184, 0.28), transparent 54%),
-          #fffaf0;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 26px;
       }
 
-      .login-setup strong {
-        display: block;
-        margin-bottom: 6px;
-        font-family: Archivo, Impact, sans-serif;
-        font-size: 1.25rem;
-        line-height: 1;
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand img {
+        width: 54px;
+        height: auto;
+      }
+
+      .brand p,
+      .kicker {
+        margin: 0;
+        color: #1b8f66;
+        font-size: 0.76rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
-      .login-setup p {
-        max-width: 760px;
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.95rem;
-        font-weight: 700;
-        line-height: 1.45;
+      .brand strong {
+        display: block;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: clamp(1.5rem, 3.6vw, 3rem);
+        line-height: 0.9;
+        text-transform: uppercase;
       }
 
-      .setup-actions {
+      .top-actions {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-end;
         gap: 10px;
       }
 
-      .setup-actions a {
+      .login {
+        width: min(100%, 520px);
+        display: grid;
+        gap: 18px;
+        margin: 8vh auto 0;
         border: 1px solid var(--line);
-        border-radius: 999px;
-        padding: 12px 16px;
-        background: #ffffff;
-        color: var(--ink);
-        font-size: 0.78rem;
-        font-weight: 900;
-        text-decoration: none;
-        text-transform: uppercase;
-        white-space: nowrap;
+        border-radius: 8px;
+        padding: clamp(22px, 5vw, 34px);
+        background: var(--panel);
       }
 
-      .setup-actions a:first-child {
-        border-color: transparent;
-        background: var(--blue);
+      .login h1,
+      .editor-hero h1,
+      .section-title h2,
+      .preview h2 {
+        margin: 0;
+        font-family: Archivo, Impact, sans-serif;
+        line-height: 0.92;
+        text-transform: uppercase;
+      }
+
+      .login h1 {
+        font-size: clamp(2.5rem, 10vw, 5.6rem);
+      }
+
+      .login p,
+      .editor-hero p,
+      .section-title p,
+      .field span,
+      .preview p,
+      .status-line {
+        margin: 0;
+        color: var(--muted);
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .login form,
+      .editor-form,
+      .field-grid,
+      .metric-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .field {
+        display: grid;
+        gap: 7px;
+      }
+
+      .field strong {
+        font-size: 0.76rem;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 13px 14px;
+        background: #ffffff;
+        color: var(--ink);
+        font-weight: 800;
+        outline: none;
+      }
+
+      textarea {
+        min-height: 108px;
+        resize: vertical;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(33, 111, 189, 0.16);
+      }
+
+      .editor[hidden],
+      .login[hidden] {
+        display: none;
+      }
+
+      .editor {
+        display: grid;
+        gap: 18px;
+      }
+
+      .editor-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.44fr);
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .hero-copy {
+        display: grid;
+        align-content: end;
+        gap: 14px;
+        min-height: 280px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: clamp(20px, 5vw, 34px);
+        background:
+          linear-gradient(135deg, rgba(133, 223, 184, 0.3), transparent 54%),
+          var(--panel);
+      }
+
+      .hero-copy h1 {
+        max-width: 850px;
+        font-size: clamp(3.2rem, 10vw, 7.8rem);
+      }
+
+      .preview {
+        display: grid;
+        align-content: space-between;
+        gap: 16px;
+        border: 1px solid rgba(255, 250, 240, 0.14);
+        border-radius: 8px;
+        padding: 22px;
+        background: #111614;
         color: #ffffff;
       }
 
-      html[data-cms-auth-mode="token"] .oauth-mode,
-      html[data-cms-auth-mode="oauth"] .token-mode {
-        display: none !important;
+      .preview h2 {
+        font-size: clamp(1.8rem, 4vw, 3rem);
       }
 
-      #nc-root {
-        min-height: 720px;
+      .preview p {
+        color: rgba(255, 255, 255, 0.72);
+      }
+
+      .preview-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
         overflow: hidden;
+      }
+
+      .preview-stats div {
+        display: grid;
+        gap: 2px;
+        padding: 12px;
+        border-right: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .preview-stats div:last-child {
+        border-right: 0;
+      }
+
+      .preview-stats strong {
+        font-family: Archivo, Impact, sans-serif;
+        font-size: 1.45rem;
+      }
+
+      .preview-stats span {
+        color: rgba(255, 255, 255, 0.64);
+        font-size: 0.74rem;
+        font-weight: 800;
+        line-height: 1.15;
+      }
+
+      .edit-section {
+        display: grid;
+        gap: 16px;
+        border-top: 1px solid var(--line);
+        padding-top: 26px;
+      }
+
+      .section-title {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+      }
+
+      .section-title h2 {
+        font-size: clamp(1.9rem, 5vw, 4rem);
+      }
+
+      .field-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .field.is-wide {
+        grid-column: 1 / -1;
+      }
+
+      .metric-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .metric-card {
+        display: grid;
+        gap: 12px;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: #ffffff;
+        padding: 14px;
+        background: rgba(255, 250, 240, 0.78);
       }
 
-      @media (max-width: 900px) {
-        .admin-cards {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+      .metric-card .field {
+        gap: 6px;
+      }
+
+      .savebar {
+        position: sticky;
+        bottom: 12px;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: rgba(255, 250, 240, 0.94);
+        backdrop-filter: blur(12px);
+      }
+
+      .savebar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .status-line[data-tone="error"] {
+        color: var(--danger);
+      }
+
+      .status-line[data-tone="success"] {
+        color: #177a56;
+      }
+
+      @media (max-width: 820px) {
+        .topbar,
+        .editor-hero,
+        .section-title,
+        .savebar {
+          grid-template-columns: 1fr;
+          display: grid;
         }
-      }
 
-      @media (max-width: 620px) {
-        .admin-cards {
+        .top-actions,
+        .savebar-actions {
+          justify-content: stretch;
+        }
+
+        .top-actions > *,
+        .savebar-actions > * {
+          width: 100%;
+        }
+
+        .field-grid,
+        .metric-grid {
           grid-template-columns: 1fr;
         }
 
-        .admin-card {
-          min-height: 130px;
+        .hero-copy {
+          min-height: 0;
         }
 
-        .login-setup {
+        .preview-stats {
           grid-template-columns: 1fr;
         }
 
-        .setup-actions {
-          justify-content: flex-start;
+        .preview-stats div {
+          border-right: 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .preview-stats div:last-child {
+          border-bottom: 0;
         }
       }
     </style>
   </head>
   <body>
-    <main class="admin-guide" aria-labelledby="admin-title">
-      <div class="admin-guide-inner">
-        <p class="admin-kicker">BAM backend</p>
-        <h1 id="admin-title">Make the easy edits here.</h1>
-        <p class="admin-intro">
-          This page edits the safe homepage fields: hero copy, stats, receipts, email, and social links.
-          Publish saves a commit to GitHub, then GitHub Pages pushes the live site.
-        </p>
-        <div class="admin-actions" aria-label="Admin shortcuts">
-          <a
-            class="is-key token-mode"
-            href="https://github.com/settings/tokens/new?description=BAM%20Website%20Admin&scopes=public_repo"
-            target="_blank"
-            rel="noreferrer"
-          >Create admin key</a>
-          <a class="token-mode" href="#cms-title">Paste key below</a>
-          <a class="is-oauth oauth-mode" href="#nc-root">Sign in with GitHub</a>
-          <a class="is-primary" href="/" target="_blank" rel="noreferrer">View live site</a>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <img src="/assets/favicon.svg" alt="" />
+          <div>
+            <p>BAM backend</p>
+            <strong>Control room</strong>
+          </div>
         </div>
-        <section class="admin-cards" aria-label="Editing tips">
-          <article class="admin-card">
-            <strong>Hero copy</strong>
-            <p>Keep it short. If it looks like a paragraph on mobile, it is probably two sentences too long.</p>
-          </article>
-          <article class="admin-card">
-            <strong>Stats</strong>
-            <p>Use the Demand Board and Receipts together so the numbers tell one clean story.</p>
-          </article>
-          <article class="admin-card">
-            <strong>Publish flow</strong>
-            <p>Save, publish, then give GitHub Pages a minute. Refresh the live site after the cache catches up.</p>
-          </article>
-          <article class="admin-card is-liam">
-            <strong>Liam-proof note</strong>
-            <p>Built by Liam, tuned for Jake. If copy starts sounding too fancy, cut it in half and blame the builder.</p>
-          </article>
+        <div class="top-actions">
+          <a class="button-link" href="/" target="_blank" rel="noreferrer">View live site</a>
+          <button class="subtle" type="button" data-action="logout" hidden>Log out</button>
+        </div>
+      </header>
+
+      <section class="login" data-login>
+        <p class="kicker">Jake login</p>
+        <h1>No GitHub maze.</h1>
+        <p>Enter the BAM admin password, make the safe homepage edits, save, done. Liam did the wiring so nobody has to cosplay as a developer.</p>
+        <form data-login-form>
+          <label class="field">
+            <strong>Password</strong>
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="primary" type="submit">Open editor</button>
+          <p class="status-line" data-login-status></p>
+        </form>
+      </section>
+
+      <main class="editor" data-editor hidden>
+        <section class="editor-hero">
+          <div class="hero-copy">
+            <p class="kicker">Live homepage editor</p>
+            <h1>Make the easy edits obvious.</h1>
+            <p>These are the fields the website actually uses. If a change needs layout, video, reels, or new sections, that still belongs in the code.</p>
+          </div>
+          <aside class="preview" aria-label="Homepage preview">
+            <div>
+              <p class="kicker">Preview</p>
+              <h2 data-preview="hero.title">Make food famous. Move orders.</h2>
+              <p data-preview="hero.copy">BAM turns social attention into store visits, catering demand, and repeatable local momentum.</p>
+            </div>
+            <div class="preview-stats" aria-label="Preview stats">
+              <div>
+                <strong data-preview="signals.0.value">10%+</strong>
+                <span data-preview="signals.0.label">average sales lift</span>
+              </div>
+              <div>
+                <strong data-preview="signals.1.value">287%+</strong>
+                <span data-preview="signals.1.label">average engagement lift</span>
+              </div>
+              <div>
+                <strong data-preview="signals.2.value">5B+</strong>
+                <span data-preview="signals.2.label">food community views</span>
+              </div>
+            </div>
+          </aside>
         </section>
-      </div>
-    </main>
 
-    <section class="cms-shell" aria-labelledby="cms-title">
-      <div class="cms-heading">
-        <p class="cms-kicker">Editor</p>
-        <h2 id="cms-title">Homepage controls</h2>
-        <p class="token-mode">
-          First login only: create the admin key, copy it, click Paste Admin Key, and paste it. After that,
-          this browser remembers Jake's login.
-        </p>
-        <p class="oauth-mode">
-          Click Sign in with GitHub below. If Jake has repo access, the editor opens without copy-pasting keys.
-        </p>
-      </div>
-      <aside class="login-setup token-mode" aria-label="First login setup">
-        <div>
-          <strong>First login, no scavenger hunt.</strong>
-          <p>
-            The key page opens with the public repo permission already selected. Copy the new key once,
-            paste it below, and future edits should open straight into the CMS from this browser.
-          </p>
-        </div>
-        <div class="setup-actions">
-          <a
-            href="https://github.com/settings/tokens/new?description=BAM%20Website%20Admin&scopes=public_repo"
-            target="_blank"
-            rel="noreferrer"
-          >Create key</a>
-          <a href="#nc-root">Paste key</a>
-        </div>
-      </aside>
-      <aside class="login-setup oauth-mode" aria-label="GitHub sign in setup">
-        <div>
-          <strong>One-click sign in.</strong>
-          <p>
-            The Cloudflare OAuth bridge keeps the GitHub secret off the website. Jake just approves GitHub access,
-            then edits the safe homepage fields.
-          </p>
-        </div>
-        <div class="setup-actions">
-          <a href="#nc-root">Sign in below</a>
-          <a
-            href="https://github.com/AlohaLegend/bam_media/tree/main/cms-auth-worker"
-            target="_blank"
-            rel="noreferrer"
-          >Setup notes</a>
-        </div>
-      </aside>
-      <div id="nc-root"></div>
-    </section>
+        <form class="editor-form" data-content-form>
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">First screen</p>
+                <h2>Hero</h2>
+              </div>
+              <p>Shorter usually wins here, especially on phones.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Eyebrow</strong>
+                <input data-field="hero.eyebrow" maxlength="48" />
+              </label>
+              <label class="field">
+                <strong>Primary button</strong>
+                <input data-field="hero.primaryCta" maxlength="40" />
+              </label>
+              <label class="field is-wide">
+                <strong>Headline</strong>
+                <textarea data-field="hero.title" maxlength="80"></textarea>
+                <span>Keep this punchy. If it wraps forever on mobile, it is fighting the page.</span>
+              </label>
+              <label class="field is-wide">
+                <strong>Intro copy</strong>
+                <textarea data-field="hero.copy" maxlength="180"></textarea>
+              </label>
+              <label class="field">
+                <strong>Secondary button</strong>
+                <input data-field="hero.secondaryCta" maxlength="40" />
+              </label>
+            </div>
+          </section>
 
-    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Demand board</p>
+                <h2>Hero stats</h2>
+              </div>
+              <p>These are the three numbers people see before they scroll.</p>
+            </div>
+            <div class="metric-grid">
+              <article class="metric-card">
+                <label class="field">
+                  <strong>Number 1</strong>
+                  <input data-field="signals.0.value" maxlength="20" />
+                </label>
+                <label class="field">
+                  <strong>Label 1</strong>
+                  <input data-field="signals.0.label" maxlength="60" />
+                </label>
+              </article>
+              <article class="metric-card">
+                <label class="field">
+                  <strong>Number 2</strong>
+                  <input data-field="signals.1.value" maxlength="20" />
+                </label>
+                <label class="field">
+                  <strong>Label 2</strong>
+                  <input data-field="signals.1.label" maxlength="60" />
+                </label>
+              </article>
+              <article class="metric-card">
+                <label class="field">
+                  <strong>Number 3</strong>
+                  <input data-field="signals.2.value" maxlength="20" />
+                </label>
+                <label class="field">
+                  <strong>Label 3</strong>
+                  <input data-field="signals.2.label" maxlength="60" />
+                </label>
+              </article>
+            </div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Proof section</p>
+                <h2>Receipts</h2>
+              </div>
+              <button class="warm" type="button" data-action="sync-receipts">Copy hero stats here</button>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Kicker</strong>
+                <input data-field="proof.kicker" maxlength="40" />
+              </label>
+              <label class="field is-wide">
+                <strong>Headline</strong>
+                <textarea data-field="proof.title" maxlength="110"></textarea>
+              </label>
+            </div>
+            <div class="metric-grid">
+              <article class="metric-card">
+                <label class="field">
+                  <strong>Receipt number 1</strong>
+                  <input data-field="proof.metrics.0.value" maxlength="20" />
+                </label>
+                <label class="field">
+                  <strong>Receipt label 1</strong>
+                  <input data-field="proof.metrics.0.label" maxlength="60" />
+                </label>
+              </article>
+              <article class="metric-card">
+                <label class="field">
+                  <strong>Receipt number 2</strong>
+                  <input data-field="proof.metrics.1.value" maxlength="20" />
+                </label>
+                <label class="field">
+                  <strong>Receipt label 2</strong>
+                  <input data-field="proof.metrics.1.label" maxlength="60" />
+                </label>
+              </article>
+              <article class="metric-card">
+                <label class="field">
+                  <strong>Receipt number 3</strong>
+                  <input data-field="proof.metrics.2.value" maxlength="20" />
+                </label>
+                <label class="field">
+                  <strong>Receipt label 3</strong>
+                  <input data-field="proof.metrics.2.label" maxlength="60" />
+                </label>
+              </article>
+            </div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Direct line</p>
+                <h2>Contact and socials</h2>
+              </div>
+              <p>This powers the CTA and footer buttons.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Contact eyebrow</strong>
+                <input data-field="contact.eyebrow" maxlength="48" />
+              </label>
+              <label class="field">
+                <strong>Button text</strong>
+                <input data-field="contact.cta" maxlength="40" />
+              </label>
+              <label class="field is-wide">
+                <strong>Contact headline</strong>
+                <textarea data-field="contact.title" maxlength="130"></textarea>
+              </label>
+              <label class="field">
+                <strong>Email</strong>
+                <input data-field="contact.email" type="email" maxlength="120" />
+              </label>
+              <label class="field">
+                <strong>Instagram</strong>
+                <input data-field="social.instagram" type="url" maxlength="180" />
+              </label>
+              <label class="field">
+                <strong>LinkedIn</strong>
+                <input data-field="social.linkedin" type="url" maxlength="180" />
+              </label>
+            </div>
+          </section>
+
+          <section class="edit-section">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Search and browser</p>
+                <h2>SEO</h2>
+              </div>
+              <p>Not the homepage headline. This is for Google, tabs, and link previews.</p>
+            </div>
+            <div class="field-grid">
+              <label class="field">
+                <strong>Browser title</strong>
+                <input data-field="seo.title" maxlength="80" />
+              </label>
+              <label class="field is-wide">
+                <strong>Search description</strong>
+                <textarea data-field="seo.description" maxlength="180"></textarea>
+              </label>
+            </div>
+          </section>
+        </form>
+
+        <div class="savebar" aria-live="polite">
+          <p class="status-line" data-save-status>Loaded. Make edits, then save them live.</p>
+          <div class="savebar-actions">
+            <button type="button" data-action="reload">Reload saved</button>
+            <button class="primary" type="button" data-action="save">Save live content</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
     <script>
-      const cmsAuthMode = document.querySelector('meta[name="cms-auth-mode"]')?.content || "token";
+      const API_BASE = "https://bam-cms-auth.bammediaauth.workers.dev";
+      const login = document.querySelector("[data-login]");
+      const editor = document.querySelector("[data-editor]");
+      const loginForm = document.querySelector("[data-login-form]");
+      const loginStatus = document.querySelector("[data-login-status]");
+      const saveStatus = document.querySelector("[data-save-status]");
+      const logoutButton = document.querySelector('[data-action="logout"]');
+      const saveButton = document.querySelector('[data-action="save"]');
+      const reloadButton = document.querySelector('[data-action="reload"]');
+      const syncReceiptsButton = document.querySelector('[data-action="sync-receipts"]');
+      const fields = Array.from(document.querySelectorAll("[data-field]"));
+      const previews = Array.from(document.querySelectorAll("[data-preview]"));
+      const sessionKey = "bamAdminSession";
 
-      document.documentElement.dataset.cmsAuthMode = cmsAuthMode;
+      let content = null;
+      let dirty = false;
 
-      const withCmsRoots = (callback) => {
-        const roots = [document];
+      const getValue = (source, path) =>
+        path.split(".").reduce((value, key) => {
+          if (value == null) {
+            return "";
+          }
 
-        for (let index = 0; index < roots.length; index += 1) {
-          const root = roots[index];
-          callback(root);
+          return Array.isArray(value) ? value[Number(key)] : value[key];
+        }, source);
 
-          root.querySelectorAll("*").forEach((element) => {
-            if (element.shadowRoot) {
-              roots.push(element.shadowRoot);
-            }
-          });
-        }
-      };
+      const setValue = (source, path, value) => {
+        const parts = path.split(".");
+        let cursor = source;
 
-      const tidyCmsLogin = () => {
-        withCmsRoots((root) => {
-          root.querySelectorAll("button").forEach((button) => {
-            const label = (button.textContent || "").trim().toLowerCase();
+        parts.forEach((part, index) => {
+          const isLast = index === parts.length - 1;
+          const nextPart = parts[index + 1];
+          const key = Array.isArray(cursor) ? Number(part) : part;
 
-            if (label.includes("work with local repository")) {
-              button.hidden = true;
-              button.setAttribute("aria-hidden", "true");
-            }
+          if (isLast) {
+            cursor[key] = value;
+            return;
+          }
 
-            if (cmsAuthMode === "token" && label.includes("sign in with") && label.includes("github")) {
-              button.hidden = true;
-              button.setAttribute("aria-hidden", "true");
-            }
+          if (cursor[key] == null) {
+            cursor[key] = Number.isNaN(Number(nextPart)) ? {} : [];
+          }
 
-            if (cmsAuthMode === "oauth" && label.includes("access token")) {
-              button.hidden = true;
-              button.setAttribute("aria-hidden", "true");
-            }
-
-            if (cmsAuthMode === "token" && label.includes("sign in using access token")) {
-              button.textContent = "Paste Admin Key";
-            }
-          });
-
-          root.querySelectorAll("div, p, small, span").forEach((element) => {
-            const label = (element.textContent || "").trim().toLowerCase();
-
-            if (label.startsWith("once prompted") && label.includes("root directory")) {
-              element.hidden = true;
-              element.setAttribute("aria-hidden", "true");
-            }
-          });
+          cursor = cursor[key];
         });
       };
 
-      tidyCmsLogin();
-      new MutationObserver(tidyCmsLogin).observe(document.body, { childList: true, subtree: true });
+      const apiFetch = async (path, options = {}) => {
+        const session = sessionStorage.getItem(sessionKey);
+        const response = await fetch(`${API_BASE}${path}`, {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            ...(session ? { Authorization: `Bearer ${session}` } : {}),
+            ...(options.headers || {}),
+          },
+          ...options,
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.error || "Something went wrong.");
+        }
+
+        return data;
+      };
+
+      const setStatus = (element, message, tone = "") => {
+        element.textContent = message;
+        element.dataset.tone = tone;
+      };
+
+      const showLogin = (message = "") => {
+        login.hidden = false;
+        editor.hidden = true;
+        logoutButton.hidden = true;
+        setStatus(loginStatus, message);
+      };
+
+      const showEditor = () => {
+        login.hidden = true;
+        editor.hidden = false;
+        logoutButton.hidden = false;
+      };
+
+      const renderPreview = () => {
+        previews.forEach((element) => {
+          const value = getValue(content, element.dataset.preview);
+
+          if (typeof value === "string") {
+            element.textContent = value;
+          }
+        });
+      };
+
+      const renderFields = () => {
+        fields.forEach((field) => {
+          const value = getValue(content, field.dataset.field);
+
+          field.value = typeof value === "string" ? value : "";
+        });
+
+        renderPreview();
+      };
+
+      const loadContent = async () => {
+        setStatus(saveStatus, "Loading saved content...");
+        const data = await apiFetch("/api/content");
+        content = data.content;
+        dirty = false;
+        renderFields();
+        setStatus(saveStatus, "Loaded. Make edits, then save them live.", "success");
+      };
+
+      const boot = async () => {
+        try {
+          const session = await apiFetch("/api/session");
+
+          if (!session.authenticated) {
+            showLogin();
+            return;
+          }
+
+          showEditor();
+          await loadContent();
+        } catch (error) {
+          showLogin(error.message);
+        }
+      };
+
+      fields.forEach((field) => {
+        field.addEventListener("input", () => {
+          if (!content) {
+            return;
+          }
+
+          setValue(content, field.dataset.field, field.value);
+          dirty = true;
+          renderPreview();
+          setStatus(saveStatus, "Unsaved edits. Hit save when this is ready.", "");
+        });
+      });
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const password = new FormData(loginForm).get("password");
+
+        setStatus(loginStatus, "Checking password...");
+
+        try {
+          await apiFetch("/api/login", {
+            method: "POST",
+            body: JSON.stringify({ password }),
+          }).then((data) => {
+            if (data.session) {
+              sessionStorage.setItem(sessionKey, data.session);
+            }
+          });
+          loginForm.reset();
+          showEditor();
+          await loadContent();
+        } catch (error) {
+          setStatus(loginStatus, error.message, "error");
+        }
+      });
+
+      saveButton.addEventListener("click", async () => {
+        if (!content) {
+          return;
+        }
+
+        saveButton.disabled = true;
+        setStatus(saveStatus, "Saving live content...");
+
+        try {
+          await apiFetch("/api/content", {
+            method: "PUT",
+            body: JSON.stringify({ content }),
+          });
+          dirty = false;
+          setStatus(saveStatus, "Saved. The live site will use this content now.", "success");
+        } catch (error) {
+          setStatus(saveStatus, error.message, "error");
+        } finally {
+          saveButton.disabled = false;
+        }
+      });
+
+      reloadButton.addEventListener("click", async () => {
+        if (dirty && !window.confirm("Reload saved content and throw away unsaved edits?")) {
+          return;
+        }
+
+        await loadContent();
+      });
+
+      logoutButton.addEventListener("click", async () => {
+        await apiFetch("/api/logout", { method: "POST", body: "{}" }).catch(() => {});
+        sessionStorage.removeItem(sessionKey);
+        content = null;
+        showLogin("Logged out.");
+      });
+
+      syncReceiptsButton.addEventListener("click", () => {
+        if (!content) {
+          return;
+        }
+
+        content.proof.metrics = content.signals.map((metric) => ({ ...metric }));
+        renderFields();
+        dirty = true;
+        setStatus(saveStatus, "Receipts now match the hero stats. Save when ready.");
+      });
+
+      window.addEventListener("beforeunload", (event) => {
+        if (!dirty) {
+          return;
+        }
+
+        event.preventDefault();
+        event.returnValue = "";
+      });
+
+      boot();
     </script>
   </body>
 </html>

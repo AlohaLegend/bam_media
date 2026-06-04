@@ -7,6 +7,10 @@ const mobileHeroQuery = window.matchMedia("(max-width: 620px)");
 const entrance = document.querySelector("[data-entrance]");
 const entranceActive = document.documentElement.classList.contains("entrance-active");
 const canWarmScrollAssets = "requestIdleCallback" in window;
+const editableContentUrls = [
+  "https://bam-cms-auth.bammediaauth.workers.dev/content/site.json",
+  "content/site.json",
+];
 
 const runWhenIdle = (callback, timeout = 1200) => {
   if (canWarmScrollAssets) {
@@ -132,16 +136,19 @@ const applyEditableContent = (content) => {
 };
 
 const loadEditableContent = async () => {
-  try {
-    const response = await fetch("content/site.json", { cache: "no-store" });
+  for (const url of editableContentUrls) {
+    try {
+      const response = await fetch(url, { cache: "no-store" });
 
-    if (!response.ok) {
+      if (!response.ok) {
+        continue;
+      }
+
+      applyEditableContent(await response.json());
       return;
+    } catch {
+      applyEditableContent(null);
     }
-
-    applyEditableContent(await response.json());
-  } catch {
-    applyEditableContent(null);
   }
 };
 
