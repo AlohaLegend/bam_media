@@ -1,6 +1,8 @@
 name = "bam-cms-auth"
 main = "src/index.js"
 compatibility_date = "2026-06-03"
+workers_dev = true
+preview_urls = false
 
 [vars]
 ALLOWED_DOMAINS = "bammedia.us,www.bammedia.us"

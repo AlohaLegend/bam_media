@@ -2,7 +2,7 @@
 
 The admin panel lives at `/admin/` and edits `content/site.json`.
 
-Jake's normal workflow once OAuth is enabled:
+Jake's normal workflow:
 
 1. Open `https://bammedia.us/admin/`.
 2. Click `Sign in with GitHub`.
@@ -11,15 +11,21 @@ Jake's normal workflow once OAuth is enabled:
 5. Edit copy, stats, contact email, or social links.
 6. Publish. GitHub Pages usually updates the live site within a minute or two.
 
-OAuth setup lives in `cms-auth-worker/`. It needs a Cloudflare Worker URL and a GitHub OAuth app secret. After those exist, run:
+OAuth setup lives in `cms-auth-worker/`. It uses this deployed Worker:
+
+```text
+https://bam-cms-auth.bammediaauth.workers.dev
+```
+
+If the Worker URL ever changes, run:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\enable-cms-oauth.ps1 -WorkerUrl "https://bam-cms-auth.<cloudflare-subdomain>.workers.dev"
+powershell -ExecutionPolicy Bypass -File .\scripts\enable-cms-oauth.ps1 -WorkerUrl "https://bam-cms-auth.bammediaauth.workers.dev"
 ```
 
 Then commit and push.
 
-Current fallback workflow before OAuth is enabled:
+Fallback token workflow:
 
 1. Open `https://bammedia.us/admin/`.
 2. First time only, click `Create admin key`.
