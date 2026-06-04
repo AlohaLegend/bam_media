@@ -303,7 +303,55 @@
         line-height: 1.15;
       }
 
+      .section-jump {
+        position: sticky;
+        top: 0;
+        z-index: 4;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        background: rgba(246, 241, 232, 0.94);
+        backdrop-filter: blur(14px);
+      }
+
+      .section-jump span,
+      .section-jump a {
+        flex: 0 0 auto;
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .section-jump span {
+        padding: 0 8px;
+        color: var(--muted);
+      }
+
+      .section-jump a {
+        border: 1px solid rgba(16, 16, 15, 0.12);
+        padding: 0 12px;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.72);
+        text-decoration: none;
+      }
+
+      .section-jump a:hover,
+      .section-jump a:focus-visible {
+        border-color: rgba(33, 111, 189, 0.34);
+        background: #ffffff;
+        color: var(--blue);
+      }
+
       .edit-section {
+        scroll-margin-top: 86px;
         display: grid;
         gap: 16px;
         border-top: 1px solid var(--line);
@@ -493,6 +541,22 @@
           grid-template-columns: 1fr;
         }
 
+        .section-jump {
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .section-jump::-webkit-scrollbar {
+          display: none;
+        }
+
+        .edit-section {
+          scroll-margin-top: 78px;
+        }
+
         .hero-copy {
           min-height: 0;
         }
@@ -572,8 +636,23 @@
           </aside>
         </section>
 
+        <nav class="section-jump" aria-label="Editor sections">
+          <span>Jump to</span>
+          <a href="#edit-hero">Hero</a>
+          <a href="#edit-stats">Stats</a>
+          <a href="#edit-focus">Focus bar</a>
+          <a href="#edit-pitch">Pitch</a>
+          <a href="#edit-loop">BAM loop</a>
+          <a href="#edit-reels">Reels</a>
+          <a href="#edit-services">Services</a>
+          <a href="#edit-clients">Clients</a>
+          <a href="#edit-receipts">Receipts</a>
+          <a href="#edit-contact">Contact</a>
+          <a href="#edit-seo">SEO</a>
+        </nav>
+
         <form class="editor-form" data-content-form>
-          <section class="edit-section">
+          <section class="edit-section" id="edit-hero">
             <div class="section-title">
               <div>
                 <p class="kicker">First screen</p>
@@ -606,7 +685,7 @@
             </div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-stats">
             <div class="section-title">
               <div>
                 <p class="kicker">Demand board</p>
@@ -648,7 +727,7 @@
             </div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-focus">
             <div class="section-title">
               <div>
                 <p class="kicker">Yellow signal bar</p>
@@ -659,7 +738,7 @@
             <div class="dynamic-grid is-small" data-repeat-group="ticker"></div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-pitch">
             <div class="section-title">
               <div>
                 <p class="kicker">Core pitch</p>
@@ -695,7 +774,7 @@
             </div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-loop">
             <div class="section-title">
               <div>
                 <p class="kicker">System section</p>
@@ -723,7 +802,7 @@
             <div class="dynamic-grid" data-repeat-group="loopSteps"></div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-reels">
             <div class="section-title">
               <div>
                 <p class="kicker">Video proof</p>
@@ -744,7 +823,7 @@
             <div class="dynamic-grid" data-repeat-group="reels"></div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-services">
             <div class="section-title">
               <div>
                 <p class="kicker">Offer stack</p>
@@ -765,7 +844,7 @@
             <div class="dynamic-grid" data-repeat-group="services"></div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-clients">
             <div class="section-title">
               <div>
                 <p class="kicker">Public proof</p>
@@ -790,7 +869,7 @@
             <div class="dynamic-grid" data-repeat-group="clients"></div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-receipts">
             <div class="section-title">
               <div>
                 <p class="kicker">Proof section</p>
@@ -842,7 +921,7 @@
             </div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-contact">
             <div class="section-title">
               <div>
                 <p class="kicker">Direct line</p>
@@ -882,7 +961,7 @@
             </div>
           </section>
 
-          <section class="edit-section">
+          <section class="edit-section" id="edit-seo">
             <div class="section-title">
               <div>
                 <p class="kicker">Search and browser</p>
