@@ -19,5 +19,3 @@ Changing a reel's Instagram link only changes where the reel card opens. The pos
 Layout changes, the hero video, brand-new sections, and design edits still belong in code.
 
 The password is checked by the Cloudflare Worker in `cms-auth-worker/`. The static website does not contain the password.
-
-Liam-proofing rule: if the copy starts sounding like it wore a blazer to lunch, shorten it.
