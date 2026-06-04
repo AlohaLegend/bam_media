@@ -14,17 +14,17 @@ It exists because `bammedia.us` is a static GitHub Pages site. GitHub Pages cann
    npm run deploy
    ```
 
-3. Copy the Worker URL, usually like:
+3. Copy the Worker URL:
 
    ```text
-   https://bam-cms-auth.<cloudflare-subdomain>.workers.dev
+   https://bam-cms-auth.bammediaauth.workers.dev
    ```
 
 4. Create a GitHub OAuth app:
 
    - Application name: `BAM Website Admin`
    - Homepage URL: `https://bammedia.us/admin/`
-   - Authorization callback URL: `<WORKER_URL>/callback`
+   - Authorization callback URL: `https://bam-cms-auth.bammediaauth.workers.dev/callback`
 
 5. In Cloudflare, open the Worker settings and add these variables:
 
@@ -36,7 +36,7 @@ It exists because `bammedia.us` is a static GitHub Pages site. GitHub Pages cann
 6. Run the helper from the repo root:
 
    ```powershell
-   powershell -ExecutionPolicy Bypass -File .\scripts\enable-cms-oauth.ps1 -WorkerUrl "https://bam-cms-auth.<cloudflare-subdomain>.workers.dev"
+   powershell -ExecutionPolicy Bypass -File .\scripts\enable-cms-oauth.ps1 -WorkerUrl "https://bam-cms-auth.bammediaauth.workers.dev"
    ```
 
 7. Commit and push the config change.

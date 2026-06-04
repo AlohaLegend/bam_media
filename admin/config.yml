@@ -2,8 +2,8 @@ backend:
   name: github
   repo: AlohaLegend/bam_media
   branch: main
-  auth_methods: [token]
-
+  auth_methods: [oauth]
+  base_url: https://bam-cms-auth.bammediaauth.workers.dev
 site_url: https://bammedia.us
 display_url: https://bammedia.us
 logo_url: /assets/favicon.svg
