@@ -39,6 +39,16 @@ body.nav-open {
   overflow: hidden;
 }
 
+#top,
+#work,
+#reels,
+#services,
+#proof,
+#clients,
+#contact {
+  scroll-margin-top: 94px;
+}
+
 html.entrance-active:not(.entrance-complete) body {
   overflow: hidden;
 }
@@ -873,9 +883,9 @@ html.motion-ready [data-reveal].is-visible {
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   overscroll-behavior-y: auto;
-  margin-top: -6px;
-  padding-top: 6px;
-  padding-bottom: 8px;
+  margin-top: -12px;
+  padding-top: 12px;
+  padding-bottom: 14px;
   scroll-padding-left: 1px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -2044,7 +2054,10 @@ html.motion-ready [data-reveal].is-visible {
 
   .loop-steps {
     margin-right: -18px;
+    margin-top: -8px;
+    padding-top: 8px;
     padding-right: 18px;
+    padding-bottom: 12px;
     border-top: 0;
   }
 
@@ -2122,8 +2135,10 @@ html.motion-ready [data-reveal].is-visible {
   }
 
   .service-grid {
+    margin-top: -8px;
     border: 0;
-    padding-bottom: 6px;
+    padding-top: 8px;
+    padding-bottom: 12px;
   }
 
   .service-grid article {
