@@ -7,3 +7,4 @@ preview_urls = false
 [vars]
 ALLOWED_DOMAINS = "bammedia.us,www.bammedia.us"
 GITHUB_SCOPE = "public_repo"
+CMS_REDIRECT_URL = "https://bammedia.us/admin/"
