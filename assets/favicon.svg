@@ -1,8 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BAM Media Group">
-  <rect width="512" height="512" rx="96" fill="#ffffff"/>
-  <rect x="18" y="18" width="476" height="476" rx="82" fill="none" stroke="#eee9df" stroke-width="10"/>
-  <g fill="#0c0c0b" text-anchor="middle">
-    <text x="256" y="259" font-family="Arial Black, Archivo, Arial, sans-serif" font-size="168" font-weight="900">BAM</text>
-    <text x="256" y="321" font-family="Arial, Inter, sans-serif" font-size="43" font-weight="900">MEDIA GROUP</text>
+  <rect width="512" height="512" fill="#ffffff"/>
+  <g fill="#0c0c0b" font-family="Archivo, Arial Black, Arial, sans-serif" text-anchor="middle">
+    <text x="256" y="245" font-size="168" font-weight="900">BAM</text>
+    <text x="256" y="315" font-size="71" font-weight="800">MEDIA GROUP</text>
   </g>
 </svg>
