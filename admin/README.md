@@ -14,7 +14,7 @@ The admin is intentionally focused. It controls homepage copy, hero stats, ticke
 
 Asset fields include upload, open, and download controls. Uploading a file stages the new Cloudflare asset URL in that field; Jake still needs to click `Save live content` to publish it.
 
-Changing a reel's Instagram link only changes where the reel card opens. The poster image and preview video are separate fields because Instagram does not reliably hand this static site a clean public asset to embed.
+Changing a reel's Instagram link automatically renders that Instagram reel on the live page. The poster image and preview video fields remain useful as fallbacks and for faster custom visuals when Instagram is slow or unavailable.
 
 Layout changes, the hero video, brand-new sections, and design edits still belong in code.
 
