@@ -12,6 +12,18 @@ const editableContentUrls = [
   "content/site.json",
 ];
 
+const freshEditableContentUrl = (url) => {
+  const cacheKey = Date.now().toString();
+
+  try {
+    const freshUrl = new URL(url, window.location.href);
+    freshUrl.searchParams.set("v", cacheKey);
+    return freshUrl.toString();
+  } catch {
+    return `${url}${url.includes("?") ? "&" : "?"}v=${cacheKey}`;
+  }
+};
+
 const runWhenIdle = (callback, timeout = 1200) => {
   if (canWarmScrollAssets) {
     window.requestIdleCallback(callback, { timeout });
@@ -215,7 +227,11 @@ const applyEditableContent = (content) => {
 const loadEditableContent = async () => {
   for (const url of editableContentUrls) {
     try {
-      const response = await fetch(url, { cache: "no-store" });
+      const response = await fetch(freshEditableContentUrl(url), {
+        cache: "no-store",
+        credentials: "omit",
+        headers: { Accept: "application/json" },
+      });
 
       if (!response.ok) {
         continue;
