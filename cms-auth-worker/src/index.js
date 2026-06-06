@@ -34,14 +34,14 @@ const fallbackContent = {
   signals: [
     { value: "10%+", label: "average sales lift" },
     { value: "287%+", label: "average engagement lift" },
-    { value: "5B+", label: "food community views" },
+    { value: "5B+", label: "total views" },
   ],
-  ticker: ["QSR", "F&B", "Creator campaigns", "Paid social", "Partnerships", "Bulk-order leads", "Local communities"],
+  ticker: ["QSR", "F&B", "Creator campaigns", "Local communities", "Partnerships", "Catering leads", "Paid social"],
   thesis: {
     kicker: "From scroll to sale",
     title: "A growth engine for brands people can taste.",
     copy:
-      "Restaurants do not need more disconnected content. They need a system that spots culture, creates craving, backs winners with media, and converts demand while the food is still hot.",
+      "Restaurants do not need more disconnected content. They need a system that spots culture, creates craving, and converts demand while the food is still hot.",
     focus: ["Creative", "Community", "Conversion"],
   },
   loop: {
@@ -69,7 +69,7 @@ const fallbackContent = {
       {
         number: "01",
         title: "Read the room",
-        copy: "Track the food moments, creator angles, and community signals worth acting on.",
+        copy: "Track food moments, creator angles, and the community signals already moving inside your customer's world.",
       },
       {
         number: "02",
@@ -79,7 +79,7 @@ const fallbackContent = {
       {
         number: "03",
         title: "Back the winners",
-        copy: "Use paid social and partnerships to turn the best creative into repeatable demand.",
+        copy: "Use paid social to leverage creator partnerships turning the best creative into repeatable demand.",
       },
       {
         number: "04",
@@ -144,30 +144,35 @@ const fallbackContent = {
     title: "One stack. Built for food.",
   },
   services: [
-    { number: "01", title: "Social management", copy: "Strategy, calendars, posting, engagement, and reporting." },
+    {
+      number: "01",
+      title: "Social Partnerships",
+      copy: "Influencer relationships built through your brand, not ours. Local activations that compound and belong to you.",
+    },
     {
       number: "02",
-      title: "Content production",
-      copy: "Short-form concepts, shoots, edits, and repeatable food formats.",
+      title: "Content Production",
+      copy:
+        "Short-form concepts, shoots, edits, and the repeatable food formats that stick. We find your hero video then build a system around it.",
     },
     {
       number: "03",
       title: "Paid + UGC",
-      copy: "Creator-style ads, testing cycles, and spend behind the clips that move.",
+      copy: "Creator-style ads, testing cycles, and spend behind the clips that move. Turning your best organic into paid.",
     },
     {
       number: "04",
-      title: "Partnerships",
-      copy: "Local activations, influencer relationships, and brand collaborations.",
+      title: "Social Management",
+      copy: "Strategy, calendars, posting, engagement, and reporting.",
     },
     {
       number: "05",
-      title: "Niche communities",
-      copy: "Food pages and audience clusters that keep brands close to culture.",
+      title: "Niche Communities",
+      copy: "Owned and networked food pages, local pages, and audience clusters that keep your brand close to culture.",
     },
     {
       number: "06",
-      title: "Bulk-order leads",
+      title: "Bulk-Order Leads",
       copy: "Demand generation for catering, office orders, and recurring buyers.",
     },
   ],
@@ -188,7 +193,7 @@ const fallbackContent = {
     {
       name: "Sharky's",
       handle: "@sharkyssocial",
-      category: "Restaurant group",
+      category: "Fast casual",
       url: "https://www.sharkys.com/",
       logo: "assets/client-sharkys.png",
       ariaLabel: "Visit Sharky's website",
@@ -196,7 +201,7 @@ const fallbackContent = {
     {
       name: "University of Beer",
       handle: "@UniversityofBeerInsta",
-      category: "Restaurant + bar",
+      category: "Restaurant + Bar",
       url: "https://www.theuob.com/",
       logo: "assets/client-uob.png",
       ariaLabel: "Visit University of Beer website",
@@ -204,7 +209,7 @@ const fallbackContent = {
     {
       name: "Northern Cafe",
       handle: "@northerncafe.official",
-      category: "Restaurant",
+      category: "Restaurant Group",
       url: "https://www.northerncafeus.com/",
       logo: "assets/client-northern-cafe.png",
       ariaLabel: "Visit Northern Cafe website",
@@ -212,7 +217,7 @@ const fallbackContent = {
     {
       name: "Dumpling Wei",
       handle: "@dumpling.wei",
-      category: "Restaurant",
+      category: "Restaurant Group",
       url: "https://www.instagram.com/dumpling.wei/",
       logo: "assets/client-dumpling-wei.jpg",
       ariaLabel: "Visit Dumpling Wei Instagram",
@@ -220,7 +225,7 @@ const fallbackContent = {
     {
       name: "Shipwrecked Paradise Island",
       handle: "@shipwrecked_paradise_island",
-      category: "Hospitality",
+      category: "Bar",
       url: "https://www.shipwreckedparadiseisland.com/",
       logo: "assets/client-shipwrecked-paradise-island.jpg",
       ariaLabel: "Visit Shipwrecked Paradise Island website",
@@ -248,7 +253,7 @@ const fallbackContent = {
     metrics: [
       { value: "10%+", label: "average sales lift" },
       { value: "287%+", label: "average engagement lift" },
-      { value: "5B+", label: "food community views" },
+      { value: "5B+", label: "total views" },
     ],
   },
   contact: {
@@ -699,6 +704,9 @@ const handlePublicContent = async (request, env) =>
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "false",
+      "Cache-Control": "no-store, max-age=0, must-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
     },
   });
 
