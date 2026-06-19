@@ -376,7 +376,7 @@
 
       .field {
         display: grid;
-        gap: 7px;
+        gap: 9px;
       }
 
       .field strong {
@@ -588,7 +588,7 @@
       .dynamic-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
+        gap: 16px;
       }
 
       .dynamic-grid.is-small {
@@ -597,11 +597,17 @@
 
       .control-card {
         display: grid;
-        gap: 12px;
+        gap: 14px;
         border: 1px solid var(--line);
         border-radius: 8px;
         padding: 14px;
         background: rgba(255, 250, 240, 0.78);
+      }
+
+      .control-card .field span {
+        max-width: 58ch;
+        font-size: 0.74rem;
+        line-height: 1.38;
       }
 
       .control-card header {
@@ -1318,7 +1324,7 @@
           ],
         },
         reels: {
-          count: 5,
+          count: 11,
           title: (index) => `Reel ${index + 1}`,
           badge: "Instagram",
           fields: [
