@@ -644,10 +644,10 @@ html.motion-ready [data-reveal].is-visible {
   grid-template-columns: minmax(0, 0.76fr) minmax(300px, 0.54fr) minmax(340px, 0.8fr);
   gap: clamp(28px, 5vw, 68px);
   padding: clamp(62px, 9vw, 110px) clamp(18px, 5vw, 70px);
-  color: var(--white);
+  color: var(--ink);
   background:
-    linear-gradient(180deg, rgba(246, 241, 232, 0.11), rgba(246, 241, 232, 0) 16%),
-    linear-gradient(180deg, #26160f 0%, #14120f 44%, #0b0c0a 100%);
+    linear-gradient(180deg, rgba(12, 12, 11, 0.08), rgba(12, 12, 11, 0) 18%),
+    linear-gradient(180deg, var(--paper-2) 0%, #f5ecd8 100%);
 }
 
 .loop::before {
@@ -673,7 +673,7 @@ html.motion-ready [data-reveal].is-visible {
 .loop-copy p {
   max-width: 520px;
   margin: 22px 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.55;
 }
@@ -697,6 +697,7 @@ html.motion-ready [data-reveal].is-visible {
   width: 190px;
   min-height: 330px;
   padding: 16px;
+  color: var(--white);
   background-color: var(--ink);
   background-image:
     linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.8)),
@@ -774,7 +775,7 @@ html.motion-ready [data-reveal].is-visible {
 
 .loop-steps {
   display: grid;
-  border-top: 1px solid rgba(255, 255, 255, 0.17);
+  border-top: 1px solid var(--line);
 }
 
 .loop-steps article {
@@ -782,7 +783,7 @@ html.motion-ready [data-reveal].is-visible {
   grid-template-columns: 44px 1fr;
   gap: 16px;
   padding: 25px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.17);
+  border-bottom: 1px solid var(--line);
   transition: border-color 180ms ease, transform 180ms ease;
 }
 
@@ -816,6 +817,10 @@ html.motion-ready [data-reveal].is-visible {
   margin: 0;
   color: rgba(255, 255, 255, 0.68);
   line-height: 1.5;
+}
+
+.loop-steps p {
+  color: var(--muted);
 }
 
 .content-proof {
