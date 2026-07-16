@@ -344,7 +344,8 @@ html.entrance-active.entrance-complete .site-entrance {
 .loop .eyebrow::before,
 .contact .eyebrow::before,
 .proof .section-kicker::before,
-.clients .section-kicker::before {
+.clients .section-kicker::before,
+.content-proof .section-kicker::before {
   background: var(--mint);
   opacity: 1;
 }
@@ -825,11 +826,11 @@ html.motion-ready [data-reveal].is-visible {
   align-items: end;
   overflow: hidden;
   padding: clamp(58px, 8vw, 96px) clamp(18px, 5vw, 70px);
-  color: var(--ink);
+  color: var(--white);
   background:
-    linear-gradient(180deg, rgba(12, 12, 11, 0.08), rgba(12, 12, 11, 0) 18%),
-    linear-gradient(180deg, var(--paper-2) 0%, #f5ecd8 100%);
-  border-bottom: 1px solid var(--line);
+    linear-gradient(180deg, rgba(246, 241, 232, 0.11), rgba(246, 241, 232, 0) 16%),
+    linear-gradient(180deg, #26160f 0%, #14120f 44%, #0b0c0a 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .content-proof-copy {
