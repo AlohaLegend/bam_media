@@ -46,18 +46,18 @@
   "loop": {
     "eyebrow": "The BAM loop",
     "title": "Every post has a job.",
-    "copy": "Social should create a real-world action: a saved order, a lunch run, a catering inquiry, a launch line, or a creator clip that keeps working after it posts.",
+    "copy": "Social should create a real-world action: a saved order, a lunch run, or a catering inquiry.",
     "cards": [
       {
-        "tag": "Launch clip",
-        "value": "4,500 videos produced",
+        "tag": "Owned media",
+        "value": "4,500+ videos produced",
         "label": "Content engine",
         "image": "assets/loop-launch-clip.webp",
         "position": "50% 42%"
       },
       {
         "tag": "Creator ad",
-        "value": "-78% lower CPA",
+        "value": "70%+ average CPA reduction",
         "label": "Paid efficiency",
         "image": "assets/loop-creator-ad.webp",
         "position": "48% 42%"
