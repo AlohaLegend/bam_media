@@ -293,12 +293,12 @@ const fallbackContent = {
       ariaLabel: "Visit SpudBros Express website",
     },
     {
-      name: "Sharky's Fit",
-      handle: "@sharkyssocial",
-      category: "Food + fitness",
-      url: "https://sharkysfit.com/",
-      logo: "assets/client-sharkys-fit.png",
-      ariaLabel: "Visit Sharky's Fit website",
+      name: "Baba's Chicken",
+      handle: "@babas_chicken",
+      category: "Fast casual",
+      url: "https://babashotchicken.com/",
+      logo: "assets/client-babas-chicken.png",
+      ariaLabel: "Visit Baba's Chicken website",
     },
   ],
   proof: {
