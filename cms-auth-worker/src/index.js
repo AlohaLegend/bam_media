@@ -1,6 +1,8 @@
 const DEFAULT_ALLOWED_ORIGINS =
   "https://bammedia.us,https://www.bammedia.us,http://localhost:4173,http://127.0.0.1:4173";
 const DEFAULT_CONTENT_URL = "https://bammedia.us/content/site.json";
+const DEFAULT_GITHUB_SYNC_REPO = "AlohaLegend/bam_media";
+const GITHUB_SYNC_EVENT = "cms_content_saved";
 const CONTENT_KEY = "site.json";
 const SESSION_COOKIE = "bam_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
@@ -700,6 +702,35 @@ const writeContent = async (env, content) => {
   });
 };
 
+const triggerStaticFallbackSync = async (env, updatedAt) => {
+  if (!env.GITHUB_SYNC_TOKEN) {
+    return;
+  }
+
+  const repo = env.GITHUB_SYNC_REPO || DEFAULT_GITHUB_SYNC_REPO;
+  const response = await fetch(`https://api.github.com/repos/${repo}/dispatches`, {
+    method: "POST",
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${env.GITHUB_SYNC_TOKEN}`,
+      "Content-Type": "application/json",
+      "User-Agent": "BAM-CMS-Auth-Worker",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+    body: JSON.stringify({
+      event_type: GITHUB_SYNC_EVENT,
+      client_payload: {
+        source: "bam-cms-auth-worker",
+        updatedAt,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    console.warn(`GitHub fallback sync dispatch failed: ${response.status} ${await response.text()}`);
+  }
+};
+
 const handleLogin = async (request, env) => {
   const body = await readJson(request);
   const password = typeof body?.password === "string" ? body.password : "";
@@ -728,7 +759,7 @@ const handleLogin = async (request, env) => {
 const handleLogout = (request) =>
   jsonResponse(request, { authenticated: false }, { headers: { "Set-Cookie": clearSessionCookie() } });
 
-const handleContentUpdate = async (request, env) => {
+const handleContentUpdate = async (request, env, ctx) => {
   const sessionError = await requireSession(request, env);
 
   if (sessionError) {
@@ -737,10 +768,13 @@ const handleContentUpdate = async (request, env) => {
 
   const body = await readJson(request);
   const content = normalizeContent(body?.content || body);
+  const updatedAt = new Date().toISOString();
 
   await writeContent(env, content);
 
-  return jsonResponse(request, { content, updatedAt: new Date().toISOString() });
+  ctx?.waitUntil(triggerStaticFallbackSync(env, updatedAt).catch((error) => console.warn(error)));
+
+  return jsonResponse(request, { content, updatedAt });
 };
 
 const handleAdminContent = async (request, env) => {
@@ -865,7 +899,7 @@ const handlePublicAsset = async (request, env, filename) => {
 };
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const { pathname } = new URL(request.url);
 
     if (!isAllowedOrigin(request, env)) {
@@ -905,7 +939,7 @@ export default {
     }
 
     if (request.method === "PUT" && pathname === "/api/content") {
-      return handleContentUpdate(request, env);
+      return handleContentUpdate(request, env, ctx);
     }
 
     if (request.method === "POST" && pathname === "/api/assets") {
