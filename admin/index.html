@@ -1774,7 +1774,11 @@
           content = data.content || content;
           dirty = false;
           renderFields();
-          setStatus(saveStatus, "Saved. New desktop and mobile page loads will use this content now.", "success");
+          setStatus(
+            saveStatus,
+            "Saved. Live site content updates now; Instagram fallback syncs automatically shortly.",
+            "success",
+          );
         } catch (error) {
           setStatus(saveStatus, error.message, "error");
         } finally {
