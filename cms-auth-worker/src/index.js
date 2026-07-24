@@ -787,6 +787,123 @@ const handleAdminContent = async (request, env) => {
   return jsonResponse(request, { content: await readContent(env) });
 };
 
+const handleAnalytics = async (request, env) => {
+  const sessionError = await requireSession(request, env);
+
+  if (sessionError) {
+    return sessionError;
+  }
+
+  const { CF_API_TOKEN, CF_ACCOUNT_ID, CF_SITE_TAG } = env;
+
+  if (!CF_API_TOKEN || !CF_ACCOUNT_ID || !CF_SITE_TAG) {
+    return jsonResponse(
+      request,
+      { error: "Analytics is not configured yet. Set CF_API_TOKEN, CF_ACCOUNT_ID, and CF_SITE_TAG." },
+      { status: 501 }
+    );
+  }
+
+  const query = `
+    query BamAnalytics($accountTag: String!, $siteTag: String!, $since7: Time!, $since30: Time!, $until: Time!) {
+      viewer {
+        accounts(filter: { accountTag: $accountTag }) {
+          last7: rumPageloadEventsAdaptiveGroups(
+            limit: 1
+            filter: { siteTag: $siteTag, datetime_geq: $since7, datetime_leq: $until }
+          ) {
+            count
+            sum { visits }
+          }
+          last30: rumPageloadEventsAdaptiveGroups(
+            limit: 1
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+          ) {
+            count
+            sum { visits }
+          }
+          daily: rumPageloadEventsAdaptiveGroups(
+            limit: 31
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+            orderBy: [date_ASC]
+          ) {
+            count
+            sum { visits }
+            dimensions { date: date }
+          }
+          topPages: rumPageloadEventsAdaptiveGroups(
+            limit: 10
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { requestPath: refererHostAndPath }
+          }
+        }
+      }
+    }
+  `;
+
+  const now = new Date();
+  const since7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const since30 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const until = now.toISOString();
+
+  let graphqlResponse;
+
+  try {
+    graphqlResponse = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${CF_API_TOKEN}`,
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          accountTag: CF_ACCOUNT_ID,
+          siteTag: CF_SITE_TAG,
+          since7,
+          since30,
+          until,
+        },
+      }),
+    });
+  } catch (error) {
+    return jsonResponse(request, { error: "Unable to reach Cloudflare Analytics API." }, { status: 502 });
+  }
+
+  const payload = await graphqlResponse.json();
+
+  if (!graphqlResponse.ok || payload.errors) {
+    return jsonResponse(
+      request,
+      { error: "Cloudflare Analytics API returned an error.", details: payload.errors || null },
+      { status: 502 }
+    );
+  }
+
+  const account = payload?.data?.viewer?.accounts?.[0] || {};
+  const last7Group = account.last7?.[0] || { count: 0, sum: { visits: 0 } };
+  const last30Group = account.last30?.[0] || { count: 0, sum: { visits: 0 } };
+  const daily = (account.daily || []).map((row) => ({
+    date: row.dimensions?.date || null,
+    pageviews: row.count || 0,
+    visits: row.sum?.visits || 0,
+  }));
+  const topPages = (account.topPages || []).map((row) => ({
+    path: row.dimensions?.requestPath || "(unknown)",
+    pageviews: row.count || 0,
+  }));
+
+  return jsonResponse(request, {
+    last7: { pageviews: last7Group.count || 0, visits: last7Group.sum?.visits || 0 },
+    last30: { pageviews: last30Group.count || 0, visits: last30Group.sum?.visits || 0 },
+    daily,
+    topPages,
+  });
+};
+
 const handlePublicContent = async (request, env) =>
   jsonResponse(request, await readContent(env), {
     headers: {
@@ -940,6 +1057,10 @@ export default {
 
     if (request.method === "PUT" && pathname === "/api/content") {
       return handleContentUpdate(request, env, ctx);
+    }
+
+    if (request.method === "GET" && pathname === "/api/analytics") {
+      return handleAnalytics(request, env);
     }
 
     if (request.method === "POST" && pathname === "/api/assets") {
