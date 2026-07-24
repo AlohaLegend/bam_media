@@ -374,6 +374,25 @@
         gap: 14px;
       }
 
+      .analytics-summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .analytics-toppages table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .analytics-toppages th,
+      .analytics-toppages td {
+        text-align: left;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.85rem;
+      }
+
       .field {
         display: grid;
         gap: 9px;
@@ -873,6 +892,7 @@
           <a href="#edit-loop">BAM loop</a>
           <a href="#edit-services">Services</a>
           <a href="#edit-receipts">Receipts</a>
+          <a href="#edit-analytics">Analytics</a>
         </nav>
 
         <form class="editor-form" data-content-form>
@@ -1208,6 +1228,45 @@
               </label>
             </div>
           </section>
+          <section class="edit-section" id="edit-analytics">
+            <div class="section-title">
+              <div>
+                <p class="kicker">Performance</p>
+                <h2>Website analytics</h2>
+              </div>
+              <button class="warm" type="button" data-action="refresh-analytics">Refresh analytics</button>
+            </div>
+            <div class="analytics-summary">
+              <div class="metric-card">
+                <span class="field"><strong>Visits (7 days)</strong></span>
+                <span data-analytics="last7Visits">—</span>
+              </div>
+              <div class="metric-card">
+                <span class="field"><strong>Pageviews (7 days)</strong></span>
+                <span data-analytics="last7Pageviews">—</span>
+              </div>
+              <div class="metric-card">
+                <span class="field"><strong>Visits (30 days)</strong></span>
+                <span data-analytics="last30Visits">—</span>
+              </div>
+              <div class="metric-card">
+                <span class="field"><strong>Pageviews (30 days)</strong></span>
+                <span data-analytics="last30Pageviews">—</span>
+              </div>
+            </div>
+            <div class="analytics-toppages">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Page</th>
+                    <th>Pageviews</th>
+                  </tr>
+                </thead>
+                <tbody data-analytics-top-pages-body></tbody>
+              </table>
+            </div>
+            <p class="status-line" data-analytics-status></p>
+          </section>
         </form>
 
         <div class="savebar" aria-live="polite">
@@ -1231,6 +1290,9 @@
       const saveButton = document.querySelector('[data-action="save"]');
       const reloadButton = document.querySelector('[data-action="reload"]');
       const syncReceiptsButton = document.querySelector('[data-action="sync-receipts"]');
+      const refreshAnalyticsButton = document.querySelector('[data-action="refresh-analytics"]');
+      const analyticsStatus = document.querySelector('[data-analytics-status]');
+      const analyticsTopPagesBody = document.querySelector('[data-analytics-top-pages-body]');
       const contentForm = document.querySelector("[data-content-form]");
       const repeatContainers = Array.from(document.querySelectorAll("[data-repeat-group]"));
       const sessionKey = "bamAdminSession";
@@ -1638,6 +1700,44 @@
         setStatus(saveStatus, "Loaded. Make edits, then save them live.", "success");
       };
 
+      const setAnalyticsValue = (key, value) => {
+        const target = document.querySelector(`[data-analytics="${key}"]`);
+        if (target) {
+          target.textContent = value;
+        }
+      };
+
+      const loadAnalytics = async () => {
+        if (!analyticsStatus) {
+          return;
+        }
+
+        setStatus(analyticsStatus, "Loading analytics...");
+
+        try {
+          const data = await apiFetch("/api/analytics");
+
+          setAnalyticsValue("last7Visits", data.last7?.visits ?? "—");
+          setAnalyticsValue("last7Pageviews", data.last7?.pageviews ?? "—");
+          setAnalyticsValue("last30Visits", data.last30?.visits ?? "—");
+          setAnalyticsValue("last30Pageviews", data.last30?.pageviews ?? "—");
+
+          if (analyticsTopPagesBody) {
+            const rows = data.topPages || [];
+            analyticsTopPagesBody.innerHTML = rows
+              .map(
+                (row) =>
+                  `<tr><td>${row.path}</td><td>${row.pageviews}</td></tr>`
+              )
+              .join("");
+          }
+
+          setStatus(analyticsStatus, "Analytics updated.", "success");
+        } catch (error) {
+          setStatus(analyticsStatus, error.message, "error");
+        }
+      };
+
       const boot = async () => {
         try {
           const session = await apiFetch("/api/session");
@@ -1649,6 +1749,7 @@
 
           showEditor();
           await loadContent();
+          loadAnalytics();
         } catch (error) {
           showLogin(error.message);
         }
@@ -1810,6 +1911,10 @@
         renderFields();
         dirty = true;
         setStatus(saveStatus, "Receipts now match the hero stats. Save when ready.");
+      });
+
+      refreshAnalyticsButton?.addEventListener("click", () => {
+        loadAnalytics();
       });
 
       window.addEventListener("beforeunload", (event) => {
