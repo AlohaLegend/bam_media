@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
     <meta
       name="description"
       content="BAM Media Group builds social growth systems for quick-service restaurants and food brands that need attention to become orders."
     />
     <title>BAM Media Group | Food Social That Moves</title>
     <link rel="canonical" href="https://bammedia.us/" />
-    <meta name="robots" content="index, follow" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="BAM Media Group" />
@@ -45,15 +45,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=optional"
       rel="stylesheet"
-    />
-    <link
-      rel="preload"
-      as="video"
-      href="assets/bam-hero-reel-mobile-lite.mp4?v=fast"
-      type="video/mp4"
-      media="(max-width: 620px)"
     />
     <link
       rel="preload"
@@ -97,13 +90,14 @@
     <script>
       (() => {
         const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+        const compactViewport = window.matchMedia?.("(max-width: 620px)").matches;
 
-        if (!reduceMotion) {
+        if (!reduceMotion && !compactViewport) {
           document.documentElement.classList.add("entrance-active");
           window.setTimeout(() => {
             document.documentElement.classList.add("entrance-complete");
             document.body?.classList.add("is-loaded");
-          }, 3600);
+          }, 1100);
         } else {
           document.documentElement.classList.add("entrance-complete");
         }
@@ -117,9 +111,15 @@
             "@type": "Organization",
             "@id": "https://bammedia.us/#organization",
             "name": "BAM Media Group",
+            "legalName": "BAM Media Group Inc.",
+            "alternateName": "BAM",
             "url": "https://bammedia.us/",
-            "logo": "https://bammedia.us/assets/icon-512.png",
-            "image": "https://bammedia.us/assets/social-preview.jpg",
+            "logo": {
+              "@id": "https://bammedia.us/#logo"
+            },
+            "image": {
+              "@id": "https://bammedia.us/#primaryimage"
+            },
             "description": "BAM Media Group builds social growth systems for quick-service restaurants and food brands that need attention to become orders.",
             "email": "hello@bammediagroup.us",
             "sameAs": [
@@ -129,8 +129,27 @@
             "contactPoint": {
               "@type": "ContactPoint",
               "contactType": "sales",
-              "email": "hello@bammediagroup.us"
+              "email": "hello@bammediagroup.us",
+              "availableLanguage": "English"
             }
+          },
+          {
+            "@type": "ImageObject",
+            "@id": "https://bammedia.us/#logo",
+            "url": "https://bammedia.us/assets/icon-512.png",
+            "contentUrl": "https://bammedia.us/assets/icon-512.png",
+            "width": 512,
+            "height": 512,
+            "caption": "BAM Media Group"
+          },
+          {
+            "@type": "ImageObject",
+            "@id": "https://bammedia.us/#primaryimage",
+            "url": "https://bammedia.us/assets/social-preview.jpg",
+            "contentUrl": "https://bammedia.us/assets/social-preview.jpg",
+            "width": 1200,
+            "height": 630,
+            "caption": "Food brand social media production by BAM Media Group"
           },
           {
             "@type": "WebSite",
@@ -139,6 +158,26 @@
             "name": "BAM Media Group",
             "publisher": {
               "@id": "https://bammedia.us/#organization"
+            },
+            "inLanguage": "en-US"
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://bammedia.us/#webpage",
+            "url": "https://bammedia.us/",
+            "name": "BAM Media Group | Food Social That Moves",
+            "description": "BAM Media Group builds social growth systems for quick-service restaurants and food brands that need attention to become orders.",
+            "isPartOf": {
+              "@id": "https://bammedia.us/#website"
+            },
+            "about": {
+              "@id": "https://bammedia.us/#organization"
+            },
+            "primaryImageOfPage": {
+              "@id": "https://bammedia.us/#primaryimage"
+            },
+            "mainEntity": {
+              "@id": "https://bammedia.us/#service"
             },
             "inLanguage": "en-US"
           },
@@ -154,18 +193,73 @@
             "audience": {
               "@type": "Audience",
               "audienceType": "Quick-service restaurants and food brands"
+            },
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Restaurant social media services",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Social Partnerships"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Content Production"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Paid Social and User-Generated Content"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Social Media Management"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Niche Community Marketing"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Bulk-Order Lead Generation"
+                  }
+                }
+              ]
             }
           }
         ]
       }
     </script>
-    <link rel="stylesheet" href="styles.css?v=prod-update-20260821" />
+    <link rel="stylesheet" href="styles.css?v=prod-seo-20260821" />
   </head>
   <body>
     <a class="skip-link" href="#top">Skip to main content</a>
     <div class="site-entrance" data-entrance aria-hidden="true">
       <div class="entrance-mark">
-        <img src="assets/entrance-bam-logo.png" alt="" decoding="async" />
+        <img
+          src="assets/entrance-bam-logo.webp"
+          alt=""
+          width="1254"
+          height="1254"
+          decoding="async"
+          fetchpriority="high"
+        />
       </div>
     </div>
 
@@ -201,7 +295,13 @@
               type="image/webp"
               media="(max-width: 620px)"
             />
-            <img src="assets/bam-hero-poster.jpg?v=fast" alt="" fetchpriority="high" />
+            <img
+              src="assets/bam-hero-poster.jpg?v=fast"
+              alt=""
+              width="1280"
+              height="960"
+              fetchpriority="high"
+            />
           </picture>
           <video
             class="hero-video"
@@ -209,9 +309,6 @@
             muted
             loop
             playsinline
-            webkit-playsinline
-            disablepictureinpicture
-            controlslist="nodownload noplaybackrate noremoteplayback"
             preload="auto"
             poster="assets/bam-hero-poster.jpg?v=fast"
             data-mobile-src="assets/bam-hero-reel-mobile-lite.mp4?v=fast"
@@ -268,7 +365,7 @@
             <p data-content="thesis.copy">
               Restaurants do not need more disconnected content. They need a system that spots culture, creates craving, and converts demand while the food is still hot.
             </p>
-            <div class="mini-metrics" aria-label="BAM operating focus">
+          <div class="mini-metrics" role="group" aria-label="BAM operating focus">
               <span data-content="thesis.focus.0">Creative</span>
               <span data-content="thesis.focus.1">Community</span>
               <span data-content="thesis.focus.2">Conversion</span>
@@ -282,7 +379,7 @@
           <p class="section-kicker" data-content="reelsSection.kicker">Instagram content</p>
           <h2 id="content-title" data-content="reelsSection.title">Real reels. Real brands.</h2>
         </div>
-        <div class="content-rail" aria-label="Instagram reel examples from BAM client work">
+        <div class="content-rail" role="region" aria-label="Instagram reel examples from BAM client work">
           <a
             class="content-card is-reel"
             href="https://www.instagram.com/reel/DTtHCLHkRdr/"
@@ -300,7 +397,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-gdk.jpg"
                 data-src="assets/reel-gdk-preview.mp4"
@@ -329,7 +425,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-uob.jpg"
                 data-src="assets/reel-uob-preview.mp4"
@@ -358,7 +453,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-northern-cafe.jpg"
                 data-src="assets/reel-northern-cafe-preview.mp4"
@@ -387,7 +481,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-sharkys.jpg"
                 data-src="assets/reel-sharkys-preview.mp4"
@@ -416,7 +509,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-dumpling-wei.jpg"
                 data-src="assets/reel-dumpling-wei-preview.mp4"
@@ -445,7 +537,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-sharkys-oxnard.jpg"
                 data-src="assets/reel-sharkys-oxnard-preview.mp4"
@@ -474,7 +565,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-university-of-beer-rocklin.jpg"
                 data-src="assets/reel-university-of-beer-rocklin-preview.mp4"
@@ -503,7 +593,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-sandros-ues.jpg"
                 data-src="assets/reel-sandros-ues-preview.mp4"
@@ -532,7 +621,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-gdk-american-dream.jpg"
                 data-src="assets/reel-gdk-american-dream-preview.mp4"
@@ -561,7 +649,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-northern-cafe-comfort.jpg"
                 data-src="assets/reel-northern-cafe-comfort-preview.mp4"
@@ -590,7 +677,6 @@
                 autoplay
                 loop
                 playsinline
-                webkit-playsinline
                 preload="none"
                 poster="assets/reel-shipwrecked-paradise-island.jpg"
                 data-src="assets/reel-shipwrecked-paradise-island-preview.mp4"
@@ -674,7 +760,7 @@
             </div>
             <p class="clients-note" data-content="clientsSection.note">Publicly listed work</p>
           </div>
-          <div class="client-links" aria-label="Linked client work">
+          <div class="client-links" role="group" aria-label="Linked client work">
             <a
               class="client-link is-featured"
               href="https://www.gdk.com/us"
@@ -897,7 +983,7 @@
         <a href="#clients">Clients</a>
         <a href="#contact">Contact</a>
       </nav>
-      <div class="social-links footer-social" aria-label="BAM social profiles">
+      <div class="social-links footer-social" role="group" aria-label="BAM social profiles">
         <a
           href="https://www.instagram.com/bam.social/"
           target="_blank"

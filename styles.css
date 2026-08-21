@@ -137,7 +137,7 @@ html.entrance-active.entrance-complete .site-entrance {
   position: relative;
   z-index: 1;
   display: grid;
-  animation: entrance-mark 1900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: entrance-mark 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .entrance-mark img {
