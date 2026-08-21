@@ -8,6 +8,8 @@ preview_urls = false
 ALLOWED_ORIGINS = "https://bammedia.us,https://www.bammedia.us,http://localhost:4173,http://127.0.0.1:4173"
 FALLBACK_CONTENT_URL = "https://bammedia.us/content/site.json"
 GITHUB_SYNC_REPO = "AlohaLegend/bam_media"
+CF_ACCOUNT_ID = "4c1a903d3ff11d1ff397b96d9cda507c"
+CF_SITE_TAG = "15c5e08bc3d14a03bcccea010549b255"
 
 [[kv_namespaces]]
 binding = "BAM_CMS_CONTENT"
