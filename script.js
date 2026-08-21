@@ -115,20 +115,24 @@ const applyEditableContent = (content) => {
     return;
   }
 
-  if (content.seo?.title) {
+  if (content.seo?.title && document.title !== content.seo.title) {
     document.title = content.seo.title;
   }
 
   const description = document.querySelector('meta[name="description"]');
 
-  if (description && content.seo?.description) {
+  if (
+    description &&
+    content.seo?.description &&
+    description.getAttribute("content") !== content.seo.description
+  ) {
     description.setAttribute("content", content.seo.description);
   }
 
   document.querySelectorAll("[data-content]").forEach((element) => {
     const value = getEditableValue(content, element.dataset.content);
 
-    if (typeof value === "string" && value.trim()) {
+    if (typeof value === "string" && value.trim() && element.textContent !== value) {
       element.textContent = value;
     }
   });
