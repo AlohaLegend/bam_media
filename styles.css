@@ -83,6 +83,26 @@ a {
   text-decoration: none;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: 12px;
+  left: 12px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: var(--ink);
+  background: var(--mint);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transform: translateY(calc(-100% - 20px));
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 :focus-visible {
   outline: 2px solid var(--mint);
   outline-offset: 4px;
@@ -169,6 +189,8 @@ html.entrance-active.entrance-complete .site-entrance {
 
 .brand {
   display: grid;
+  min-height: 44px;
+  align-content: center;
   font-family: "Archivo", sans-serif;
   font-weight: 900;
   line-height: 0.9;
@@ -219,8 +241,8 @@ html.entrance-active.entrance-complete .site-entrance {
 .nav-toggle {
   position: relative;
   display: none;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: 1px solid currentColor;
   border-radius: 999px;
   color: inherit;
@@ -1584,6 +1606,9 @@ html.motion-ready [data-reveal].is-visible {
 }
 
 .footer-nav a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   color: rgba(255, 255, 255, 0.68);
   transition: color 180ms ease;
 }

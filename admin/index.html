@@ -1258,8 +1258,8 @@
               <table>
                 <thead>
                   <tr>
-                    <th>Page</th>
-                    <th>Pageviews</th>
+                    <th scope="col">Page</th>
+                    <th scope="col">Pageviews</th>
                   </tr>
                 </thead>
                 <tbody data-analytics-top-pages-body></tbody>
@@ -1724,12 +1724,18 @@
 
           if (analyticsTopPagesBody) {
             const rows = data.topPages || [];
-            analyticsTopPagesBody.innerHTML = rows
-              .map(
-                (row) =>
-                  `<tr><td>${row.path}</td><td>${row.pageviews}</td></tr>`
-              )
-              .join("");
+            analyticsTopPagesBody.replaceChildren(
+              ...rows.map((row) => {
+                const tableRow = document.createElement("tr");
+                const pathCell = document.createElement("td");
+                const pageviewsCell = document.createElement("td");
+
+                pathCell.textContent = String(row.path ?? "(unknown)");
+                pageviewsCell.textContent = String(row.pageviews ?? 0);
+                tableRow.append(pathCell, pageviewsCell);
+                return tableRow;
+              })
+            );
           }
 
           setStatus(analyticsStatus, "Analytics updated.", "success");

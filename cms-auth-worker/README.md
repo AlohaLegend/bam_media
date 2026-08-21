@@ -28,6 +28,14 @@ Set these as encrypted Worker secrets:
 
 - `ADMIN_PASSWORD`: the password Jake uses to open `/admin/`
 - `SESSION_SECRET`: a long random string for signing the login cookie
+- `CF_API_TOKEN`: a Cloudflare API token with analytics read access, required by the admin analytics panel
+- `CF_ACCOUNT_ID`: the Cloudflare account identifier used by the analytics query
+- `CF_SITE_TAG`: the BAM Web Analytics site tag
+- `GITHUB_SYNC_TOKEN`: a GitHub token with repository dispatch access for immediate fallback synchronization
+
+## Web Analytics
+
+The admin analytics panel depends on a Cloudflare Web Analytics site for `bammedia.us` plus the three `CF_*` Worker secrets above. Add Cloudflare's public beacon snippet to `index.html` only after creating that site and replacing the snippet's token with the real BAM site token. Do not commit a placeholder token: it downloads the beacon but cannot report valid BAM traffic.
 
 ## Variables
 
