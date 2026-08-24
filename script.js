@@ -1088,7 +1088,9 @@ if (window.matchMedia("(pointer: fine)").matches) {
 
       const deltaX = event.clientX - startX;
 
-      if (Math.abs(deltaX) > 4) {
+      // Allow for normal mouse or trackpad movement so a click still follows
+      // the reel link instead of being mistaken for a carousel drag.
+      if (Math.abs(deltaX) > 10) {
         didDrag = true;
         rail.scrollLeft = startScrollLeft - deltaX;
         event.preventDefault();
