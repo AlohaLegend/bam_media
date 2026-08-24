@@ -837,7 +837,39 @@ const handleAnalytics = async (request, env) => {
             orderBy: [count_DESC]
           ) {
             count
-            dimensions { requestPath: refererHostAndPath }
+            dimensions { requestPath }
+          }
+          topReferrers: rumPageloadEventsAdaptiveGroups(
+            limit: 8
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { refererHost }
+          }
+          topCountries: rumPageloadEventsAdaptiveGroups(
+            limit: 8
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { countryName }
+          }
+          topBrowsers: rumPageloadEventsAdaptiveGroups(
+            limit: 8
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { userAgentBrowser }
+          }
+          topDevices: rumPageloadEventsAdaptiveGroups(
+            limit: 8
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { deviceType }
           }
         }
       }
@@ -896,11 +928,23 @@ const handleAnalytics = async (request, env) => {
     pageviews: row.count || 0,
   }));
 
+  const rankedDimension = (rows, key, fallback = "Unknown") =>
+    (rows || [])
+      .map((row) => ({ label: row.dimensions?.[key] || fallback, pageviews: row.count || 0 }))
+      .filter((row) => row.pageviews > 0);
+
   return jsonResponse(request, {
+    connected: true,
+    source: "Cloudflare Web Analytics",
+    updatedAt: now.toISOString(),
     last7: { pageviews: last7Group.count || 0, visits: last7Group.sum?.visits || 0 },
     last30: { pageviews: last30Group.count || 0, visits: last30Group.sum?.visits || 0 },
     daily,
     topPages,
+    topReferrers: rankedDimension(account.topReferrers, "refererHost", "Direct / unknown"),
+    topCountries: rankedDimension(account.topCountries, "countryName"),
+    topBrowsers: rankedDimension(account.topBrowsers, "userAgentBrowser"),
+    topDevices: rankedDimension(account.topDevices, "deviceType"),
   });
 };
 
