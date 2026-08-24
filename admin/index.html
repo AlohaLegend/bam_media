@@ -380,6 +380,81 @@
         gap: 14px;
       }
 
+      .pulse-panel {
+        margin-top: 18px;
+        padding: clamp(18px, 3vw, 28px);
+        border: 1px solid rgba(33, 111, 189, 0.18);
+        border-radius: 16px;
+        background:
+          radial-gradient(circle at 100% 0%, rgba(133, 223, 184, 0.34), transparent 38%),
+          linear-gradient(145deg, #fffdf7, #eef8ff);
+      }
+
+      .pulse-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 16px;
+      }
+
+      .pulse-heading h3 {
+        margin: 2px 0 0;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: clamp(1.7rem, 4vw, 2.8rem);
+        line-height: 0.95;
+        text-transform: uppercase;
+      }
+
+      .pulse-heading p {
+        max-width: 430px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 800;
+        line-height: 1.4;
+      }
+
+      .pulse-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .pulse-card {
+        min-width: 0;
+        padding: 17px;
+        border: 1px solid rgba(16, 16, 15, 0.1);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.76);
+      }
+
+      .pulse-card span,
+      .pulse-card small {
+        display: block;
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 900;
+        line-height: 1.35;
+        text-transform: uppercase;
+      }
+
+      .pulse-card strong {
+        display: block;
+        overflow: hidden;
+        margin: 7px 0 4px;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: clamp(1.65rem, 4vw, 2.7rem);
+        letter-spacing: -0.04em;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .pulse-card[data-tone="good"] strong { color: #177a56; }
+      .pulse-card[data-tone="warn"] strong { color: #a45a12; }
+      .pulse-card[data-tone="bad"] strong { color: var(--danger); }
+
       .analytics-summary .metric-card > span:last-child {
         font-family: Archivo, Impact, sans-serif;
         font-size: clamp(1.9rem, 4vw, 3.2rem);
@@ -933,6 +1008,7 @@
         .metric-grid,
         .analytics-summary,
         .analytics-lists,
+        .pulse-grid,
         .dynamic-grid,
         .dynamic-grid.is-small {
           grid-template-columns: 1fr;
@@ -962,6 +1038,10 @@
 
         .hero-copy {
           min-height: 0;
+        }
+
+        .pulse-heading {
+          display: grid;
         }
 
         .preview-stats {
@@ -1422,6 +1502,47 @@
               <button class="warm" type="button" data-action="refresh-analytics">Refresh</button>
             </div>
             <p class="analytics-health" data-analytics-health>Checking the Cloudflare connection…</p>
+            <div class="pulse-panel">
+              <div class="pulse-heading">
+                <div>
+                  <p class="kicker">The useful stuff</p>
+                  <h3>BAM Pulse</h3>
+                </div>
+                <p>Real interest signals and site health. Click tracking begins with this update; traffic momentum includes the existing Cloudflare history.</p>
+              </div>
+              <div class="pulse-grid">
+                <article class="pulse-card" data-pulse-card="momentum">
+                  <span>Weekly momentum</span>
+                  <strong data-analytics="weeklyChange">—</strong>
+                  <small data-analytics="weeklyChangeNote">Visits vs prior 7 days</small>
+                </article>
+                <article class="pulse-card">
+                  <span>Contact clicks</span>
+                  <strong data-analytics="contactClicks">—</strong>
+                  <small>Last 30 days</small>
+                </article>
+                <article class="pulse-card">
+                  <span>Instagram clicks</span>
+                  <strong data-analytics="instagramClicks">—</strong>
+                  <small>Last 30 days</small>
+                </article>
+                <article class="pulse-card">
+                  <span>Reel previews</span>
+                  <strong data-analytics="reelPlays">—</strong>
+                  <small>Watched for 2+ seconds</small>
+                </article>
+                <article class="pulse-card">
+                  <span>Reels opened</span>
+                  <strong data-analytics="reelOpens">—</strong>
+                  <small>Clicked through to Instagram</small>
+                </article>
+                <article class="pulse-card" data-pulse-card="health">
+                  <span>Real-user site health</span>
+                  <strong data-analytics="siteHealth">—</strong>
+                  <small data-analytics="siteHealthNote">Collecting browser data</small>
+                </article>
+              </div>
+            </div>
             <div class="analytics-summary">
               <div class="metric-card">
                 <span class="field"><strong>Visitors</strong></span>
@@ -1447,6 +1568,7 @@
               <div class="analytics-list"><h3>Locations</h3><ol data-analytics-list="topCountries"></ol></div>
               <div class="analytics-list"><h3>Browsers</h3><ol data-analytics-list="topBrowsers"></ol></div>
               <div class="analytics-list"><h3>Devices</h3><ol data-analytics-list="topDevices"></ol></div>
+              <div class="analytics-list"><h3>Most watched reels</h3><ol data-analytics-list="topReels"></ol></div>
             </div>
             <p class="status-line" data-analytics-status></p>
           </section>
@@ -1904,7 +2026,7 @@
         }
       };
 
-      const renderAnalyticsList = (key, rows, labelKey = "label") => {
+      const renderAnalyticsList = (key, rows, labelKey = "label", valueKey = "pageviews") => {
         const list = document.querySelector(`[data-analytics-list="${key}"]`);
         if (!list) return;
 
@@ -1921,10 +2043,61 @@
           const label = document.createElement("span");
           const value = document.createElement("strong");
           label.textContent = String(row[labelKey] || "Unknown");
-          value.textContent = Number(row.pageviews || 0).toLocaleString();
+          value.textContent = Number(row[valueKey] || 0).toLocaleString();
           item.append(label, value);
           return item;
         }));
+      };
+
+      const normalizeVitalTiming = (value) => {
+        const number = Number(value);
+        if (!Number.isFinite(number) || number < 0) return null;
+        return number > 10000 ? number / 1000 : number;
+      };
+
+      const renderPulse = (data) => {
+        const change = data.momentum?.weeklyChange;
+        const momentumCard = document.querySelector('[data-pulse-card="momentum"]');
+        if (typeof change === "number") {
+          setAnalyticsValue("weeklyChange", `${change > 0 ? "+" : ""}${change}%`);
+          setAnalyticsValue("weeklyChangeNote", `${Number(data.momentum.currentWeekVisits || 0).toLocaleString()} visits this week`);
+          if (momentumCard) momentumCard.dataset.tone = change > 0 ? "good" : change < 0 ? "bad" : "warn";
+        } else {
+          setAnalyticsValue("weeklyChange", "New");
+          setAnalyticsValue("weeklyChangeNote", "More history needed for comparison");
+          if (momentumCard) momentumCard.dataset.tone = "warn";
+        }
+
+        const pulse = data.pulse?.last30 || {};
+        setAnalyticsValue("contactClicks", Number(pulse.contact_click || 0).toLocaleString());
+        setAnalyticsValue("instagramClicks", Number(pulse.instagram_click || 0).toLocaleString());
+        setAnalyticsValue("reelPlays", Number(pulse.reel_play || 0).toLocaleString());
+        setAnalyticsValue("reelOpens", Number(pulse.reel_open || 0).toLocaleString());
+        renderAnalyticsList("topReels", data.pulse?.topReels, "label", "plays");
+
+        const lcp = normalizeVitalTiming(data.webVitals?.lcpP75);
+        const inp = normalizeVitalTiming(data.webVitals?.inpP75);
+        const cls = Number(data.webVitals?.clsP75);
+        const healthCard = document.querySelector('[data-pulse-card="health"]');
+        const hasVitals = lcp !== null || inp !== null || Number.isFinite(cls);
+
+        if (!hasVitals || !Number(data.webVitals?.samples || 0)) {
+          setAnalyticsValue("siteHealth", "Learning");
+          setAnalyticsValue("siteHealthNote", "More real visits needed");
+          if (healthCard) healthCard.dataset.tone = "warn";
+          return;
+        }
+
+        const good = (lcp === null || lcp <= 2500) && (inp === null || inp <= 200) && (!Number.isFinite(cls) || cls <= 0.1);
+        const okay = (lcp === null || lcp <= 4000) && (inp === null || inp <= 500) && (!Number.isFinite(cls) || cls <= 0.25);
+        setAnalyticsValue("siteHealth", good ? "Fast" : okay ? "Okay" : "Needs work");
+        const details = [
+          lcp !== null ? `LCP ${Math.round(lcp)}ms` : "",
+          inp !== null ? `INP ${Math.round(inp)}ms` : "",
+          Number.isFinite(cls) ? `CLS ${cls.toFixed(2)}` : "",
+        ].filter(Boolean).join(" · ");
+        setAnalyticsValue("siteHealthNote", details || `${data.webVitals.samples} samples`);
+        if (healthCard) healthCard.dataset.tone = good ? "good" : okay ? "warn" : "bad";
       };
 
       const renderAnalyticsChart = (days) => {
@@ -1964,6 +2137,7 @@
           renderAnalyticsList("topCountries", data.topCountries);
           renderAnalyticsList("topBrowsers", data.topBrowsers);
           renderAnalyticsList("topDevices", data.topDevices);
+          renderPulse(data);
 
           if (analyticsHealth) {
             analyticsHealth.dataset.connected = "true";

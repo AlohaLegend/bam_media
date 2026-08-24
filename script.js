@@ -1,4 +1,22 @@
 const header = document.querySelector("[data-header]");
+const PULSE_ENDPOINT = "https://bam-cms-auth.bammediaauth.workers.dev/analytics/event";
+
+const recordPulseEvent = (event, label = "", dedupeKey = "") => {
+  if (dedupeKey) {
+    const storageKey = `bamPulse:${dedupeKey}`;
+    if (sessionStorage.getItem(storageKey)) return;
+    sessionStorage.setItem(storageKey, "1");
+  }
+
+  fetch(PULSE_ENDPOINT, {
+    method: "POST",
+    mode: "cors",
+    credentials: "omit",
+    keepalive: true,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event, label }),
+  }).catch(() => {});
+};
 const toggle = document.querySelector(".nav-toggle");
 const anchorLinks = document.querySelectorAll('a[href^="#"]');
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -595,6 +613,31 @@ const reelVisibility = new Map();
 let activeReelCard = null;
 let priorityReelCard = null;
 let reelFrame = 0;
+
+document.querySelectorAll("[data-contact-email]").forEach((link) => {
+  link.addEventListener("click", () => recordPulseEvent("contact_click"));
+});
+
+document.querySelectorAll('[data-social="instagram"]').forEach((link) => {
+  link.addEventListener("click", () => recordPulseEvent("instagram_click"));
+});
+
+reelCards.forEach((card, index) => {
+  const video = card.querySelector(".reel-preview");
+  let playTimer = 0;
+  const reelLabel = () => card.querySelector('[data-content$=".brand"]')?.textContent?.trim() || `Reel ${index + 1}`;
+
+  card.addEventListener("click", () => recordPulseEvent("reel_open", reelLabel()));
+  video?.addEventListener("playing", () => {
+    window.clearTimeout(playTimer);
+    playTimer = window.setTimeout(() => {
+      if (!video.paused && isCardOnScreen(card)) {
+        recordPulseEvent("reel_play", reelLabel(), `reel-play:${index}`);
+      }
+    }, 2000);
+  });
+  video?.addEventListener("pause", () => window.clearTimeout(playTimer));
+});
 
 const configureReelVideo = (video) => {
   if (!video) {

@@ -8,6 +8,9 @@ const SESSION_COOKIE = "bam_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
 const ASSET_KEY_PREFIX = "asset:";
 const ASSET_ROUTE_PREFIX = "/assets/uploads/";
+const PULSE_KEY_PREFIX = "analytics:pulse:";
+const PULSE_TTL_SECONDS = 60 * 60 * 24 * 400;
+const PULSE_EVENTS = new Set(["contact_click", "instagram_click", "reel_play", "reel_open"]);
 const MAX_ASSET_BYTES = 15 * 1024 * 1024;
 const ALLOWED_ASSET_TYPES = {
   "image/jpeg": "jpg",
@@ -787,6 +790,94 @@ const handleAdminContent = async (request, env) => {
   return jsonResponse(request, { content: await readContent(env) });
 };
 
+const pulseDate = (offset = 0) => {
+  const date = new Date();
+  date.setUTCDate(date.getUTCDate() - offset);
+  return date.toISOString().slice(0, 10);
+};
+
+const emptyPulseDay = (date) => ({
+  date,
+  events: { contact_click: 0, instagram_click: 0, reel_play: 0, reel_open: 0 },
+  reels: {},
+});
+
+const readPulseDay = async (env, date) => {
+  const stored = await env.BAM_CMS_CONTENT?.get(`${PULSE_KEY_PREFIX}${date}`);
+  if (!stored) return emptyPulseDay(date);
+
+  try {
+    const parsed = JSON.parse(stored);
+    return {
+      ...emptyPulseDay(date),
+      ...parsed,
+      events: { ...emptyPulseDay(date).events, ...(parsed.events || {}) },
+      reels: parsed.reels && typeof parsed.reels === "object" ? parsed.reels : {},
+    };
+  } catch {
+    return emptyPulseDay(date);
+  }
+};
+
+const handlePulseCollect = async (request, env) => {
+  if (!env.BAM_CMS_CONTENT) {
+    return jsonResponse(request, { error: "Analytics storage is not configured." }, { status: 500 });
+  }
+
+  const body = await readJson(request);
+  const event = typeof body?.event === "string" ? body.event : "";
+  const label = typeof body?.label === "string" ? body.label.trim().slice(0, 60) : "";
+
+  if (!PULSE_EVENTS.has(event)) {
+    return jsonResponse(request, { error: "Unknown analytics event." }, { status: 400 });
+  }
+
+  const date = pulseDate();
+  const day = await readPulseDay(env, date);
+  day.events[event] = Number(day.events[event] || 0) + 1;
+
+  if ((event === "reel_play" || event === "reel_open") && label && /^[\w .&'’-]{1,60}$/u.test(label)) {
+    day.reels[label] = Number(day.reels[label] || 0) + 1;
+  }
+
+  await env.BAM_CMS_CONTENT.put(`${PULSE_KEY_PREFIX}${date}`, JSON.stringify(day), {
+    expirationTtl: PULSE_TTL_SECONDS,
+    metadata: { updatedAt: new Date().toISOString() },
+  });
+
+  return jsonResponse(request, { recorded: true }, { status: 202 });
+};
+
+const readPulseSummary = async (env) => {
+  const days = await Promise.all(Array.from({ length: 30 }, (_, index) => readPulseDay(env, pulseDate(29 - index))));
+  const sumRange = (rows) => rows.reduce(
+    (totals, day) => {
+      Object.keys(totals).forEach((event) => {
+        totals[event] += Number(day.events?.[event] || 0);
+      });
+      return totals;
+    },
+    { contact_click: 0, instagram_click: 0, reel_play: 0, reel_open: 0 },
+  );
+  const reelTotals = {};
+  days.forEach((day) => {
+    Object.entries(day.reels || {}).forEach(([label, count]) => {
+      reelTotals[label] = Number(reelTotals[label] || 0) + Number(count || 0);
+    });
+  });
+
+  return {
+    last7: sumRange(days.slice(-7)),
+    previous7: sumRange(days.slice(-14, -7)),
+    last30: sumRange(days),
+    daily: days.map((day) => ({ date: day.date, ...day.events })),
+    topReels: Object.entries(reelTotals)
+      .map(([label, plays]) => ({ label, plays }))
+      .sort((a, b) => b.plays - a.plays)
+      .slice(0, 6),
+  };
+};
+
 const handleAnalytics = async (request, env) => {
   const sessionError = await requireSession(request, env);
 
@@ -871,6 +962,17 @@ const handleAnalytics = async (request, env) => {
             count
             dimensions { deviceType }
           }
+          webVitals: rumWebVitalsEventsAdaptiveGroups(
+            limit: 1
+            filter: { siteTag: $siteTag, datetime_geq: $since30, datetime_leq: $until }
+          ) {
+            count
+            quantiles {
+              largestContentfulPaintP75
+              interactionToNextPaintP75
+              cumulativeLayoutShiftP75
+            }
+          }
         }
       }
     }
@@ -932,6 +1034,22 @@ const handleAnalytics = async (request, env) => {
     (rows || [])
       .map((row) => ({ label: row.dimensions?.[key] || fallback, pageviews: row.count || 0 }))
       .filter((row) => row.pageviews > 0);
+  const pulse = await readPulseSummary(env);
+  const vitalRow = account.webVitals?.[0] || {};
+  const quantiles = vitalRow.quantiles || {};
+  const visitsByDate = new Map(daily.map((day) => [day.date, Number(day.visits || 0)]));
+  const sumVisits = (startOffset, endOffset) => {
+    let total = 0;
+    for (let offset = startOffset; offset <= endOffset; offset += 1) {
+      total += visitsByDate.get(pulseDate(offset)) || 0;
+    }
+    return total;
+  };
+  const currentWeekVisits = sumVisits(0, 6);
+  const previousWeekVisits = sumVisits(7, 13);
+  const weeklyChange = previousWeekVisits > 0
+    ? Math.round(((currentWeekVisits - previousWeekVisits) / previousWeekVisits) * 100)
+    : null;
 
   return jsonResponse(request, {
     connected: true,
@@ -945,6 +1063,14 @@ const handleAnalytics = async (request, env) => {
     topCountries: rankedDimension(account.topCountries, "countryName"),
     topBrowsers: rankedDimension(account.topBrowsers, "userAgentBrowser"),
     topDevices: rankedDimension(account.topDevices, "deviceType"),
+    momentum: { currentWeekVisits, previousWeekVisits, weeklyChange },
+    pulse,
+    webVitals: {
+      samples: vitalRow.count || 0,
+      lcpP75: quantiles.largestContentfulPaintP75 ?? null,
+      inpP75: quantiles.interactionToNextPaintP75 ?? null,
+      clsP75: quantiles.cumulativeLayoutShiftP75 ?? null,
+    },
   });
 };
 
@@ -1077,6 +1203,10 @@ export default {
 
     if (request.method === "GET" && pathname === "/content/site.json") {
       return handlePublicContent(request, env);
+    }
+
+    if (request.method === "POST" && pathname === "/analytics/event") {
+      return handlePulseCollect(request, env);
     }
 
     if (request.method === "GET" && pathname.startsWith(ASSET_ROUTE_PREFIX)) {
