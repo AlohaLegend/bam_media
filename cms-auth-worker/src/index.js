@@ -739,7 +739,7 @@ const handleLogin = async (request, env) => {
     return jsonResponse(request, { error: "Admin password is not configured." }, { status: 500 });
   }
 
-  if (password !== env.ADMIN_PASSWORD) {
+  if (password !== env.ADMIN_PASSWORD && password !== env.OWNER_PASSWORD) {
     return jsonResponse(request, { error: "That password did not work." }, { status: 401 });
   }
 

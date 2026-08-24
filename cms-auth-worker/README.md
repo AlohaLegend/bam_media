@@ -27,6 +27,7 @@ The checked-in `content/site.json` remains the fallback if Cloudflare is unavail
 Set these as encrypted Worker secrets:
 
 - `ADMIN_PASSWORD`: the password Jake uses to open `/admin/`
+- `OWNER_PASSWORD`: Liam's separate password for the same admin login
 - `SESSION_SECRET`: a long random string for signing the login cookie
 - `CF_API_TOKEN`: a Cloudflare API token with analytics read access, required by the admin analytics panel (store as a secret)
 - `CF_ACCOUNT_ID`: the Cloudflare account identifier used by the analytics query (configured in `wrangler.toml`)
