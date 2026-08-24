@@ -1067,7 +1067,13 @@ if (window.matchMedia("(pointer: fine)").matches) {
     let startScrollLeft = 0;
 
     rail.addEventListener("pointerdown", (event) => {
-      if (event.button !== 0 || !rail.classList.contains("is-scrollable")) {
+      // Reel cards are links first. Starting drag capture from inside one can
+      // swallow its native navigation in Chrome, so only drag from rail space.
+      if (
+        event.button !== 0 ||
+        !rail.classList.contains("is-scrollable") ||
+        event.target.closest("a, button")
+      ) {
         return;
       }
 
