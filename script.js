@@ -21,6 +21,8 @@ const recordPulseEvent = (event, label = "", dedupeKey = "") => {
     body: JSON.stringify({ event, label }),
   }).catch(() => {});
 };
+
+recordPulseEvent("page_view");
 const toggle = document.querySelector(".nav-toggle");
 const anchorLinks = document.querySelectorAll('a[href^="#"]');
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

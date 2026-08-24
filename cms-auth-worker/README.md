@@ -38,7 +38,7 @@ Set these as encrypted Worker secrets:
 
 The admin analytics panel depends on a Cloudflare Web Analytics site for `bammedia.us`, the two non-secret identifiers above, and the encrypted `CF_API_TOKEN` Worker secret. Add Cloudflare's public beacon snippet to `index.html` only after creating that site and replacing the snippet's token with the real BAM site token. Do not commit a placeholder token: it downloads the beacon but cannot report valid BAM traffic.
 
-The public site also sends a small allowlisted set of anonymous interaction events to `POST /analytics/event`: contact clicks, Instagram clicks, meaningful reel previews, and reel opens. Daily totals are retained in KV for 400 days. The collector does not accept names, email addresses, form contents, visitor identifiers, IP addresses, or arbitrary event names.
+The public site also sends a small allowlisted set of anonymous events to `POST /analytics/event`: page views, contact clicks, Instagram clicks, meaningful reel previews, and reel opens. Daily totals are retained in KV for 400 days. Page views are grouped by Cloudflare's coarse country, state/region, and city request metadata; cities need at least three recorded views before appearing in the admin. The collector does not accept names, email addresses, form contents, visitor identifiers, IP addresses, or arbitrary event names.
 
 ## Variables
 

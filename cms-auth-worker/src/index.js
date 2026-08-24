@@ -10,7 +10,7 @@ const ASSET_KEY_PREFIX = "asset:";
 const ASSET_ROUTE_PREFIX = "/assets/uploads/";
 const PULSE_KEY_PREFIX = "analytics:pulse:";
 const PULSE_TTL_SECONDS = 60 * 60 * 24 * 400;
-const PULSE_EVENTS = new Set(["contact_click", "instagram_click", "reel_play", "reel_open"]);
+const PULSE_EVENTS = new Set(["page_view", "contact_click", "instagram_click", "reel_play", "reel_open"]);
 const MAX_ASSET_BYTES = 15 * 1024 * 1024;
 const ALLOWED_ASSET_TYPES = {
   "image/jpeg": "jpg",
@@ -798,8 +798,10 @@ const pulseDate = (offset = 0) => {
 
 const emptyPulseDay = (date) => ({
   date,
-  events: { contact_click: 0, instagram_click: 0, reel_play: 0, reel_open: 0 },
+  events: { page_view: 0, contact_click: 0, instagram_click: 0, reel_play: 0, reel_open: 0 },
   reels: {},
+  regions: {},
+  cities: {},
 });
 
 const readPulseDay = async (env, date) => {
@@ -813,6 +815,8 @@ const readPulseDay = async (env, date) => {
       ...parsed,
       events: { ...emptyPulseDay(date).events, ...(parsed.events || {}) },
       reels: parsed.reels && typeof parsed.reels === "object" ? parsed.reels : {},
+      regions: parsed.regions && typeof parsed.regions === "object" ? parsed.regions : {},
+      cities: parsed.cities && typeof parsed.cities === "object" ? parsed.cities : {},
     };
   } catch {
     return emptyPulseDay(date);
@@ -840,6 +844,19 @@ const handlePulseCollect = async (request, env) => {
     day.reels[label] = Number(day.reels[label] || 0) + 1;
   }
 
+  if (event === "page_view") {
+    const country = cleanString(request.cf?.country, "Unknown", 60);
+    const region = cleanString(request.cf?.region, request.cf?.regionCode || "Unknown", 80);
+    const city = cleanString(request.cf?.city, "Unknown", 80);
+    const regionLabel = region === "Unknown" ? country : `${region}, ${country}`;
+    day.regions[regionLabel] = Number(day.regions[regionLabel] || 0) + 1;
+
+    if (city !== "Unknown") {
+      const cityLabel = region === "Unknown" ? `${city}, ${country}` : `${city}, ${region}`;
+      day.cities[cityLabel] = Number(day.cities[cityLabel] || 0) + 1;
+    }
+  }
+
   await env.BAM_CMS_CONTENT.put(`${PULSE_KEY_PREFIX}${date}`, JSON.stringify(day), {
     expirationTtl: PULSE_TTL_SECONDS,
     metadata: { updatedAt: new Date().toISOString() },
@@ -857,14 +874,27 @@ const readPulseSummary = async (env) => {
       });
       return totals;
     },
-    { contact_click: 0, instagram_click: 0, reel_play: 0, reel_open: 0 },
+    { page_view: 0, contact_click: 0, instagram_click: 0, reel_play: 0, reel_open: 0 },
   );
   const reelTotals = {};
+  const regionTotals = {};
+  const cityTotals = {};
   days.forEach((day) => {
     Object.entries(day.reels || {}).forEach(([label, count]) => {
       reelTotals[label] = Number(reelTotals[label] || 0) + Number(count || 0);
     });
+    Object.entries(day.regions || {}).forEach(([label, count]) => {
+      regionTotals[label] = Number(regionTotals[label] || 0) + Number(count || 0);
+    });
+    Object.entries(day.cities || {}).forEach(([label, count]) => {
+      cityTotals[label] = Number(cityTotals[label] || 0) + Number(count || 0);
+    });
   });
+  const rankedLocations = (totals, minimum = 1) => Object.entries(totals)
+    .map(([label, views]) => ({ label, views }))
+    .filter((row) => row.views >= minimum && !row.label.startsWith("Unknown"))
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 8);
 
   return {
     last7: sumRange(days.slice(-7)),
@@ -875,6 +905,8 @@ const readPulseSummary = async (env) => {
       .map(([label, plays]) => ({ label, plays }))
       .sort((a, b) => b.plays - a.plays)
       .slice(0, 6),
+    topRegions: rankedLocations(regionTotals),
+    topCities: rankedLocations(cityTotals, 3),
   };
 };
 

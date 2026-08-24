@@ -1646,7 +1646,9 @@
             <div class="analytics-lists">
               <div class="analytics-list"><h3>Top pages</h3><ol data-analytics-list="topPages"></ol></div>
               <div class="analytics-list"><h3>Referrers</h3><ol data-analytics-list="topReferrers"></ol></div>
-              <div class="analytics-list"><h3>Locations</h3><ol data-analytics-list="topCountries"></ol></div>
+              <div class="analytics-list"><h3>Countries</h3><ol data-analytics-list="topCountries"></ol></div>
+              <div class="analytics-list"><h3>States / regions</h3><ol data-analytics-list="topRegions"></ol></div>
+              <div class="analytics-list"><h3>Cities</h3><ol data-analytics-list="topCities"></ol></div>
               <div class="analytics-list"><h3>Browsers</h3><ol data-analytics-list="topBrowsers"></ol></div>
               <div class="analytics-list"><h3>Devices</h3><ol data-analytics-list="topDevices"></ol></div>
               <div class="analytics-list"><h3>Most watched reels</h3><ol data-analytics-list="topReels"></ol></div>
@@ -2219,6 +2221,8 @@
         setAnalyticsValue("reelPlays", Number(pulse.reel_play || 0).toLocaleString());
         setAnalyticsValue("reelOpens", Number(pulse.reel_open || 0).toLocaleString());
         renderAnalyticsList("topReels", data.pulse?.topReels, "label", "plays");
+        renderAnalyticsList("topRegions", data.pulse?.topRegions, "label", "views");
+        renderAnalyticsList("topCities", data.pulse?.topCities, "label", "views");
 
         const lcp = normalizeVitalTiming(data.webVitals?.lcpP75);
         const inp = normalizeVitalTiming(data.webVitals?.inpP75);
