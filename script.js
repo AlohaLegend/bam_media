@@ -4,8 +4,12 @@ const PULSE_ENDPOINT = "https://bam-cms-auth.bammediaauth.workers.dev/analytics/
 const recordPulseEvent = (event, label = "", dedupeKey = "") => {
   if (dedupeKey) {
     const storageKey = `bamPulse:${dedupeKey}`;
-    if (sessionStorage.getItem(storageKey)) return;
-    sessionStorage.setItem(storageKey, "1");
+    try {
+      if (sessionStorage.getItem(storageKey)) return;
+      sessionStorage.setItem(storageKey, "1");
+    } catch {
+      // Some privacy modes disable session storage; tracking should never affect the site experience.
+    }
   }
 
   fetch(PULSE_ENDPOINT, {
@@ -13,7 +17,7 @@ const recordPulseEvent = (event, label = "", dedupeKey = "") => {
     mode: "cors",
     credentials: "omit",
     keepalive: true,
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "text/plain;charset=UTF-8" },
     body: JSON.stringify({ event, label }),
   }).catch(() => {});
 };
