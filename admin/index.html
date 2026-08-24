@@ -584,6 +584,59 @@
         text-align: left;
       }
 
+      .wedding-banner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+        overflow: hidden;
+        margin-bottom: 18px;
+        padding: 20px clamp(20px, 4vw, 34px);
+        border: 2px solid var(--ink);
+        border-radius: 18px;
+        background:
+          radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.78), transparent 22%),
+          linear-gradient(110deg, #f8ce61, #fff4ce 48%, #85dfb8);
+        box-shadow: 7px 7px 0 var(--ink);
+      }
+
+      .wedding-banner::after {
+        position: absolute;
+        right: 30%;
+        color: rgba(16, 16, 15, 0.14);
+        content: "✦  💍  ✦  🥂  ✦";
+        font-size: clamp(1.5rem, 4vw, 3rem);
+        letter-spacing: 0.2em;
+        pointer-events: none;
+        transform: rotate(-5deg);
+      }
+
+      .wedding-banner-copy,
+      .wedding-banner button {
+        position: relative;
+        z-index: 1;
+      }
+
+      .wedding-banner .kicker {
+        margin-bottom: 4px;
+      }
+
+      .wedding-banner strong {
+        display: block;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: clamp(1.35rem, 3vw, 2rem);
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .wedding-banner button {
+        flex: 0 0 auto;
+        border-color: var(--ink);
+        background: var(--ink);
+        color: white;
+      }
+
       .wedding-egg {
         position: fixed;
         inset: 0;
@@ -1142,6 +1195,18 @@
           animation: none;
         }
       }
+
+      @media (max-width: 680px) {
+        .wedding-banner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .wedding-banner::after {
+          right: -18px;
+          bottom: 10px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1190,6 +1255,14 @@
       </section>
 
       <main class="editor" data-editor hidden>
+        <aside class="wedding-banner" aria-label="A celebration for Jake">
+          <div class="wedding-banner-copy">
+            <p class="kicker">Major Jake update 💍</p>
+            <strong>He went and got married!</strong>
+          </div>
+          <button type="button" data-wedding-trigger>Open wedding surprise</button>
+        </aside>
+
         <section class="editor-hero">
           <div class="hero-copy">
             <p class="kicker">BAM website control room</p>
@@ -1692,16 +1765,18 @@
       const analyticsStatus = document.querySelector('[data-analytics-status]');
       const analyticsHealth = document.querySelector('[data-analytics-health]');
       const analyticsChart = document.querySelector('[data-analytics-chart]');
-      const weddingTrigger = document.querySelector('[data-wedding-trigger]');
+      const weddingTriggers = Array.from(document.querySelectorAll('[data-wedding-trigger]'));
       const weddingEgg = document.querySelector('[data-wedding-egg]');
       const weddingClose = document.querySelector('[data-wedding-close]');
       const contentForm = document.querySelector("[data-content-form]");
       const repeatContainers = Array.from(document.querySelectorAll("[data-repeat-group]"));
       const sessionKey = "bamAdminSession";
+      const weddingSeenKey = "bamWeddingSurpriseSeen";
       const maxUploadBytes = 15 * 1024 * 1024;
 
       let content = null;
       let dirty = false;
+      let lastWeddingTrigger = null;
 
       const editorGroups = [
         {
@@ -2306,12 +2381,28 @@
       const closeWeddingEgg = () => {
         if (!weddingEgg) return;
         weddingEgg.hidden = true;
-        weddingTrigger?.focus();
+        lastWeddingTrigger?.focus();
       };
 
-      weddingTrigger?.addEventListener("click", () => {
+      const openWeddingEgg = (trigger = null) => {
+        if (!weddingEgg) return;
+        lastWeddingTrigger = trigger;
         weddingEgg.hidden = false;
         weddingClose?.focus();
+      };
+
+      const showWeddingOnce = () => {
+        try {
+          if (sessionStorage.getItem(weddingSeenKey)) return;
+          sessionStorage.setItem(weddingSeenKey, "1");
+          window.setTimeout(() => openWeddingEgg(), 500);
+        } catch {
+          // The banner remains available if private browsing blocks storage.
+        }
+      };
+
+      weddingTriggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => openWeddingEgg(trigger));
       });
 
       weddingClose?.addEventListener("click", closeWeddingEgg);
@@ -2334,6 +2425,7 @@
           showEditor();
           await loadContent();
           loadAnalytics();
+          showWeddingOnce();
         } catch (error) {
           showLogin(error.message);
         }
@@ -2438,6 +2530,8 @@
           loginForm.reset();
           showEditor();
           await loadContent();
+          loadAnalytics();
+          showWeddingOnce();
         } catch (error) {
           setStatus(loginStatus, error.message, "error");
         }
