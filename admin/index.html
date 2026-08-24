@@ -714,7 +714,47 @@
 
       .hero-copy h1 {
         max-width: 850px;
-        font-size: clamp(3.2rem, 10vw, 7.8rem);
+        font-size: clamp(2.8rem, 8vw, 5.8rem);
+      }
+
+      .quick-start {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      .quick-start a {
+        display: grid;
+        gap: 3px;
+        min-width: 0;
+        padding: 12px;
+        border: 1px solid rgba(16, 16, 15, 0.12);
+        border-radius: 9px;
+        background: rgba(255, 255, 255, 0.68);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .quick-start a:hover,
+      .quick-start a:focus-visible {
+        border-color: rgba(33, 111, 189, 0.42);
+        background: #ffffff;
+        color: var(--blue);
+      }
+
+      .quick-start small {
+        color: var(--muted);
+        font-size: 0.64rem;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .quick-start strong {
+        overflow: hidden;
+        font-size: 0.82rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .preview {
@@ -808,10 +848,44 @@
       }
 
       .section-jump a:hover,
-      .section-jump a:focus-visible {
+      .section-jump a:focus-visible,
+      .section-jump a.is-active {
         border-color: rgba(33, 111, 189, 0.34);
         background: #ffffff;
         color: var(--blue);
+      }
+
+      .section-jump a.is-primary {
+        border-color: transparent;
+        background: var(--blue);
+        color: #ffffff;
+      }
+
+      .editor-group {
+        display: grid;
+        gap: 4px;
+        margin-top: 18px;
+        padding: 22px 0 2px;
+        border-top: 2px solid var(--ink);
+      }
+
+      .editor-group:first-child {
+        margin-top: 0;
+      }
+
+      .editor-group h2 {
+        margin: 0;
+        font-family: Archivo, Impact, sans-serif;
+        font-size: clamp(1.45rem, 3vw, 2.25rem);
+        text-transform: uppercase;
+      }
+
+      .editor-group p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.8rem;
+        font-weight: 800;
+        line-height: 1.4;
       }
 
       .edit-section {
@@ -1009,6 +1083,7 @@
         .analytics-summary,
         .analytics-lists,
         .pulse-grid,
+        .quick-start,
         .dynamic-grid,
         .dynamic-grid.is-small {
           grid-template-columns: 1fr;
@@ -1117,9 +1192,15 @@
       <main class="editor" data-editor hidden>
         <section class="editor-hero">
           <div class="hero-copy">
-            <p class="kicker">Live homepage editor</p>
-            <h1>Make the easy edits obvious.</h1>
-            <p>Text, stats, reels, services, client work, links, and image paths live here. Layout changes and new sections still belong in code.</p>
+            <p class="kicker">BAM website control room</p>
+            <h1>Check it. Change it. Save it.</h1>
+            <p>Analytics are first. For an edit, jump to the section, change the field, then hit <strong>Save live content</strong> at the bottom. Nothing publishes until you save.</p>
+            <nav class="quick-start" aria-label="Common admin tasks">
+              <a href="#edit-analytics"><small>See results</small><strong>Analytics</strong></a>
+              <a href="#edit-hero"><small>First screen</small><strong>Edit hero</strong></a>
+              <a href="#edit-reels"><small>Video work</small><strong>Edit reels</strong></a>
+              <a href="#edit-contact"><small>Leads + links</small><strong>Edit contact</strong></a>
+            </nav>
           </div>
           <aside class="preview" aria-label="Homepage preview">
             <div>
@@ -1146,18 +1227,18 @@
 
         <nav class="section-jump" aria-label="Editor sections">
           <span>Jump to</span>
+          <a class="is-primary" href="#edit-analytics">Analytics</a>
           <a href="#edit-hero">Hero</a>
           <a href="#edit-reels">Reels</a>
           <a href="#edit-clients">Clients</a>
           <a href="#edit-contact">Contact</a>
-          <a href="#edit-seo">SEO</a>
+          <a href="#edit-services">Services</a>
           <a href="#edit-stats">Stats</a>
-          <a href="#edit-focus">Focus bar</a>
+          <a href="#edit-focus">Focus</a>
           <a href="#edit-pitch">Pitch</a>
           <a href="#edit-loop">BAM loop</a>
-          <a href="#edit-services">Services</a>
           <a href="#edit-receipts">Receipts</a>
-          <a href="#edit-analytics">Analytics</a>
+          <a href="#edit-seo">SEO</a>
         </nav>
 
         <form class="editor-form" data-content-form>
@@ -1619,6 +1700,70 @@
 
       let content = null;
       let dirty = false;
+
+      const editorGroups = [
+        {
+          title: "Overview",
+          copy: "Start here to see what the website is doing.",
+          sections: ["edit-analytics"],
+        },
+        {
+          title: "Common website edits",
+          copy: "The sections Jake is most likely to update day to day.",
+          sections: ["edit-hero", "edit-reels", "edit-clients", "edit-contact", "edit-services"],
+        },
+        {
+          title: "Brand story and proof",
+          copy: "Supporting homepage copy, positioning, stats, and receipts.",
+          sections: ["edit-stats", "edit-focus", "edit-pitch", "edit-loop", "edit-receipts"],
+        },
+        {
+          title: "Site settings",
+          copy: "Search appearance and footer details. These usually change less often.",
+          sections: ["edit-seo"],
+        },
+      ];
+
+      const organizeEditor = () => {
+        editorGroups.forEach((group) => {
+          const heading = document.createElement("header");
+          const title = document.createElement("h2");
+          const copy = document.createElement("p");
+          heading.className = "editor-group";
+          title.textContent = group.title;
+          copy.textContent = group.copy;
+          heading.append(title, copy);
+          contentForm.append(heading);
+
+          group.sections.forEach((id) => {
+            const section = document.getElementById(id);
+            if (section) contentForm.append(section);
+          });
+        });
+      };
+
+      const watchEditorSections = () => {
+        if (!("IntersectionObserver" in window)) return;
+        const links = Array.from(document.querySelectorAll('.section-jump a[href^="#edit-"]'));
+        const linkById = new Map(links.map((link) => [link.getAttribute("href").slice(1), link]));
+        const observer = new IntersectionObserver((entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (!visible) return;
+          links.forEach((link) => {
+            const active = link === linkById.get(visible.target.id);
+            link.classList.toggle("is-active", active);
+            if (active) link.setAttribute("aria-current", "location");
+            else link.removeAttribute("aria-current");
+          });
+        }, { rootMargin: "-92px 0px -68% 0px", threshold: [0, 0.08, 0.25] });
+
+        linkById.forEach((link, id) => {
+          const section = document.getElementById(id);
+          if (section) observer.observe(section);
+        });
+      };
 
       const getFields = () => Array.from(document.querySelectorAll("[data-field]"));
       const getPreviews = () => Array.from(document.querySelectorAll("[data-preview]"));
@@ -2361,6 +2506,8 @@
         event.returnValue = "";
       });
 
+      organizeEditor();
+      watchEditorSections();
       renderRepeatGroups();
       boot();
     </script>
