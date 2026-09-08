@@ -242,6 +242,19 @@ const applyEditableContent = (content) => {
     });
   }
 
+  if (content.contact?.phone) {
+    const phone = content.contact.phone.trim();
+    const phoneHref = phone.replace(/[^+\d]/g, "");
+
+    document.querySelectorAll("[data-contact-phone]").forEach((element) => {
+      element.href = `tel:${phoneHref}`;
+    });
+
+    document.querySelectorAll("[data-contact-phone-label]").forEach((element) => {
+      element.textContent = phone;
+    });
+  }
+
   Object.entries(content.social || {}).forEach(([network, url]) => {
     if (typeof url !== "string" || !url.trim()) {
       return;
@@ -621,6 +634,10 @@ let priorityReelCard = null;
 let reelFrame = 0;
 
 document.querySelectorAll("[data-contact-email]").forEach((link) => {
+  link.addEventListener("click", () => recordPulseEvent("contact_click"));
+});
+
+document.querySelectorAll("[data-contact-phone]").forEach((link) => {
   link.addEventListener("click", () => recordPulseEvent("contact_click"));
 });
 
